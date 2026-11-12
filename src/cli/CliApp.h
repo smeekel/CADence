@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <iosfwd>
 #include <span>
 #include <string_view>
@@ -14,11 +15,12 @@
 namespace app::cli
 {
 
-/// @brief Process exit codes of the command-line runner.
-enum class ExitCode : int
+/// @brief Process exit codes of the command-line runner (0 to 255, the range every platform preserves).
+enum class ExitCode : std::uint8_t
 {
-    Success    = 0, ///< The request completed.
-    UsageError = 2, ///< The arguments were not understood; usage was printed to the error stream.
+    Success       = 0, ///< The request completed.
+    InternalError = 1, ///< An unexpected error stopped the runner; a message was written to the error stream.
+    UsageError    = 2, ///< The arguments were not understood; usage was printed to the error stream.
 };
 
 /// @brief  Run the command-line runner with already split arguments.

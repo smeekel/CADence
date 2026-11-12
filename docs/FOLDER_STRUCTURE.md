@@ -32,6 +32,7 @@ in its description. Sub-folders inside a module or test folder are the ones name
 ├── README.md                         [now]    what APP is; how to build, test and build docs (replaces the kit stub)
 ├── THIRD_PARTY_NOTICES.md            [now]    every linked library and reused project (P-30, CR-07)
 ├── .clang-format                     [exists] C++ formatting (rule 010)
+├── .clang-tidy                       [S0]     clang-tidy checks run by scripts/analyze.ps1 (T-11)
 ├── .editorconfig                     [exists] encoding, line endings, indentation
 ├── Doxyfile                          [exists] documentation build, HTML + LaTeX/PDF, offline (rule 020)
 ├── .gitignore                        [now]    ignores out/, vcpkg_installed/, *.user, .vs/
@@ -44,7 +45,7 @@ in its description. Sub-folders inside a module or test folder are the ones name
 │   └── rules/                        [exists] project rules 000–080 (.mdc)
 │
 ├── build/                            [now]    build infrastructure; no build logic in sources (B-07)
-│   └── props/                        [now]    shared MSBuild settings (B-03): Common, Cpp, Vcpkg, Qt, Headless, Tests
+│   └── props/                        [now]    shared MSBuild settings (B-03): Common, Cpp, Vcpkg, Qt, Headless, Tests; CodeAnalysis props and ruleset [S0]
 │
 ├── scripts/                          [now]    PowerShell scripts: build, test, docs, layering/SPDX/network checks (B-06, T-11, T-13)
 │

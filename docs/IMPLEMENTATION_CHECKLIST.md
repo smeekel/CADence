@@ -133,13 +133,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-11 `scripts/check-selftest.ps1` cases fail on a fixture source including `winsock2.h` and calling `WSAStartup`, a fixture project linking `ws2_32.lib`, `vcpkg.json` adding the `qtbase` network feature, an APP-built executable importing `ws2_32.dll`, and an APP-built binary importing `WINHTTP.dll`; a third-party DLL importing `ws2_32.dll` passes and is listed in the summary, and Qt6Core's `ws2_32.dll` import is noted, not a failure (Accept: P-03b)
   - Done when: every failure mode and the allowed case covered by `check-selftest.ps1`; repository green; `docs/network-imports.md` regenerated and matches the check's printed summary
   - Notes: APP-built binaries are recognised by project name or `<TargetName>` for both `.exe` and `.dll`; `dumpbin /dependents` includes delay-loaded imports. The WinHTTP fixture is a Windows DLL that imports `WINHTTP.dll` (`bitsigd.dll`, with fallbacks checked at run time) copied as `bin/Core/Core.dll`; the Qt6Core case copies the installed `Qt6Core.dll`. The vcpkg case is split into a port case and a `qtbase` feature case, and every network case now checks its failure message. `docs/network-imports.md` no longer carries a generation date, so regenerating it from unchanged builds gives no diff. ADR 0026 rule 4 now names DLLs.
-- [ ] **S0.02.4: Run MSVC Code Analysis and clang-tidy from a script**
+- [x] **S0.02.4: Run MSVC Code Analysis and clang-tidy from a script**
   - Requirements: T-11
   - Modules: scripts, build
   - Depends on: S0.01.1
   - Deliverables: `.clang-tidy`; `scripts/analyze.ps1` (MSBuild `RunCodeAnalysis=true` with a ruleset in `build/props/`, clang-tidy from the VS-bundled LLVM)
   - Tests: T-11 `scripts/analyze.ps1` reports zero findings on the scaffold and fails on a fixture with a seeded null dereference
   - Done when: zero findings on the repository; script called by `scripts/ci-local.ps1` once it exists
+  - Notes: `build/props/CodeAnalysis.props` (imported by `Directory.Build.props`) turns on `RunCodeAnalysis` with `build/props/CodeAnalysis.ruleset` (NativeRecommendedRules) and the Visual Studio clang-tidy integration (LLVM 22.1.3) only when `AppAnalysis=true`, building into `out/analyze/`. The clang-tidy integration writes findings to per-project `*.ClangTidy.log` files, not to the MSBuild log, so `analyze.ps1` parses them; each run is a clean analysis build so unchanged files cannot hide findings. Findings in Qt moc output under `out/` are listed but not failed (generated code). `portability-avoid-pragma-once` is off because rule 010 requires `#pragma once`. The scaffold had two clang-tidy findings, now fixed: `cli::ExitCode` is `std::uint8_t` and gains `InternalError = 1`, and `cli/main.cpp` catches exceptions. `analyze.ps1 -SelfTest` builds `src/core` with a seeded null dereference in `out/analyze-selftest/` and requires MSVC C6011 and `clang-analyzer-core.NullDereference`. Debug (36 projects) and Headless (34) have zero findings; S0.15.1 adds the call from `scripts/ci-local.ps1`.
 - [ ] **S0.02.5: Add the clang-format check**
   - Requirements: T-11
   - Modules: scripts

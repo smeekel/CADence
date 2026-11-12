@@ -18,6 +18,7 @@
   <Import Project="$(AppPropsDir)Common.props" />
   <Import Project="$(AppPropsDir)Cpp.props" />
   <Import Project="$(AppPropsDir)Vcpkg.props" />
+  <Import Project="$(AppPropsDir)CodeAnalysis.props" />
   <Import Project="$(AppPropsDir)Headless.props" Condition="'$(Configuration)' == 'Headless'" />
   <Import Project="$(AppPropsDir)Tests.props" Condition="'$(AppIsTestProject)' == 'true'" />
 </Project>

@@ -69,7 +69,7 @@ T-07,Output conformance tests,,S0,not-started,S0.08.3;S6.09.1;S7.04.7;S7.07.7,,
 T-08,Benchmarks,,S0,not-started,S0.08.4;S0.99.2;S1.99.2;S2.99.2;S3.99.2;S4.99.2;S5.99.2;S6.99.2;S7.99.2;S8.99.2;S9.99.2;S10.99.2,,
 T-09,Fuzzing,,S0,not-started,S0.08.5,,
 T-10,Domain verification suites,,S0,not-started,S0.08.3;S1.03.10;S4.07.4;S5.08.5;S9.01.6;S9.02.4;S9.03.7,,
-T-11,Static checks,,S0,in-progress,S0.02.3;S0.02.4;S0.02.5;S0.02.7;S0.08.7;S0.14.1;S0.15.1;S0.99.1;S1.99.1;S2.99.1;S3.99.1;S4.99.1;S5.99.1;S6.99.1;S7.99.1;S8.99.1;S9.99.1;S10.99.1,S0.02.3 check-network-apis.ps1 covered by check-selftest network-* cases,
+T-11,Static checks,,S0,in-progress,S0.02.3;S0.02.4;S0.02.5;S0.02.7;S0.08.7;S0.14.1;S0.15.1;S0.99.1;S1.99.1;S2.99.1;S3.99.1;S4.99.1;S5.99.1;S6.99.1;S7.99.1;S8.99.1;S9.99.1;S10.99.1,"S0.02.3 check-network-apis.ps1 covered by check-selftest network-* cases | S0.02.4 scripts/analyze.ps1 (MSVC Code Analysis + clang-tidy) zero findings on Debug and Headless; analyze.ps1 -SelfTest fails on a seeded null dereference (C6011, clang-analyzer-core.NullDereference)",
 T-12,Coverage,,S0,not-started,S0.08.6,,
 T-13,One-command run,,S0,not-started,S0.02.7;S0.08.2;S0.15.1;S0.99.1;S0.99.3;S1.08.1;S1.99.1;S1.99.3;S2.99.1;S2.99.3;S3.99.1;S3.99.3;S4.99.1;S4.99.3;S5.99.1;S5.99.3;S6.99.1;S6.99.3;S7.99.1;S7.99.3;S8.99.1;S8.99.3;S9.99.1;S9.99.3;S10.99.1;S10.99.3,,"CI open (Q2, ADR 0033): local scripts now, hosted later"
 T-14,Reference scenario test,,S6;S8,not-started,S6.11.1;S6.11.2;S6.11.3;S6.99.1;S7.99.1;S8.01.4;S8.99.1;S9.99.1;S10.99.1,,C-01 (ADR 0015 Accepted); C-02 split variant from S8

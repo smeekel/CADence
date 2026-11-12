@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<!--
+  MSVC Code Analysis rules for scripts/analyze.ps1 (T-11): Microsoft's recommended native rules, which include the
+  null-pointer (C6011), buffer-overrun, uninitialised-memory and handle-leak checks.
+-->
+<RuleSet Name="APP Code Analysis" Description="Native recommended rules for APP (T-11)" ToolsVersion="17.0">
+  <Include Path="NativeRecommendedRules.ruleset" Action="Default" />
+</RuleSet>

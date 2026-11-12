@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<!--
+  CodeAnalysis.props: MSVC Code Analysis and clang-tidy (T-11), off unless AppAnalysis is true.
+  scripts/analyze.ps1 passes /p:AppAnalysis=true. The analysis build goes to out/analyze/ and out/obj/analyze/ so
+  that it never replaces the objects of a normal build. clang-tidy is the VS-bundled LLVM and reads .clang-tidy.
+-->
+<Project>
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>$(AppPropsDir)CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <AppAnalysis Condition="'$(AppAnalysis)' == ''">false</AppAnalysis>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(AppAnalysis)' == 'true'">
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <ClangTidyHeaderFilter>.*[\\/](src|tests)[\\/].*</ClangTidyHeaderFilter>
+    <OutDir>$(AppRoot)out\analyze\$(Configuration)\$(MSBuildProjectName)\</OutDir>
+    <IntDir>$(AppRoot)out\obj\analyze\$(Configuration)\$(MSBuildProjectName)\</IntDir>
+  </PropertyGroup>
+</Project>

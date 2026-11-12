@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 The APP Authors
+#
+# clang-tidy configuration for scripts/analyze.ps1 (T-11). Run through the Visual Studio clang-tidy integration
+# (build/props/CodeAnalysis.props) with the VS-bundled LLVM. Every finding fails scripts/analyze.ps1; suppress a
+# finding only with NOLINT(<check>) and a reason on the same line. portability-avoid-pragma-once is off because
+# rule 010 requires #pragma once in every header.
+Checks: >
+  -*,
+  clang-analyzer-*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  performance-*,
+  portability-*,
+  -portability-avoid-pragma-once,
+  misc-definitions-in-headers,
+  misc-redundant-expression,
+  misc-unused-using-decls
+WarningsAsErrors: ''
+FormatStyle: none
