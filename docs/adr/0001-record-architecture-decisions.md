@@ -54,7 +54,7 @@ says assumptions are recorded as ADRs, never as invented requirements.
 | 0026 | Network-API check scope and third-party network imports (C-12) | Accepted |
 | 0027 | Preservation of unknown fields (C-20) | Proposed |
 | 0028 | UUID encoding in BSON decided by schema (C-21) | Proposed |
-| 0029 | vcpkg root selection (C-24) | Proposed |
+| 0029 | vcpkg root selection (C-24) | Accepted (verified in S0.01.1) |
 | 0030 | Docking with Qt Advanced Docking System (C-26) | Proposed |
 | 0031 | Logging with spdlog (C-26) | Proposed |
 | 0032 | Planning assumptions bundle | Proposed |

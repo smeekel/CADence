@@ -63,13 +63,14 @@ locally (hosted CI open, ADR 0033).
 
 ### S0.01 Toolchain spike and build verification (SP-1)
 
-- [ ] **S0.01.1: Spike SP-1a: verify the scaffold toolchain from a clean clone (time box 1 day)**
+- [x] **S0.01.1: Spike SP-1a: verify the scaffold toolchain from a clean clone (time box 1 day)**
   - Requirements: P-02, B-01, B-05, B-06, L-01
   - Modules: build, scripts
   - Depends on: none
   - Deliverables: clean-clone build log and first-build timings; DLL import lists of Qt6Core, OCCT TKernel and the product executables (`dumpbin /imports`), compared with `docs/network-imports.md` (ADR 0026); confirmed vcpkg baseline commit recorded in ADR 0029
   - Tests: T-11 `scripts/build.ps1 -Configuration Debug`, `-Configuration Release` and `-Configuration Headless` with zero warnings; T-13 `scripts/test.ps1` green
   - Done when: a fresh clone in a temporary folder builds all three configurations with only VS 2026 and Git installed; `vcpkg-configuration.json` baseline matches ADR 0029; every third-party network import in the lists appears in `docs/network-imports.md`
+  - Notes: results in ADR 0029 (now Accepted). Scratch clones must not live under `%TEMP%` (MSB8029 warning fails the build). Release `Qt6Core.dll` → `WS2_32.dll` was missing from `docs/network-imports.md` and is now listed. OCCT `TKernel` import list moved to S0.09.1 (OCCT not yet a dependency).
 - [ ] **S0.01.2: Spike SP-1b: C++23/26 feature matrix on MSVC, GCC and Clang, ending in ADR 0034 (time box 1 day)**
   - Requirements: P-05, L-01, L-02, L-03, L-04, L-05
   - Modules: build, docs
@@ -490,7 +491,7 @@ locally (hosted CI open, ADR 0033).
   - Requirements: A-05
   - Modules: geom
   - Depends on: S0.03.5
-  - Deliverables: `opencascade` in `vcpkg.json` (licence `LGPL-2.1-only WITH OCCT-exception-1.0`, already recorded in `THIRD_PARTY_NOTICES.md`, ADR 0005); `src/geom/{Kernel,Shape}.h` (pimpl, no OCCT types), `src/geom/occt/OcctKernel.{h,cpp}`; box, cylinder, sphere, cone, torus
+  - Deliverables: `opencascade` in `vcpkg.json` (licence `LGPL-2.1-only WITH OCCT-exception-1.0`, already recorded in `THIRD_PARTY_NOTICES.md`, ADR 0005); `src/geom/{Kernel,Shape}.h` (pimpl, no OCCT types), `src/geom/occt/OcctKernel.{h,cpp}`; box, cylinder, sphere, cone, torus; `dumpbin /dependents` list of OCCT `TKernel` recorded in ADR 0029 and its network imports in `docs/network-imports.md` (moved from S0.01.1, where OCCT was not yet a dependency)
   - Tests: T-01 `Geom.Tests Primitives.*`
   - Done when: tests green; no OCCT include in any `src/geom/*.h` public header
 - [ ] **S0.09.2: Add mass properties, bounding box, validity and topology counts**

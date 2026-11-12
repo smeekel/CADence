@@ -7,7 +7,7 @@ CR-07,Attribution and provenance,,S0,not-started,S0.02.1;S0.02.2,"CR-07a: S0.02.
 CR-05,Standards data: calculators and public factual data only,,S0,not-started,S0.02.6;S2.04.7;S2.08.1;S4.03.6;S4.04.1;S5.03.4;S7.02.2;S8.04.1;S8.06.1;S10.03.1;S10.04.1;S10.04.2,,Data-source table docs/data-sources.md
 CR-06,No telemetry or phone-home,,S0,not-started,S0.02.3;S0.02.6,,
 P-01,Desktop application,,S0,not-started,S0.12.1;S0.13.4,,
-P-02,Initial target,,S0,not-started,S0.01.1,,
+P-02,Initial target,,S0,done,S0.01.1,"S0.01.1 T-11 clean-clone build of Debug, Release and Headless with 0 warnings (ADR 0029 verification)",
 P-03,Fully offline,,S0,not-started,S0.02.3;S0.08.7;S0.99.1;S1.99.1;S2.99.1;S3.99.1;S4.99.1;S5.99.1;S6.99.1;S7.99.1;S8.99.1;S9.99.1;S10.06.7;S10.99.1,"P-03a: S0.08.7 T-11 offline smoke of cli, ui (start and close) and Integration.Tests with no errors and no outbound connection attempts | P-03b: S0.02.3 network APIs in src/ fail; third-party network imports such as Qt6Core's ws2_32.dll are allowed, noted and summarised",C-12 decided by the owner 2026-11-11 (ADR 0026 Accepted): third-party network imports allowed and listed in docs/network-imports.md; APP code in src/ still fails
 P-04,Portability,,S0,not-started,S0.01.3;S0.03.13;S0.11.1;S0.11.5;S0.11.6;S0.99.1,P-04: S0.01.3 T-11 check passes on the solution and fails on a fixture project that links Qt6Widgets,C-09 (ADR 0023)
 P-05,Language,,S0,not-started,S0.01.2,,
@@ -26,14 +26,14 @@ P-21,No silent data loss,,S0,not-started,S0.05.4;S2.01.2;S2.03.8;S6.02.3,,
 P-22,Undo/redo,,S0,not-started,S0.04.3,,
 P-23,Logging,,S0,not-started,S0.03.10;S0.11.3;S0.11.4;S0.13.13,,
 P-30,Licence GPL-3.0-or-later,,S0,not-started,S0.01.6;S0.02.2;S0.13.12,,"C-25 resolved by owner decision 2026-11-11: OCCT is LGPL-2.1-only WITH OCCT-exception-1.0 (spec 4.3 says LGPL-2.1-or-later), ngspice is BSD-3-Clause; both recorded in THIRD_PARTY_NOTICES.md (ADRs 0005, 0008)"
-B-01,Solution,,S0,not-started,S0.01.1;S0.01.4,,
+B-01,Solution,,S0,in-progress,S0.01.1;S0.01.4,S0.01.1 T-11 clean-clone build of APP.slnx,
 B-02,One project per module,,S0,not-started,S0.01.4,,
 B-03,Shared settings,,S0,not-started,S0.01.4,,
 B-04,Configurations,,S0,not-started,S0.01.3,,
-B-05,Dependencies,,S0,not-started,S0.01.1;S0.01.6,,
-B-06,Command-line build,,S0,not-started,S0.01.1,,
+B-05,Dependencies,,S0,in-progress,S0.01.1;S0.01.6,"S0.01.1 baseline 177e8175 verified, clean-clone vcpkg restore (ADR 0029)",
+B-06,Command-line build,,S0,done,S0.01.1,"S0.01.1 T-11 scripts/build.ps1 Debug, Release, Headless; T-13 scripts/test.ps1",
 B-07,Migration-ready,,S0,not-started,S0.01.4,,
-L-01,Standard switch,,S0,not-started,S0.01.1;S0.01.2,,
+L-01,Standard switch,,S0,in-progress,S0.01.1;S0.01.2,S0.01.1 T-11 /std:c++latest builds with 0 warnings,
 L-02,Supported features only,,S0,not-started,S0.01.2;S9.01.1;S9.03.1;S10.04.3,,
 L-03,Portable subset,,S0,not-started,S0.01.2;S0.01.5,,
 L-04,Feature-test macros,,S0,not-started,S0.01.2;S0.01.5,,
