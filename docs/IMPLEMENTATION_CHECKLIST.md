@@ -141,13 +141,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-11 `scripts/analyze.ps1` reports zero findings on the scaffold and fails on a fixture with a seeded null dereference
   - Done when: zero findings on the repository; script called by `scripts/ci-local.ps1` once it exists
   - Notes: `build/props/CodeAnalysis.props` (imported by `Directory.Build.props`) turns on `RunCodeAnalysis` with `build/props/CodeAnalysis.ruleset` (NativeRecommendedRules) and the Visual Studio clang-tidy integration (LLVM 22.1.3) only when `AppAnalysis=true`, building into `out/analyze/`. The clang-tidy integration writes findings to per-project `*.ClangTidy.log` files, not to the MSBuild log, so `analyze.ps1` parses them; each run is a clean analysis build so unchanged files cannot hide findings. Findings in Qt moc output under `out/` are listed but not failed (generated code). `portability-avoid-pragma-once` is off because rule 010 requires `#pragma once`. The scaffold had two clang-tidy findings, now fixed: `cli::ExitCode` is `std::uint8_t` and gains `InternalError = 1`, and `cli/main.cpp` catches exceptions. `analyze.ps1 -SelfTest` builds `src/core` with a seeded null dereference in `out/analyze-selftest/` and requires MSVC C6011 and `clang-analyzer-core.NullDereference`. Debug (36 projects) and Headless (34) have zero findings; S0.15.1 adds the call from `scripts/ci-local.ps1`.
-- [ ] **S0.02.5: Add the clang-format check**
+- [x] **S0.02.5: Add the clang-format check**
   - Requirements: T-11
   - Modules: scripts
   - Depends on: S0.01.1
   - Deliverables: `scripts/check-format.ps1` (VS-bundled clang-format, `--dry-run --Werror` over `src/` and `tests/`)
   - Tests: T-11 check fails on a mis-formatted fixture and passes on the repository
   - Done when: repository formatted and green; check run by `scripts/test.ps1`
+  - Notes: the repository already matched `.clang-format` with clang-format 22.1.3 (63 files). The check passes `--style=file:<root>/.clang-format` explicitly, and `check-selftest.ps1` now copies `.clang-format` and `.clang-tidy` into its fixtures; its `format-misformatted` case fails on a mis-formatted `tests/core` source.
 - [ ] **S0.02.6: Add clean-room and data-source guards**
   - Requirements: CR-01, CR-02, CR-03, CR-05, CR-06
   - Modules: scripts, docs, libraries

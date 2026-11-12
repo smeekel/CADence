@@ -31,7 +31,8 @@ param(
 $root     = Get-AppRepoRoot
 $tempBase = Join-Path ( [IO.Path]::GetTempPath() ) ( 'app-check-selftest-' + [Guid]::NewGuid().ToString( 'N' ).Substring( 0, 8 ) )
 $copyList = @( 'src', 'tests', 'build', 'scripts', 'docs', 'libraries', 'Directory.Build.props', 'Directory.Build.targets',
-               'vcpkg.json', 'vcpkg-configuration.json', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'APP.slnx' )
+               'vcpkg.json', 'vcpkg-configuration.json', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'APP.slnx', '.clang-format',
+               '.clang-tidy' )
 $utf8     = New-Object System.Text.UTF8Encoding( $false )
 $failures = New-Object System.Collections.Generic.List[string]
 
@@ -249,6 +250,10 @@ $cases = @(
     @{ Name = 'hygiene-two-projects'; Check = 'check-build-hygiene'
        What = 'a module folder holds two projects'
        Apply = { param( $r ) Copy-Item ( Join-Path $r 'src\core\Core.vcxproj' ) ( Join-Path $r 'src\core\CoreExtra.vcxproj' ) } },
+    @{ Name = 'format-misformatted'; Check = 'check-format'
+       What = 'a test source with cramped braces and double spaces'
+       Expect = 'tests/core/Misformatted\.cpp:\d+: code should be clang-formatted'
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'tests\core\Misformatted.cpp' ) ( $header + "int  misformatted(int a){return a;}`n" ) } },
     # Accept: P-30
     @{ Name = 'licences-gpl2-dependency'; Check = 'check-licences'
        What = 'vcpkg.json adds a reviewed and noticed GPL-2.0-only dependency'
