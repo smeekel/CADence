@@ -144,6 +144,9 @@ Resolved by the owner on 2026-11-11, and removed from this list:
   in APP's own code fail (ADR 0026, Accepted).
 - **Repository:** https://github.com/smeekel/CADence. The product keeps the `APP` placeholder.
 - **Doxygen:** installed (1.18.0).
+- **Licences (C-25, ADRs 0005 and 0008):** OCCT is `LGPL-2.1-only WITH OCCT-exception-1.0` and ngspice is
+  `BSD-3-Clause` with some parts under other licences. Both are acceptable. The spec section 4.3 OCCT wording is
+  resolved by this decision; the spec is not edited. Both are recorded in `THIRD_PARTY_NOTICES.md`.
 
 1. **Hosted CI (ADR 0033, open).**
    - **Question:** which service to use (GitHub Actions hosted Windows, a self-hosted runner on this machine, or
@@ -154,19 +157,14 @@ Resolved by the owner on 2026-11-11, and removed from this list:
    - **A Clang/GCC toolchain:** WSL 2 compilers or the VS "C++ Clang tools", so SP-1 can confirm the L-03
      portable feature set.
    - **MiKTeX:** optional, for the PDF manual.
-3. **Licence corrections.**
-   - **OCCT (C-25, ADR 0005):** OCCT is LGPL-2.1-only in vcpkg metadata. Spec section 4.3 should be corrected; the
-     implementer does not edit the spec.
-   - **ngspice (ADR 0008):** the vcpkg port declares CC-BY-SA-4.0. The licence must be verified in S9.03.1 before
-     any ngspice code is linked.
-4. **Proposed ADRs 0016 … 0033, except 0026.**
+3. **Proposed ADRs 0016 … 0033, except 0026.**
    - **Needed first:** 0029 (vcpkg root, S0.01.1), 0016 (S0.03.1), 0031 (logging, S0.03.10),
      0024, 0027, 0028, 0023, 0030 and 0017, all in S0.
    - **Later:** the layering extensions 0018 … 0022 are needed from S1 onwards.
-5. **Spec Q-08 (MP4/FFmpeg) and Q-09 (writable global library folder).**
+4. **Spec Q-08 (MP4/FFmpeg) and Q-09 (writable global library folder).**
    - **Q-08 default:** the encoder is an optional, dynamically loaded seam (S3.08.3, S10.04.4).
    - **Q-09 default:** the global folder is writable, as the F-10 table says (ADR 0032).
-6. **Product name.** The plan keeps the placeholder `APP`. "Cadence" is a third-party trademark, so the workspace
+5. **Product name.** The plan keeps the placeholder `APP`. "Cadence" is a third-party trademark, so the workspace
    name should not become the product name (ADR 0032, R-22).
 
 ## Proposed first five steps

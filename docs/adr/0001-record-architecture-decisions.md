@@ -33,7 +33,7 @@ says assumptions are recorded as ADRs, never as invented requirements.
 | 0005 | Open CASCADE Technology behind `geom` (D-04) | Accepted |
 | 0006 | Own 2D sketch constraint solver (D-05) | Accepted |
 | 0007 | Own mate solver; Project Chrono for dynamics (D-06) | Accepted |
-| 0008 | ngspice as a shared library (D-07) | Accepted (licence check pending) |
+| 0008 | ngspice as a shared library (D-07) | Accepted |
 | 0009 | Clipper2 for PCB polygon operations (D-08) | Accepted |
 | 0010 | nlohmann/json `ordered_json` for JSON and BSON (D-09) | Accepted |
 | 0011 | lib3mf for 3MF (D-10) | Accepted |

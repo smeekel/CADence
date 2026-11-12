@@ -102,7 +102,7 @@ locally (hosted CI open, ADR 0033).
   - Requirements: B-05, P-30
   - Modules: build, docs
   - Depends on: S0.01.1
-  - Deliverables: `vcpkg.json` with a version constraint per dependency and `qtbase` `default-features: false`; licence verification section in ADRs 0002 … 0014 (ngspice licence open until S9.03.1)
+  - Deliverables: `vcpkg.json` with a version constraint per dependency and `qtbase` `default-features: false`; licence verification section in ADRs 0002 … 0014 (OCCT and ngspice already verified and accepted by the owner on 2026-11-11, recorded in `THIRD_PARTY_NOTICES.md` and ADRs 0005 and 0008)
   - Tests: T-11 `scripts/check-licences.ps1` dry run (manual until S0.02.2); clean-clone build repeated
   - Done when: every dependency has a pinned version and a verified licence entry, or a recorded open item
 
@@ -490,7 +490,7 @@ locally (hosted CI open, ADR 0033).
   - Requirements: A-05
   - Modules: geom
   - Depends on: S0.03.5
-  - Deliverables: `src/geom/{Kernel,Shape}.h` (pimpl, no OCCT types), `src/geom/occt/OcctKernel.{h,cpp}`; box, cylinder, sphere, cone, torus
+  - Deliverables: `opencascade` in `vcpkg.json` (licence `LGPL-2.1-only WITH OCCT-exception-1.0`, already recorded in `THIRD_PARTY_NOTICES.md`, ADR 0005); `src/geom/{Kernel,Shape}.h` (pimpl, no OCCT types), `src/geom/occt/OcctKernel.{h,cpp}`; box, cylinder, sphere, cone, torus
   - Tests: T-01 `Geom.Tests Primitives.*`
   - Done when: tests green; no OCCT include in any `src/geom/*.h` public header
 - [ ] **S0.09.2: Add mass properties, bounding box, validity and topology counts**
@@ -3903,13 +3903,13 @@ Stage plan: `docs/stages/S9.md`. Exit: T-10 motion, tolerance and SPICE verifica
 
 ### S9.03 Circuit simulation (SPICE)
 
-- [ ] **S9.03.1: Verify the ngspice licence and load it dynamically through platform**
+- [ ] **S9.03.1: Add the ngspice port, confirm it matches the recorded licence, and load it dynamically through platform**
   - Requirements: E-SIM-01, L-02, L-05
   - Modules: sim, platform, docs
   - Depends on: S8.99.4
-  - Deliverables: licence verification recorded in ADR 0008 and `docs/provenance.md` (or in `THIRD_PARTY_NOTICES.md` if from vcpkg); `src/sim/spice/NgspiceEngine.{h,cpp}` using the shared-library API through `platform` dynamic loading (S0.11.5); missing library gives a clear message
+  - Deliverables: `ngspice` in `vcpkg.json`. The licence was verified and accepted by the owner on 2026-11-11 (ADR 0008, `THIRD_PARTY_NOTICES.md`). This step confirms that the pinned port version and its `COPYING` still match that record, decides whether the `codemodels` feature (GPL-2.0-or-later `table.cm`) ships, and updates the notices. Code: `src/sim/spice/NgspiceEngine.{h,cpp}` using the shared-library API through `platform` dynamic loading (S0.11.5); a missing library gives a clear message
   - Tests: T-01 `Sim.Tests Spice.LoadsEngine`, `Spice.MissingLibraryMessage`
-  - Done when: tests green and the licence is confirmed GPL-3.0-compatible
+  - Done when: tests green; port version and `COPYING` match `THIRD_PARTY_NOTICES.md`, or the notices and ADR 0008 are updated
 - [ ] **S9.03.2: Netlist export from the schematic with the active variant**
   - Requirements: E-SIM-01, E-LIB-01, E-PRJ-03
   - Modules: sim, ecad/sch, ecad/lib

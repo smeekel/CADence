@@ -25,7 +25,7 @@ P-20,Crash safety,,S0,not-started,S0.11.2;S0.11.3;S0.13.13,,
 P-21,No silent data loss,,S0,not-started,S0.05.4;S2.01.2;S2.03.8;S6.02.3,,
 P-22,Undo/redo,,S0,not-started,S0.04.3,,
 P-23,Logging,,S0,not-started,S0.03.10;S0.11.3;S0.11.4;S0.13.13,,
-P-30,Licence GPL-3.0-or-later,,S0,not-started,S0.01.6;S0.02.2;S0.13.12,,
+P-30,Licence GPL-3.0-or-later,,S0,not-started,S0.01.6;S0.02.2;S0.13.12,,"C-25 resolved by owner decision 2026-11-11: OCCT is LGPL-2.1-only WITH OCCT-exception-1.0 (spec 4.3 says LGPL-2.1-or-later), ngspice is BSD-3-Clause; both recorded in THIRD_PARTY_NOTICES.md (ADRs 0005, 0008)"
 B-01,Solution,,S0,not-started,S0.01.1;S0.01.4,,
 B-02,One project per module,,S0,not-started,S0.01.4,,
 B-03,Shared settings,,S0,not-started,S0.01.4,,
@@ -42,7 +42,7 @@ A-01,Layering,,S0,not-started,S0.01.3;S0.02.7;S0.03.1;S0.09.4;S0.10.3;S1.01.1;S3
 A-02,Headless first,,S0,not-started,S0.03.2;S0.05.5;S0.10.1;S0.10.4;S0.11.6;S7.04.6,,
 A-03,Command bus,,S0,not-started,S0.03.2;S0.03.9;S0.04.1;S0.04.2;S0.04.3;S0.04.4;S0.04.5;S0.05.5;S0.14.2;S1.04.8,,
 A-04,Stable identities,,S0,not-started,S0.03.3;S0.05.1;S0.05.2;S0.09.7;S6.02.1,,
-A-05,Kernel adapter,,S0,not-started,S0.09.1;S0.09.2;S0.09.3;S0.09.4,,
+A-05,Kernel adapter,,S0,not-started,S0.09.1;S0.09.2;S0.09.3;S0.09.4,,OCCT linked dynamically under LGPL-2.1-only WITH OCCT-exception-1.0 (ADR 0005)
 A-06,Topological naming,,S0,not-started,S0.09.5;S0.09.6;S0.09.7;S2.01.3;S2.06.1;S2.06.2;S3.03.1;S6.03.1;S7.01.6;S10.03.4,A-06: S2.06.2 T-04 Golden.Tests TopoNaming.Case01..20,
 A-07,Regeneration engine,,S0,not-started,S0.03.8;S0.03.9;S0.05.3;S0.05.4;S0.10.1;S1.06.2;S2.01.2;S2.07.3;S2.10.1;S6.01.1;S6.01.2;S6.02.3;S7.01.6;S8.01.3;S10.05.3,,
 A-08,Expression engine,,S0,not-started,S0.03.6;S0.03.7;S0.03.8;S0.05.2;S0.13.8;S1.03.9;S1.06.4;S5.05.1;S6.02.2,,
@@ -131,7 +131,7 @@ E-SCH-02,Hierarchy and multi-channel design,AD-SCH-02,S4,not-started,S4.06.1;S4.
 E-SCH-03,Electrical rules check (ERC),AD-SCH-03,S4,not-started,S4.07.1;S4.07.2;S4.07.3;S4.07.4;S4.10.4,E-SCH-03: S4.07.4 T-04 Golden.Tests Erc.Seeded12Exactly,
 E-SCH-04,Annotation,AD-SCH-04,S4;S5,not-started,S4.08.1;S5.06.2,E-SCH-04a: S4.08.1 T-04 Golden.Tests Annotation.ExpectedDesignators | E-SCH-04b: S5.06.2 Annotation.BackAnnotateByPosition,Clause b accepted in S5.06.2
 E-SCH-05,Schematic directives,AD-SCH-05,S4;S5,not-started,S4.08.2;S5.06.3,E-SCH-05: S5.06.3 T-02 Integration.Tests Directives.UsbPairCreatesDiffPairClass,
-E-SIM-01,Circuit simulation,AD-SIM-01,S9,not-started,S9.03.1;S9.03.2;S9.03.3;S9.03.4;S9.03.5;S9.03.6;S9.03.7;S9.05.3,E-SIM-01: S9.03.7 T-10 Sim.Tests SpiceSuite.All,"ngspice licence to be verified (ADR 0008, S9.03.1)"
+E-SIM-01,Circuit simulation,AD-SIM-01,S9,not-started,S9.03.1;S9.03.2;S9.03.3;S9.03.4;S9.03.5;S9.03.6;S9.03.7;S9.05.3,E-SIM-01: S9.03.7 T-10 Sim.Tests SpiceSuite.All,"ngspice licence verified and accepted by the owner 2026-11-11: BSD-3-Clause with LGPL/MPL/GPL-2.0-or-later/public-domain parts (ADR 0008, THIRD_PARTY_NOTICES.md); S9.03.1 confirms the pinned port still matches"
 E-PCB-01,Layer stack,AD-PCB-01,S5,not-started,S5.03.1;S5.03.2;S5.03.3;S5.03.4;S5.10.3;S5.15.6,E-PCB-01a: S5.03.3 T-04 Golden.Tests Stack.FourAndEightLayerThickness | E-PCB-01b: S5.03.3 Golden.Tests Impedance.Within1Percent,
 E-PCB-02,Board shape and regions,AD-PCB-02,S5,not-started,S5.02.1;S5.04.1;S5.04.2;S5.13.4;S5.15.1;S6.04.2;S6.05.2,E-PCB-02: S5.13.4 T-06 Golden.Tests Snapshot.BoardCutoutsKeepouts2d3d,
 E-PCB-03,Component placement,AD-PCB-03,S5,not-started,S5.07.1;S5.07.2;S5.07.3;S5.07.4;S5.15.2;S6.05.3,E-PCB-03a: S5.15.2 T-05 Ui.Tests Replay.PlaceGoldenBoard | E-PCB-03b: S5.07.4 T-04 Golden.Tests Placement.RoomCopy4Channels,

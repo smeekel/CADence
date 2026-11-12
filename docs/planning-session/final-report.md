@@ -133,7 +133,8 @@ and extension steps.
 ## 7. Open questions for the owner
 
 The owner resolved the fabrication outputs at S6 (ADR 0015), the P-03 wording (ADR 0026), the repository and the
-Doxygen install. Section 12 lists these decisions, and they are no longer open. The remaining questions:
+Doxygen install (section 12), and the OCCT and ngspice licences (section 13). None of these is open any more. The
+remaining questions:
 
 1. **Continuous integration (ADR 0033, open).**
    - **Question:** which service to use: GitHub Actions on hosted Windows runners, a self-hosted runner on this
@@ -146,13 +147,7 @@ Doxygen install. Section 12 lists these decisions, and they are no longer open. 
      that P-02 holds, and they have been run only under 5.1.
    - **Optional extras:** a Clang/GCC toolchain (the VS "C++ Clang tools" or WSL 2 compilers) for SP-1's L-03 matrix,
      and MiKTeX for the PDF manual (`scripts/docs.ps1 -Pdf`). LaTeX is not installed, by decision.
-3. **Licence corrections.**
-   - **OCCT:** OCCT is LGPL-2.1-only (with the OCCT exception) in the vcpkg metadata, while spec section 4.3 says
-     "LGPL-2.1-or-later, LGPL-3.0". Linking stays allowed, but the spec should be corrected (ADR 0005). Qt Advanced
-     Docking System is also LGPL-2.1-only (ADR 0030).
-   - **ngspice:** the vcpkg port metadata declares CC-BY-SA-4.0. The actual licence must be verified in S9.03.1
-     before linking (ADR 0008, R-12).
-4. **The six layering ADRs, 0016 … 0021 (Proposed).** Each adds an edge to the rule-030 layering table, and each must
+3. **The six layering ADRs, 0016 … 0021 (Proposed).** Each adds an edge to the rule-030 layering table, and each must
    be Accepted before the step that applies it:
    - 0016: `core` uses nlohmann/json. Needed from S0.03.
    - 0017: `cli` references `platform` and `render`. Needed in S0.10.3.
@@ -160,13 +155,15 @@ Doxygen install. Section 12 lists these decisions, and they are no longer open. 
    - 0019: `drw` references `sketch`. Needed in S7.
    - 0020: `io` references `sketch` and `drw`. Needed in S7.
    - 0021: `sim` references `part` and `drw`. Needed in S9.
-5. **The other Proposed ADRs, 0022 … 0033 except 0026 (Accepted).** They cover Eigen in `sketch`, `asm` and `sim`;
+4. **The other Proposed ADRs, 0022 … 0033 except 0026 (Accepted).** They cover Eigen in `sketch`, `asm` and `sim`;
    Qt confined to `ui`; OS folders injected into `doc`; the 3D board in `link`; unknown-field preservation; UUIDs in
-   BSON; vcpkg root selection; Qt ADS docking; spdlog; and the planning assumptions.
+   BSON; vcpkg root selection; Qt ADS docking; spdlog; and the planning assumptions. Qt Advanced Docking System is
+   LGPL-2.1-only, like OCCT. Its licence entry is written when ADR 0030 is Accepted, and it is not part of the
+   licence decision in section 13.
    - **Needed in S0:** 0029 before S0.01.1, then 0031, 0024, 0027, 0028, 0023 and 0030.
    - **Needed later:** 0022 from S1 (the sketch solver) and 0025 in S5 (the 3D board).
    - **Bundles:** 0032 records the planning assumptions, and 0033 records the open CI decision.
-6. **Smaller items.**
+5. **Smaller items.**
    - **Spec Q-08 (MP4/FFmpeg):** the default is an optional, dynamically loaded encoder seam.
    - **Spec Q-09 (writable global library folder):** the default is writable.
    - **Product name:** keep the `APP` placeholder until the owner renames the software. "Cadence" is a third-party
@@ -227,7 +224,7 @@ The spec wins in every case, except where it contradicts itself or the facts; th
 | C-20 | F-08 preserves unknown fields in place; the notepad moves them to `extensions` | Spec (ADR 0027) |
 | C-21 | F-09: only `$magic` is a BSON UUID; the notepad makes every ObjectId binary | Schema-driven binary ObjectIds (ADR 0028) |
 | C-23 | Rule 040 requires PowerShell 7; P-02 allows only VS and Git | Scripts compatible with 5.1 |
-| C-25 | Spec section 4.3 OCCT licence versus the vcpkg metadata | **owner** (open question 3) |
+| C-25 | Spec section 4.3 OCCT licence versus the vcpkg metadata | **owner**: resolved by user decision; OCCT is `LGPL-2.1-only WITH OCCT-exception-1.0` and accepted, and the spec is not edited (ADR 0005, section 13) |
 | C-27 | The section 6.2 parameter example has no `id`; the notepad envelope has one | Parameters carry ObjectIds |
 
 Phase 3 found no new conflict between the spec and the notepads.
@@ -351,7 +348,77 @@ names. The Headless build has no third-party network import. No other third-part
   | `4cd42ea` | S0 scaffold: the root configuration files, `README.md`, `LICENSE`, `Doxyfile`, `build/`, `src/`, `tests/`, `libraries/`, `scripts/` and the Doxygen pages in `docs/` (203 files) |
   | `9764bba` | Planning documents: the checklist, the traceability CSV, the stage plans, the risks, the ADRs, `FOLDER_STRUCTURE.md` and `network-imports.md` (53 files) |
   | `5596b9c` | Planning-session reports and `checks/check_plan.py` (5 files) |
-  | the next commit | Records the push result in this section |
+  | `59528f6` | Records the push result in this section |
 
 - **Push:** `git push -u origin main` gave `535926a..5596b9c  main -> main`, exit 0, with no force. `main` tracks
-  `origin/main`, and 289 files are tracked.
+  `origin/main`, and 289 files are tracked. A second push of `59528f6` was also a fast-forward.
+
+## 13. Licence decision: OCCT and ngspice (2026-11-11)
+
+The owner decided that OCCT under the LGPL and ngspice under BSD are both acceptable. This closes Phase 1 conflict
+C-25 and the licence open question. The spec section 4.3 discrepancy, which lists OCCT under "LGPL-2.1-or-later", is
+**resolved by user decision**. The spec is not edited (C-18).
+
+### Verification
+
+The licences were checked against the vcpkg ports at the pinned baseline `177e8175…` and against the upstream files.
+
+- **OCCT:** `LGPL-2.1-only WITH OCCT-exception-1.0`.
+  - **vcpkg port:** `opencascade` 8.0.1. Its metadata says `LGPL-2.1-only` and leaves out the exception, but the
+    portfile installs both `LICENSE_LGPL_21.txt` and `OCCT_LGPL_EXCEPTION.txt`.
+  - **Upstream:** the `README.md` and the file headers at tag `V8_0_1` grant LGPL version 2.1 with that exception,
+    and say nothing about later versions. `OCCT-exception-1.0` is the identifier in the SPDX exceptions list. OCCT
+    is also offered under a commercial licence.
+- **ngspice:** `BSD-3-Clause`, upstream's "Modified BSD" licence.
+  - **vcpkg port:** `ngspice` 41. The tarball's SHA512 matches the port, and its `COPYING` is byte-identical to the
+    one at upstream tag `ngspice-41`.
+  - **Why vcpkg says CC-BY-SA-4.0:** that licence covers only the licensing document itself and the ngspice manual,
+    not the code.
+  - **Parts not under BSD-3-Clause:**
+
+    | Part | Licence | Built by the vcpkg port |
+    |---|---|---|
+    | `numparam` | LGPL-2.0-or-later | Yes, in `ngspice.dll` |
+    | `osdi` and the bundled `cppduals` headers | MPL-2.0 (`cppduals` is not listed in `COPYING`) | Yes, in `ngspice.dll` |
+    | `maths/sparse` | MIT-style | Yes, in `ngspice.dll` |
+    | XSPICE | Public domain | Yes, in `ngspice.dll` |
+    | XSPICE `table` code model | GPL-2.0-or-later | Yes, in `table.cm`, through the default `codemodels` feature |
+    | `tclspice.c` | LGPL v2 | No |
+    | ADMS `admst` | LGPL-2.1 | No |
+    | `ndev` | Public domain | No |
+    | `m4` | DFSG-compatible | No |
+
+  - **Compatibility:** every part is compatible with GPL-3.0-or-later under spec section 4.3.
+
+### Changes
+
+- **`THIRD_PARTY_NOTICES.md`:** new entries for OCCT and ngspice, each with its SPDX licence, upstream URL, verified
+  version, how APP uses it and whether it ships. The ngspice entry also has the table of parts under other licences.
+  - **How APP uses them:** both are built by vcpkg and neither is copied. OCCT is linked dynamically by `geom`.
+    ngspice is loaded at run time by `sim` through `platform`.
+  - **The OCCT notice:** the notice that the OCCT exception requires.
+  - **LGPL obligations:** a new section covers dynamic linking, a replaceable DLL, and offering the source (including
+    the vcpkg port patches), for Qt, OCCT and the LGPL and MPL parts of `ngspice.dll`.
+- **ADRs:**
+  - **ADR 0005:** licence confirmed, and C-25 resolved by owner decision.
+  - **ADR 0008:** the "licence verification pending" status is removed, and the licence and the differently
+    licensed parts are recorded.
+  - **ADR 0001:** the index entry for 0008 is updated.
+- **Risks:** R-12 is resolved, and its likelihood drops to Low. R-15 now names the confirmed OCCT licence and the
+  obligations.
+- **Checklist:** step S0.01.6 no longer says the ngspice licence is open. Step S0.09.1 now adds `opencascade` to
+  `vcpkg.json` with the recorded licence. Step S9.03.1 now confirms that the pinned port still matches the record,
+  and decides whether `table.cm` ships.
+- **Traceability:** notes added to the P-30, A-05 and E-SIM-01 rows.
+- **Stage plan and reports:** `docs/stages/S9.md`, plus the open questions in this report and in
+  `planning-docs-report.md`.
+- **Not covered:** Qt Advanced Docking System (LGPL-2.1-only, ADR 0030) is outside this decision. Its entry is
+  written when ADR 0030 is Accepted.
+
+### Results
+
+| Command | Result |
+|---|---|
+| `scripts\check-spdx.ps1` | `OK (115 files)`, exit 0 |
+| `python docs\planning-session\checks\check_plan.py` | `check_plan: OK` |
+| `scripts\docs.ps1` | `docs: HTML OK`, exit 0, with 0 Doxygen warnings |
