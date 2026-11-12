@@ -59,7 +59,7 @@ says assumptions are recorded as ADRs, never as invented requirements.
 | 0031 | Logging with spdlog (C-26) | Proposed |
 | 0032 | Planning assumptions bundle | Proposed |
 | 0033 | Continuous integration: local scripts first, hosted CI later | Proposed (open) |
-| 0034 | Reserved: SP-1 toolchain and C++ feature matrix | to be written in S0.01.2 |
+| 0034 | Spike SP-1: toolchain and C++23/26 feature matrix | Proposed (MSVC verified; GCC/Clang blocked: not installed) |
 | 0035 | Reserved: SP-2 topological naming (`TopoRef`) | to be written in S0.09.6 |
 | 0036 | Reserved: SP-3 sketch solver | to be written in S1.01.3 |
 | 0037 | Reserved: SP-4 mate solver | to be written in S3.01.3 |

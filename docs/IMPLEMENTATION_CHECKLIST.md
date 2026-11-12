@@ -71,7 +71,8 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-11 `scripts/build.ps1 -Configuration Debug`, `-Configuration Release` and `-Configuration Headless` with zero warnings; T-13 `scripts/test.ps1` green
   - Done when: a fresh clone in a temporary folder builds all three configurations with only VS 2026 and Git installed; `vcpkg-configuration.json` baseline matches ADR 0029; every third-party network import in the lists appears in `docs/network-imports.md`
   - Notes: results in ADR 0029 (now Accepted). Scratch clones must not live under `%TEMP%` (MSB8029 warning fails the build). Release `Qt6Core.dll` → `WS2_32.dll` was missing from `docs/network-imports.md` and is now listed. OCCT `TKernel` import list moved to S0.09.1 (OCCT not yet a dependency).
-- [ ] **S0.01.2: Spike SP-1b: C++23/26 feature matrix on MSVC, GCC and Clang, ending in ADR 0034 (time box 1 day)**
+- [~] **S0.01.2: Spike SP-1b: C++23/26 feature matrix on MSVC, GCC and Clang, ending in ADR 0034 (time box 1 day)**
+  - Status: blocked. MSVC column verified with `tests/core/spikes/cpp_feature_probe.cpp` and `scripts/probe-cpp-features.ps1` (all rows match `docs/cpp-features.md`); ADR 0034 written as Proposed. GCC 14 and Clang 18 are not installed in WSL (Ubuntu 26.04.1 has no C++ compiler; installing `g++-14 clang-18 libc++-18-dev libc++abi-18-dev` needs the owner's approval), and the ADR needs owner acceptance.
   - Requirements: P-05, L-01, L-02, L-03, L-04, L-05
   - Modules: build, docs
   - Depends on: S0.01.1

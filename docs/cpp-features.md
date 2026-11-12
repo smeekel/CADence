@@ -57,3 +57,4 @@ on items in "Not allowed".
 | Date | Change | ADR |
 |---|---|---|
 | 2026-11-11 | Initial list from the Phase 1 MSVC probe; GCC/Clang to be confirmed | 0034 (to be written in S0.01.2) |
+| 2026-11-12 | MSVC 19.51 column re-verified row by row with `scripts/probe-cpp-features.ps1` (no change); GCC/Clang still pending because no compiler is installed in WSL | 0034 (Proposed) |
