@@ -26,7 +26,7 @@ ports, the installed `share/<port>/copyright` file. Spec section 4.3 is the yard
 | Library | Port and version (pinned) | Licence (SPDX) | Evidence | Status |
 |---|---|---|---|---|
 | Qt Base (Core, Gui, Widgets) | `qtbase` 6.11.3#1, features `gui`, `widgets` | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only (used under LGPL-3.0-only, dynamically linked) | Port metadata has `"license": null`; the installed copyright file (261 KB) holds the LGPL-3.0, GPL-2.0 and GPL-3.0 texts, the commercial-licence reference and the permissive licences of bundled third-party code | Allowed (4.3: LGPL-3.0) |
-| PCRE2 | `pcre2` 10.49#2 | BSD-3-Clause WITH PCRE2-exception | Port metadata; installed copyright | Allowed |
+| PCRE2 | `pcre2` 10.49#2 | BSD-2-Clause AND BSD-3-Clause WITH PCRE2-exception (BSD-2-Clause covers the bundled sljit JIT compiler; corrected in S0.02.2, accepted by the owner on 2026-11-12) | Port metadata; installed copyright | Allowed |
 | double-conversion | `double-conversion` 3.4.0 | BSD-3-Clause | Port metadata has no licence; portfile installs upstream `LICENSE`; GitHub reports BSD-3-Clause; installed copyright is the BSD text | Allowed |
 | zlib | `zlib` 1.3.2#3 | Zlib | Port metadata; installed copyright | Allowed |
 | MD4C | `md4c` 0.6.0 | MIT | Port metadata; installed copyright | Allowed |

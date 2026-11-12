@@ -55,6 +55,14 @@ Decided by the owner on 2026-11-11:
 | Reference scenario at S6 needs fabrication outputs (C-01) | Minimal Gerber X2, Excellon, IPC-2581, BOM and pick-and-place writers are built in S6 (`S6.09`); full E-OUT-01 options stay in S7 | S6.09, S6.11, S7.04, S7.05 | 0015 (Accepted) |
 | Qt6Core imports `ws2_32.dll` even without Qt Network (C-12) | Third-party network imports are allowed: `check-network-apis.ps1` notes them and prints a summary (library, DLL, APIs), committed as `docs/network-imports.md`; network APIs in APP's own code in `src/` still fail | S0.02.3, S0.08.7, every stage gate | 0026 (Accepted) |
 
+Decided by the owner on 2026-11-12:
+
+| Topic | Decision | Where it matters | ADR |
+|---|---|---|---|
+| Compilers and platforms (SP-1, L-03) | Build and test only with Visual Studio 2026 on Windows 11 for now. GCC and Clang are not installed and their feature columns are deferred; `docs/cpp-features.md` stays conservative | S0.01.2, S0.01.5, every stage gate | 0034 (Accepted) |
+| Clean-room term list (CR-02) | Ten names are generic and allowed (Solid Edge, Hole Wizard, FeatureManager, PropertyManager, CommandManager, ConfigurationManager, PhotoView, ActiveRoute, eDrawings, ActiveBOM); the rest of `docs/clean-room.md` is approved | S0.02.6 | none |
+| vcpkg root, licence manifest, scaffold CLI fixes | ADR 0029 confirmed; `docs/licence-manifest.json` and its corrections to `THIRD_PARTY_NOTICES.md` and ADR 0004 accepted; the S0.02.4 `src/cli` changes accepted | S0.01.1, S0.02.2, S0.02.4 | 0029 (Accepted) |
+
 ## Stage S0: Foundation
 
 Stage plan: `docs/stages/S0.md`. Exit: clean-clone build, themed shell with a kernel box, box → JSON → BSON → STL
@@ -71,14 +79,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-11 `scripts/build.ps1 -Configuration Debug`, `-Configuration Release` and `-Configuration Headless` with zero warnings; T-13 `scripts/test.ps1` green
   - Done when: a fresh clone in a temporary folder builds all three configurations with only VS 2026 and Git installed; `vcpkg-configuration.json` baseline matches ADR 0029; every third-party network import in the lists appears in `docs/network-imports.md`
   - Notes: results in ADR 0029 (now Accepted). Scratch clones must not live under `%TEMP%` (MSB8029 warning fails the build). Release `Qt6Core.dll` → `WS2_32.dll` was missing from `docs/network-imports.md` and is now listed. OCCT `TKernel` import list moved to S0.09.1 (OCCT not yet a dependency).
-- [~] **S0.01.2: Spike SP-1b: C++23/26 feature matrix on MSVC, GCC and Clang, ending in ADR 0034 (time box 1 day)**
-  - Status: blocked. MSVC column verified with `tests/core/spikes/cpp_feature_probe.cpp` and `scripts/probe-cpp-features.ps1` (all rows match `docs/cpp-features.md`); ADR 0034 written as Proposed. GCC 14 and Clang 18 are not installed in WSL (Ubuntu 26.04.1 has no C++ compiler; installing `g++-14 clang-18 libc++-18-dev libc++abi-18-dev` needs the owner's approval), and the ADR needs owner acceptance.
+- [x] **S0.01.2: Spike SP-1b: C++23/26 feature matrix on MSVC, GCC and Clang, ending in ADR 0034 (time box 1 day)**
   - Requirements: P-05, L-01, L-02, L-03, L-04, L-05
   - Modules: build, docs
   - Depends on: S0.01.1
   - Deliverables: `docs/adr/0034-spike-sp1-toolchain.md`; every row of `docs/cpp-features.md` verified for MSVC v145, GCC 14 and Clang 18 (WSL)
   - Tests: feature probe compiled with MSVC `/std:c++latest`, GCC and Clang `-std=c++2c`; result table in the ADR
   - Done when: each listed feature has a verified status on all three compilers; ADR 0034 Accepted by the owner
+  - Notes: MSVC column verified with `tests/core/spikes/cpp_feature_probe.cpp` and `scripts/probe-cpp-features.ps1` (all rows match `docs/cpp-features.md`). Owner decision 2026-11-12: build and test only with Visual Studio on Windows 11 for now, so the GCC and Clang columns are deferred rather than verified, and ADR 0034 is Accepted on that basis. The allow-list stays conservative; the probe fills the deferred columns unchanged once the compilers are installed.
 - [x] **S0.01.3: Add the Headless dependency check**
   - Requirements: P-04, B-04, A-01
   - Modules: scripts, build
@@ -149,14 +157,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-11 check fails on a mis-formatted fixture and passes on the repository
   - Done when: repository formatted and green; check run by `scripts/test.ps1`
   - Notes: the repository already matched `.clang-format` with clang-format 22.1.3 (63 files). The check passes `--style=file:<root>/.clang-format` explicitly, and `check-selftest.ps1` now copies `.clang-format` and `.clang-tidy` into its fixtures; its `format-misformatted` case fails on a mis-formatted `tests/core` source.
-- [~] **S0.02.6: Add clean-room and data-source guards**
+- [x] **S0.02.6: Add clean-room and data-source guards**
   - Requirements: CR-01, CR-02, CR-03, CR-05, CR-06
   - Modules: scripts, docs, libraries
   - Depends on: S0.01.1
   - Deliverables: `docs/clean-room.md` (contributor checklist for CR-01 … CR-07); `scripts/check-clean-room.ps1` (banned vendor trademark terms in UI strings and translations, banned native CAD file extensions in importer/exporter registrations, telemetry and update-check keywords, every data file under `libraries/` listed in `docs/data-sources.md`)
   - Tests: T-11 one failing fixture per rule; passes on the repository
   - Done when: all rules detected on fixtures; repository green; term list reviewed by the owner
-  - Status: awaiting owner review of the term lists. Everything else is done: `docs/clean-room.md` (checklist for CR-01 to CR-07 and the three term tables the check reads), `scripts/check-clean-room.ps1` (run by `scripts/test.ps1`; repository green), and one failing `check-selftest.ps1` fixture per rule (`cleanroom-trademark`, `cleanroom-translation`, `cleanroom-native-extension`, `cleanroom-telemetry`, `cleanroom-undocumented-data`) plus an allowed case (comments, a local crash-dump string and a documented data file pass). Assumptions for the review: UI strings are C++ string literals under `src/`, Qt `.ui`/`.ts`/`.qml` files and library JSON; telemetry keywords are checked in code and strings, not comments or Markdown; `Creo` was left out of the trademark list because it is a common Spanish word in translations; `libraries/seed-manifest.json` and `README.md` files are not data. CR-01 and CR-04 cannot be checked automatically.
+  - Notes: the owner reviewed the term lists on 2026-11-12 and ruled ten names generic (Solid Edge, Hole Wizard, FeatureManager, PropertyManager, CommandManager, ConfigurationManager, PhotoView, ActiveRoute, eDrawings, ActiveBOM); they were removed from the trademark table, the `cleanroom-trademark` fixture now uses `SmartMate`, and `cleanroom-allowed` proves `"Hole Wizard"` passes. Delivered: `docs/clean-room.md` (checklist for CR-01 to CR-07 and the three term tables the check reads), `scripts/check-clean-room.ps1` (run by `scripts/test.ps1`; repository green), and one failing `check-selftest.ps1` fixture per rule (`cleanroom-trademark`, `cleanroom-translation`, `cleanroom-native-extension`, `cleanroom-telemetry`, `cleanroom-undocumented-data`) plus an allowed case (comments, a local crash-dump string and a documented data file pass). Assumptions for the review: UI strings are C++ string literals under `src/`, Qt `.ui`/`.ts`/`.qml` files and library JSON; telemetry keywords are checked in code and strings, not comments or Markdown; `Creo` was left out of the trademark list because it is a common Spanish word in translations; `libraries/seed-manifest.json` and `README.md` files are not data. CR-01 and CR-04 cannot be checked automatically.
 - [ ] **S0.02.7: Run every check from test.ps1 and extend check-selftest.ps1 to all checks**
   - Requirements: T-11, T-13, A-01
   - Modules: scripts

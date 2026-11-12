@@ -54,12 +54,12 @@ says assumptions are recorded as ADRs, never as invented requirements.
 | 0026 | Network-API check scope and third-party network imports (C-12) | Accepted |
 | 0027 | Preservation of unknown fields (C-20) | Proposed |
 | 0028 | UUID encoding in BSON decided by schema (C-21) | Proposed |
-| 0029 | vcpkg root selection (C-24) | Accepted (verified in S0.01.1) |
+| 0029 | vcpkg root selection (C-24) | Accepted (verified in S0.01.1, confirmed by the owner) |
 | 0030 | Docking with Qt Advanced Docking System (C-26) | Proposed |
 | 0031 | Logging with spdlog (C-26) | Proposed |
 | 0032 | Planning assumptions bundle | Proposed |
 | 0033 | Continuous integration: local scripts first, hosted CI later | Proposed (open) |
-| 0034 | Spike SP-1: toolchain and C++23/26 feature matrix | Proposed (MSVC verified; GCC/Clang blocked: not installed) |
+| 0034 | Spike SP-1: toolchain and C++23/26 feature matrix | Accepted (MSVC only; GCC/Clang deferred by the owner) |
 | 0035 | Reserved: SP-2 topological naming (`TopoRef`) | to be written in S0.09.6 |
 | 0036 | Reserved: SP-3 sketch solver | to be written in S1.01.3 |
 | 0037 | Reserved: SP-4 mate solver | to be written in S3.01.3 |

@@ -255,9 +255,9 @@ $cases = @(
        Expect = 'tests/core/Misformatted\.cpp:\d+: code should be clang-formatted'
        Apply = { param( $r ) Set-Text ( Join-Path $r 'tests\core\Misformatted.cpp' ) ( $header + "int  misformatted(int a){return a;}`n" ) } },
     @{ Name = 'cleanroom-trademark'; Check = 'check-clean-room'
-       What = 'a UI string names a vendor feature (Hole Wizard)'
-       Expect = "src/ui/Labels\.cpp:3: vendor trademark term in a UI string \(CR-02\) 'Hole Wizard'"
-       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\ui\Labels.cpp' ) ( $header + "const char* holeToolLabel = `"Hole Wizard...`";`n" ) } },
+       What = 'a UI string names a vendor feature (SmartMate)'
+       Expect = "src/ui/Labels\.cpp:3: vendor trademark term in a UI string \(CR-02\) 'SmartMate'"
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\ui\Labels.cpp' ) ( $header + "const char* autoMateLabel = `"SmartMate...`";`n" ) } },
     @{ Name = 'cleanroom-translation'; Check = 'check-clean-room'
        What = 'a Qt translation names a vendor product'
        Expect = "src/ui/translations/app_de\.ts:3: vendor trademark term in a UI string \(CR-02\) 'SOLIDWORKS'"
@@ -317,10 +317,10 @@ $allowedCases = @(
                  New-Item -ItemType Directory -Force ( Join-Path $r 'bin\Vendor' ) | Out-Null
                  Copy-Item ( Join-Path $env:SystemRoot 'System32\wsock32.dll' ) ( Join-Path $r 'bin\Vendor\vendornet.dll' ) } },
     @{ Name = 'cleanroom-allowed'; Check = 'check-clean-room'
-       What = 'a comment about telemetry, a local crash-dump string and a documented data file pass'
+       What = 'a comment about telemetry, a local crash-dump string, a term the owner ruled generic and a documented data file pass'
        Expect = 'check-clean-room: OK .* 1 library data files'
        Apply = { param( $r )
-                 Set-Text ( Join-Path $r 'src\core\Notes.cpp' ) ( $header + "// No telemetry and no update check (CR-06).`nconst char* dumpFolder = `"crash dumps stay local`";`n" )
+                 Set-Text ( Join-Path $r 'src\core\Notes.cpp' ) ( $header + "// No telemetry and no update check (CR-06).`nconst char* dumpFolder = `"crash dumps stay local`";`nconst char* holeLabel  = `"Hole Wizard`";`n" )
                  Set-Text ( Join-Path $r 'libraries\materials\steel.json' ) "{ `"name`": `"Steel`" }`n"
                  Add-Text ( Join-Path $r 'docs\data-sources.md' ) "| material | ``libraries/materials/steel.json`` | Example handbook, Example Press, 2020 | public factual data | 2026-11-12 | original values |`n" } },
     # Accept: P-03b

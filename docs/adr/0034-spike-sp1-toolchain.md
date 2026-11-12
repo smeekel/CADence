@@ -1,6 +1,7 @@
 # ADR 0034: Spike SP-1: toolchain and C++23/26 feature matrix {#adr-0034}
 
-- **Status:** Proposed (MSVC column verified; GCC and Clang columns blocked, see "Open items")
+- **Status:** Accepted (owner decision, 2026-11-12: build and test only with Visual Studio on Windows 11 for now;
+  the GCC and Clang columns are deferred)
 - **Date:** 2026-11-12
 - **Deciders:** project owner (approves), implementer (proposes)
 
@@ -20,9 +21,13 @@ Clang 18 (WSL). SP-1a (step S0.01.1) verified the build toolchain itself; its re
   /Zc:__cplusplus /Zc:preprocessor /utf-8 /EHsc /W4 /WX`) and, in WSL, with GCC 14 or later (`-std=c++2c -Wall
   -Wextra -Werror`) and Clang 18 or later (`-std=c++2c -stdlib=libc++`). It prints the matrix and writes it as
   Markdown with `-OutFile`.
-- **Proposed:** keep `docs/cpp-features.md` as it is. The MSVC results below match every row. The decision is final
-  only when the GCC and Clang columns are measured and confirm the "Allowed" rows, or the rows they contradict move
-  to "Allowed with a feature-test check and fallback" or "Not allowed" through this ADR.
+- Keep `docs/cpp-features.md` as it is. The MSVC results below match every row.
+- **Owner decision, 2026-11-12:** ignore the other compilers and platforms for now; APP is built and tested only
+  with Visual Studio 2026 (MSVC v145) on Windows 11. The GCC and Clang columns are deferred, not measured, and no
+  compiler is installed in WSL. The allow-list stays as conservative as if L-03 were checked: features marked
+  "Not allowed" for portability (`std::generator`, `std::stacktrace`, `std::move_only_function`) stay banned even
+  though MSVC builds them, and the "Conditional" features keep their feature-test checks and fallbacks (L-04), so
+  adding GCC and Clang later needs no code changes beyond what this matrix then shows.
 
 ## Results
 
@@ -63,26 +68,19 @@ library features listed as "Not allowed" for portability (`std::generator`, `std
 other "Not allowed" features fail on MSVC as recorded. `import std;` fails without a prebuilt standard-library
 module, which L-05 rules out anyway.
 
-## Open items
+## Deferred items
 
-- **GCC 14 and Clang 18 are not installed.** WSL 2 has Ubuntu 26.04.1 with no C++ compiler; Visual Studio ships only
-  `clang-format` and `clang-tidy`, not a Clang compiler. The packages are available from Ubuntu
-  (`g++-14` 14.3.0, `clang-18` 18.1.8, `libc++-18-dev` 18.1.8). Installing them is a system change that needs the
-  owner's approval:
-
-  ```bash
-  sudo apt install g++-14 clang-18 libc++-18-dev libc++abi-18-dev
-  ```
-
-  After that, `scripts\probe-cpp-features.ps1 -OutFile out\logs\cpp-feature-probe.md` fills both columns with no
-  further changes.
-- **Owner acceptance.** S0.01.2 is done only when this ADR is Accepted by the owner (checklist "Done when").
+- **GCC and Clang columns.** WSL 2 has Ubuntu 26.04.1 with no C++ compiler; Visual Studio ships only `clang-format`
+  and `clang-tidy`, not a Clang compiler. When other platforms come into scope, install the compilers (for example
+  `sudo apt install g++-14 clang-18 libc++-18-dev libc++abi-18-dev`) and run
+  `scripts\probe-cpp-features.ps1 -OutFile out\logs\cpp-feature-probe.md`; it fills both columns with no further
+  changes. A row the measurement contradicts moves section through a new ADR that supersedes this one.
 
 ## Consequences
 
-- Until this ADR is Accepted, step S0.01.2 stays in progress and the steps that depend on it (S0.01.5 and, through
-  S0.02.7, all of S0.03 onward) cannot start.
-- The probe and the script are kept, so the matrix can be re-run whenever a compiler is upgraded (R-09).
+- Step S0.01.2 is done for the MSVC-only scope; L-03 is met only as far as the conservative allow-list goes, and is
+  recorded as deferred in `docs/traceability.csv`.
+- The probe and the script are kept, so the matrix can be re-run whenever a compiler is upgraded or added (R-09).
 - `tests/core/spikes/cpp_feature_probe.cpp` uses banned features on purpose; `scripts/check-cpp-features.ps1`
   (S0.01.5) must exempt it.
 

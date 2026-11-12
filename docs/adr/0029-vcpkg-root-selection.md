@@ -1,6 +1,6 @@
 # ADR 0029: vcpkg root selection (C-24) {#adr-0029}
 
-- **Status:** Accepted (verified by spike SP-1a, step S0.01.1, 2026-11-12)
+- **Status:** Accepted (verified by spike SP-1a, step S0.01.1, 2026-11-12; confirmed by the owner, 2026-11-12)
 - **Date:** 2026-11-11
 
 ## Context

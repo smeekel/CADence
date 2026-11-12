@@ -5,11 +5,11 @@ current GCC and Clang support it too (L-03). Where support may be missing on ano
 feature-test macro and provides a fallback (L-04); `src/core/Compat.h` (step S0.01.5) collects these helpers. Named
 modules are not used (L-05). Adding a feature to this list, or moving one between sections, requires an ADR.
 
-**Status of this list.** Initial version from the Phase 1 MSVC probe (VS 2026, MSVC 19.51, `/std:c++latest`,
-`__cplusplus` = 202400). GCC and Clang status is **pending spike SP-1** (step S0.01.2, ADR 0034): no native Clang or
-GCC is installed yet, so the "GCC / Clang" column records the expected status from public conformance tables and must
-be confirmed by compiling a probe (for example in WSL 2). `scripts/check-cpp-features.ps1` (S0.01.5) fails the build
-on items in "Not allowed".
+**Status of this list.** Verified on MSVC 19.51 (VS 2026, `/std:c++latest`, `__cplusplus` = 202400) by spike SP-1
+(step S0.01.2, ADR 0034, Accepted). By owner decision APP is built and tested only with Visual Studio on Windows 11
+for now, so the "GCC / Clang" column still records the expected status from public conformance tables; it is
+measured with `scripts/probe-cpp-features.ps1` when other platforms come into scope. The list stays conservative in
+the meantime. `scripts/check-cpp-features.ps1` (S0.01.5) fails the build on items in "Not allowed".
 
 ## Allowed
 
@@ -58,3 +58,4 @@ on items in "Not allowed".
 |---|---|---|
 | 2026-11-11 | Initial list from the Phase 1 MSVC probe; GCC/Clang to be confirmed | 0034 (to be written in S0.01.2) |
 | 2026-11-12 | MSVC 19.51 column re-verified row by row with `scripts/probe-cpp-features.ps1` (no change); GCC/Clang still pending because no compiler is installed in WSL | 0034 (Proposed) |
+| 2026-11-12 | Owner decision: Visual Studio on Windows 11 only for now; GCC/Clang measurement deferred, list unchanged | 0034 (Accepted) |

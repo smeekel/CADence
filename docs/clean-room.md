@@ -4,8 +4,8 @@ How APP stays independent of proprietary CAD products and records where its code
 CR-01 to CR-07). Every contributor, human or agent, follows the checklist below for every change. The term lists in
 this page are the input of `scripts/check-clean-room.ps1`, which `scripts/test.ps1` runs.
 
-**Status of the term lists:** proposed in step S0.02.6, awaiting review by the owner. Add or remove a term by editing
-the tables below; the first column of each table is what the check matches.
+**Status of the term lists:** proposed in step S0.02.6 and reviewed by the owner on 2026-11-12. Add or remove a term
+by editing the tables below; the first column of each table is what the check matches.
 
 ## Contributor checklist
 
@@ -42,8 +42,8 @@ Before committing, confirm each item:
 | 3. Telemetry and update-check keywords | CR-06 | Code and string literals in C++ files under `src/` (comments are skipped), and every other text file under `src/` except Markdown documentation |
 | 4. Undocumented data files | CR-05 | Every file under `libraries/` except `README.md` files and `libraries/seed-manifest.json` needs a complete row in `docs/data-sources.md` |
 
-Matching is case-insensitive on whole words; a space in a term also matches no space, `_` or `-` (so "Hole Wizard"
-also matches `HoleWizard` and `hole_wizard`). CR-01 and CR-04 cannot be checked automatically and rely on the
+Matching is case-insensitive on whole words; a space in a term also matches no space, `_` or `-` (so "Fusion 360"
+also matches `Fusion360` and `fusion_360`). CR-01 and CR-04 cannot be checked automatically and rely on the
 checklist and on review. There is no allow-list: rephrase the text instead.
 
 ## Vendor trademark terms (rule 1)
@@ -57,24 +57,19 @@ checklist and on review. There is no allow-list: rephrase the text instead.
 | `AutoCAD` | Autodesk | "other CAD software" |
 | `Fusion 360` | Autodesk | "other CAD software" |
 | `Onshape` | PTC | "other CAD software" |
-| `Solid Edge` | Siemens | "other CAD software" |
 | `OrCAD` | Cadence | "other EDA software" |
-| `Hole Wizard` | Dassault Systemes | "Hole tool" |
-| `FeatureManager` | Dassault Systemes | "Feature tree" |
-| `PropertyManager` | Dassault Systemes | "Properties panel" |
-| `CommandManager` | Dassault Systemes | "Command ribbon" |
-| `ConfigurationManager` | Dassault Systemes | "Configurations panel" |
 | `SmartMate` | Dassault Systemes | "Automatic mate" |
 | `DimXpert` | Dassault Systemes | "Dimensioning assistant" |
 | `Instant3D` | Dassault Systemes | "Drag editing" |
 | `SpeedPak` | Dassault Systemes | "Simplified assembly" |
-| `eDrawings` | Dassault Systemes | "Viewer export" |
-| `PhotoView` | Dassault Systemes | "Rendering" |
-| `ActiveRoute` | Altium | "Guided routing" |
 | `Situs` | Altium | "Topological autorouter" |
 | `xSignals` | Altium | "Signal path" |
-| `ActiveBOM` | Altium | "BOM manager" |
 | `Draftsman` | Altium | "Board drawing" |
+
+The owner ruled these names generic on 2026-11-12, so they are not checked and may be used: `Solid Edge`,
+`Hole Wizard`, `FeatureManager`, `PropertyManager`, `CommandManager`, `ConfigurationManager`, `PhotoView`,
+`ActiveRoute`, `eDrawings` and `ActiveBOM`. `Creo` is also not checked, because it is a common Spanish word in
+translations.
 
 ## Native CAD file extensions (rule 2)
 
