@@ -37,7 +37,10 @@ Machine: Windows 11 x64, Visual Studio Community 2026 18.10.1 (v145, MSVC 19.51)
   | Run | vcpkg binary cache | Headless | Debug | Release | Tests (Headless) |
   |---|---|---|---|---|---|
   | Clean clone, warm cache | default (local archives) | OK, 0 warnings, 13 s | OK, 0 warnings, 26 s | OK, 0 warnings, 12 s | OK, 3 s |
-  | Clean clone, cold (`VCPKG_BINARY_SOURCES=clear`) | disabled | OK, 0 warnings, 24 s | running when S0.01.1 was committed (Qt compiles from source) | after Debug | not run |
+  | Clean clone, cold (`VCPKG_BINARY_SOURCES=clear`) | disabled | OK, 0 warnings, 24 s | OK, 0 warnings, 490 s (qtbase built from source in 7 min) | OK, 0 warnings, 14 s | not run |
+
+  The cold run reused source archives already in vcpkg's download cache; on a machine that has never fetched them,
+  add the download time.
 
   A first attempt in `%TEMP%\cadence-clean` failed on MSB8029 (see Decision).
 - **DLL imports** (`dumpbin /dependents`, clean-clone build):
