@@ -72,6 +72,7 @@ Static checks, also usable on their own:
 | `scripts\check-layering.ps1` | Module dependencies in project references and `#include` paths (A-01) |
 | `scripts\check-spdx.ps1` | SPDX headers and provenance of reused code (CR-07, P-30) |
 | `scripts\check-network-apis.ps1` | No networking APIs in sources, link inputs, vcpkg features or binaries (P-03) |
+| `scripts\check-licences.ps1` | Every vcpkg port and reused project has a spec 4.3 licence recorded in `docs\licence-manifest.json` or `docs\provenance.md`, and `THIRD_PARTY_NOTICES.md` is up to date (P-30) |
 | `scripts\check-selftest.ps1` | Each check above fails on a deliberately broken copy of the repository |
 
 ## Documentation

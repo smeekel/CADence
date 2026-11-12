@@ -1,0 +1,121 @@
+{
+  "description": "Reviewed licence of every vcpkg port APP depends on, directly or through the installed trees (P-30, spec 4.3, rule 070). scripts/check-licences.ps1 validates it; scripts/update-notices.ps1 builds THIRD_PARTY_NOTICES.md from it. 'version' is the version whose licence was verified: changing a port version without re-verifying and updating the entry fails the check. 'role' is linked, test, build (build time only, not linked) or system (operating-system library; needs a note). 'licence' is an SPDX expression; 'usedUnder' names the option APP uses when it is a choice; 'note' records where the vcpkg port metadata differs or is missing.",
+  "ports": [
+    {
+      "port": "qtbase",
+      "library": "Qt Base (Core, Gui, Widgets)",
+      "version": "6.11.3#1",
+      "licence": "LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only",
+      "usedUnder": "LGPL-3.0-only or GPL-3.0-only",
+      "role": "linked",
+      "usedBy": "`ui`, `tests/ui`",
+      "shipped": "Yes (DLLs)",
+      "verified": "S0.01.6, ADR 0004",
+      "note": "The port metadata has no licence (vcpkg reports LicenseRef-vcpkg-null); verified against the installed copyright file and upstream LICENSES/."
+    },
+    {
+      "port": "pcre2",
+      "library": "PCRE2",
+      "version": "10.49#2",
+      "licence": "BSD-2-Clause AND BSD-3-Clause WITH PCRE2-exception",
+      "role": "linked",
+      "usedBy": "`ui` via Qt Core",
+      "shipped": "Yes (DLL)",
+      "verified": "S0.01.6, ADR 0004; S0.02.2",
+      "note": "BSD-2-Clause covers the bundled sljit JIT compiler; ADR 0004 lists only BSD-3-Clause WITH PCRE2-exception. Matches the port metadata."
+    },
+    {
+      "port": "double-conversion",
+      "library": "double-conversion",
+      "version": "3.4.0",
+      "licence": "BSD-3-Clause",
+      "role": "linked",
+      "usedBy": "`ui` via Qt Core",
+      "shipped": "Yes (DLL)",
+      "verified": "S0.01.6, ADR 0004",
+      "note": "The port metadata has no licence (NOASSERTION); the installed copyright file is the upstream BSD-3-Clause LICENSE."
+    },
+    {
+      "port": "zlib",
+      "library": "zlib",
+      "version": "1.3.2#3",
+      "licence": "Zlib",
+      "role": "linked",
+      "usedBy": "`ui` via Qt Core",
+      "shipped": "Yes (DLL)",
+      "verified": "S0.01.6, ADR 0004"
+    },
+    {
+      "port": "md4c",
+      "library": "MD4C",
+      "version": "0.6.0",
+      "licence": "MIT",
+      "role": "linked",
+      "usedBy": "`ui` via Qt Gui",
+      "shipped": "Yes (DLL)",
+      "verified": "S0.01.6, ADR 0004"
+    },
+    {
+      "port": "gtest",
+      "library": "GoogleTest and GoogleMock",
+      "version": "1.18.0",
+      "licence": "BSD-3-Clause",
+      "role": "test",
+      "usedBy": "`tests/*` only",
+      "shipped": "No (test only)",
+      "verified": "S0.01.6, ADR 0012"
+    },
+    {
+      "port": "opengl-registry",
+      "library": "Khronos OpenGL API headers",
+      "version": "2026-08-03",
+      "licence": "MIT",
+      "role": "build",
+      "usedBy": "Qt Gui headers",
+      "shipped": "No (headers, build time)",
+      "verified": "S0.01.6, ADRs 0004 and 0013",
+      "note": "The port metadata has no licence (NOASSERTION); the headers carry SPDX MIT lines."
+    },
+    {
+      "port": "egl-registry",
+      "library": "Khronos EGL API headers",
+      "version": "2025-05-27",
+      "licence": "Apache-2.0",
+      "role": "build",
+      "usedBy": "Qt Gui headers",
+      "shipped": "No (headers, build time)",
+      "verified": "S0.01.6, ADRs 0004 and 0013"
+    },
+    {
+      "port": "opengl",
+      "library": "OpenGL system library (Windows SDK)",
+      "version": "2022-12-04#3",
+      "licence": "LicenseRef-Windows-SDK",
+      "role": "system",
+      "usedBy": "Qt Gui (`opengl32`)",
+      "shipped": "No (part of Windows)",
+      "verified": "S0.01.6, ADR 0004",
+      "note": "Windows system library, a System Library under GPL-3.0 section 1; the port only points to the Windows SDK licence."
+    },
+    {
+      "port": "vcpkg-cmake",
+      "library": "vcpkg CMake helper",
+      "version": "2025-08-07",
+      "licence": "MIT",
+      "role": "build",
+      "usedBy": "vcpkg port builds",
+      "shipped": "No (build time)",
+      "verified": "S0.01.6, ADR 0003"
+    },
+    {
+      "port": "vcpkg-cmake-config",
+      "library": "vcpkg CMake config helper",
+      "version": "2026-07-21",
+      "licence": "MIT",
+      "role": "build",
+      "usedBy": "vcpkg port builds",
+      "shipped": "No (build time)",
+      "verified": "S0.01.6, ADR 0003"
+    }
+  ]
+}

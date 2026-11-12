@@ -99,6 +99,72 @@ function Get-AppSourceFiles( [string]$Root, [string[]]$Extensions )
                     Where-Object { $_.FullName -notmatch $skipAny }
 }
 
+# Rows of the docs/provenance.md table (CR-07): Cells maps column name to text, Missing lists the required columns
+# left empty, Destinations lists the entries of "Destination file(s)" (forward slashes, no Markdown). Prose and
+# other tables are ignored.
+function Get-AppProvenanceRows( [string]$Root )
+{
+    $path     = Join-Path $Root 'docs\provenance.md'
+    $rows     = New-Object System.Collections.Generic.List[object]
+    $required = @( 'Project', 'URL', 'Version / commit', 'Original path(s)', 'Licence', 'Destination file(s)', 'Step ID' )
+
+    if( -not ( Test-Path $path ) )
+    {
+        return ,$rows
+    }
+
+    $columns = $null
+
+    foreach( $line in [IO.File]::ReadAllLines( $path ) )
+    {
+        if( $line -notmatch '^\s*\|' )
+        {
+            $columns = $null
+            continue
+        }
+
+        $cells = @( $line.Trim().Trim( '|' ) -split '\|' | ForEach-Object { $_.Trim() } )
+
+        if( $null -eq $columns )
+        {
+            if( $cells -contains 'Destination file(s)' )
+            {
+                $columns = $cells
+            }
+
+            continue
+        }
+
+        if( $line -match '^\s*\|[\s:|-]+\|\s*$' )
+        {
+            continue
+        }
+
+        $row = @{}
+
+        for( $i = 0; $i -lt $columns.Count; $i++ )
+        {
+            $value = ''
+
+            if( $i -lt $cells.Count )
+            {
+                $value = $cells[$i]
+            }
+
+            $row[$columns[$i]] = $value
+        }
+
+        $missing = @( $required | Where-Object { -not $row.ContainsKey( $_ ) -or $row[$_] -match '^(|-|\?|TBD|n/a)$' } )
+        $entries = @( ( "$( $row['Destination file(s)'] )" -split '(<br\s*/?>|,|;)' ) |
+                      ForEach-Object { ( $_ -replace '[`*]', '' -replace '\\', '/' ).Trim() } |
+                      Where-Object { $_ -and $_ -notmatch '^(<br\s*/?>|,|;)$' } )
+
+        $rows.Add( [pscustomobject]@{ Cells = $row; Missing = $missing; Destinations = $entries } )
+    }
+
+    return ,$rows
+}
+
 # Minimal JUnit XML writer for results that do not come from GoogleTest (static checks, smoke runs).
 function Write-AppJUnit( [string]$Path, [string]$SuiteName, [object[]]$Cases )
 {

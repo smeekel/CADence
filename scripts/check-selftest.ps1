@@ -8,8 +8,12 @@
     Copies the checked parts of the repository (src, tests, build, scripts, docs, root files; no build output) into
     a temporary folder, verifies that every check named by a case below passes on the clean copy, then applies one
     deliberate violation per case to a fresh copy and verifies that the matching check fails.
-    Allowed cases (a third-party DLL that imports ws2_32.dll, ADR 0026) must pass and appear in the check's summary.
-    The repository itself is never modified. Exits non-zero if any expectation is not met.
+    A case with an expected message must also report it. Allowed cases (a third-party DLL that imports ws2_32.dll,
+    ADR 0026) must pass and appear in the check's summary. Finally THIRD_PARTY_NOTICES.md is regenerated on a copy
+    from the installed vcpkg trees (vcpkg_installed\, created by scripts\build.ps1): it must already be up to date,
+    a new docs/provenance.md row must make check-licences fail until it is regenerated, and a second
+    update-notices run must change nothing. The repository itself is never modified. Exits non-zero if any
+    expectation is not met.
 
 .PARAMETER KeepFixtures
     Keep the temporary copies for inspection.
@@ -66,9 +70,16 @@ function Set-Text( [string]$Path, [string]$Text )
     [IO.File]::WriteAllText( $Path, $Text, $utf8 )
 }
 
+function Invoke-Script( [string]$Name, [string[]]$Arguments )
+{
+    $output = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File ( Join-Path $PSScriptRoot "$Name.ps1" ) @Arguments 2>&1
+    $code   = $LASTEXITCODE
+
+    return [pscustomobject]@{ Code = $code; Output = @( $output | ForEach-Object { "$_" } ) }
+}
+
 function Invoke-Check( [string]$Check, [string]$FixtureRoot, [string]$BinaryDir )
 {
-    $script    = Join-Path $PSScriptRoot "$Check.ps1"
     $arguments = @( '-Root', $FixtureRoot )
 
     if( $BinaryDir )
@@ -76,10 +87,31 @@ function Invoke-Check( [string]$Check, [string]$FixtureRoot, [string]$BinaryDir 
         $arguments += @( '-BinaryDir', ( Join-Path $FixtureRoot $BinaryDir ) )
     }
 
-    $output = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $script @arguments 2>&1
-    $code   = $LASTEXITCODE
+    return Invoke-Script $Check $arguments
+}
 
-    return [pscustomobject]@{ Code = $code; Output = ( $output | ForEach-Object { "$_" } ) }
+# A vcpkg dependency pinned with an override, optionally reviewed in docs/licence-manifest.json and listed in
+# THIRD_PARTY_NOTICES.md.
+function Add-FixturePort( [string]$FixtureRoot, [string]$Port, [string]$Licence, [bool]$Reviewed, [bool]$Noticed )
+{
+    $p = Join-Path $FixtureRoot 'vcpkg.json'
+    $x = [IO.File]::ReadAllText( $p )
+    $x = ( [regex]'"dependencies": \[' ).Replace( $x, "`"dependencies`": [ `"$Port`",", 1 )
+    $x = $x.Replace( '"overrides": [', "`"overrides`": [ { `"name`": `"$Port`", `"version`": `"1.0.0`" }," )
+    Set-Text $p $x
+
+    if( $Reviewed )
+    {
+        $p = Join-Path $FixtureRoot 'docs\licence-manifest.json'
+        $x = [IO.File]::ReadAllText( $p )
+        $x = $x.Replace( '"ports": [', "`"ports`": [ { `"port`": `"$Port`", `"library`": `"Fixture`", `"version`": `"1.0.0`", `"licence`": `"$Licence`", `"role`": `"linked`", `"usedBy`": `"core`", `"shipped`": `"Yes (DLL)`", `"verified`": `"S0.02.2`" }," )
+        Set-Text $p $x
+    }
+
+    if( $Noticed )
+    {
+        Add-Text ( Join-Path $FixtureRoot 'THIRD_PARTY_NOTICES.md' ) "`n| Fixture | ``$Port`` 1.0.0 | $Licence | linked | core | Yes (DLL) |`n"
+    }
 }
 
 $header = "// SPDX-License-Identifier: GPL-3.0-or-later`n// SPDX-FileCopyrightText: 2026 The APP Authors`n"
@@ -183,7 +215,31 @@ $cases = @(
        Apply = { param( $r ) Set-Text ( Join-Path $r 'src\core\CMakeLists.txt' ) "add_library(core Module.cpp)`n" } },
     @{ Name = 'hygiene-two-projects'; Check = 'check-build-hygiene'
        What = 'a module folder holds two projects'
-       Apply = { param( $r ) Copy-Item ( Join-Path $r 'src\core\Core.vcxproj' ) ( Join-Path $r 'src\core\CoreExtra.vcxproj' ) } }
+       Apply = { param( $r ) Copy-Item ( Join-Path $r 'src\core\Core.vcxproj' ) ( Join-Path $r 'src\core\CoreExtra.vcxproj' ) } },
+    # Accept: P-30
+    @{ Name = 'licences-gpl2-dependency'; Check = 'check-licences'
+       What = 'vcpkg.json adds a reviewed and noticed GPL-2.0-only dependency'
+       Expect = "'fixture-gpl' \(GPL-2\.0-only\): GPL-2\.0-only is not allowed"
+       Apply = { param( $r ) Add-FixturePort $r 'fixture-gpl' 'GPL-2.0-only' $true $true } },
+    @{ Name = 'licences-unreviewed-dependency'; Check = 'check-licences'
+       What = 'vcpkg.json adds a dependency without a docs/licence-manifest.json entry'
+       Expect = "dependency 'fixture-new' has no entry in docs/licence-manifest\.json"
+       Apply = { param( $r ) Add-FixturePort $r 'fixture-new' 'MIT' $false $false } },
+    @{ Name = 'licences-missing-notice'; Check = 'check-licences'
+       What = 'a reviewed MIT dependency missing from THIRD_PARTY_NOTICES.md'
+       Expect = "THIRD_PARTY_NOTICES\.md: no row for port 'fixture-mit'"
+       Apply = { param( $r ) Add-FixturePort $r 'fixture-mit' 'MIT' $true $false } },
+    @{ Name = 'licences-version-not-reverified'; Check = 'check-licences'
+       What = 'vcpkg.json pins gtest to a version whose licence was not verified'
+       Expect = "'gtest' is pinned to 1\.17\.0 but its licence was verified for 1\.18\.0"
+       Apply = { param( $r )
+                 $p = Join-Path $r 'vcpkg.json'
+                 Set-Text $p ( [IO.File]::ReadAllText( $p ).Replace( '"version": "1.18.0"', '"version": "1.17.0"' ) ) } },
+    # Accept: P-30
+    @{ Name = 'licences-provenance-gpl2-only'; Check = 'check-licences'
+       What = 'docs/provenance.md records code reused from a GPL-2.0-only project'
+       Expect = "docs/provenance\.md: 'Example' \(GPL-2\.0-only\): GPL-2\.0-only is not allowed"
+       Apply = { param( $r ) Add-Text ( Join-Path $r 'docs\provenance.md' ) ( $provenanceRow.Replace( '| MIT |', '| GPL-2.0-only |' ) ) } }
 )
 
 # Cases that must pass, with output that must match.
@@ -233,6 +289,10 @@ try
         {
             $failures.Add( "$( $case.Check ) did not detect: $( $case.What )" )
         }
+        elseif( $case['Expect'] -and -not ( $result.Output | Where-Object { $_ -match $case.Expect } ) )
+        {
+            $failures.Add( "$( $case.Check ) failed without reporting '$( $case.Expect )': $( $case.What )" )
+        }
     }
 
     foreach( $case in $allowedCases )
@@ -252,6 +312,61 @@ try
         {
             $failures.Add( "$( $case.Check ) did not report '$( $case.Expect )': $( $case.What )" )
         }
+    }
+
+    # Notices regeneration against the real installed vcpkg trees: a new provenance row makes the notices stale,
+    # update-notices fixes them, and a second run changes nothing.
+    $installedRoot = Join-Path $root 'vcpkg_installed'
+
+    if( -not ( Test-Path $installedRoot ) )
+    {
+        $failures.Add( "notices regeneration needs the installed vcpkg trees in '$installedRoot'; run scripts\build.ps1 first" )
+    }
+    else
+    {
+        $fixture  = New-Fixture 'notices-regeneration'
+        $notices  = Join-Path $fixture 'THIRD_PARTY_NOTICES.md'
+        $withTree = @( '-Root', $fixture, '-InstalledRoot', $installedRoot )
+        $steps    = New-Object System.Collections.Generic.List[string]
+
+        $unchanged = Invoke-Script 'update-notices' ( $withTree + '-Check' )
+        $steps.Add( "update-notices -Check on the copy -> exit $( $unchanged.Code )" )
+
+        if( $unchanged.Code -ne 0 )
+        {
+            $failures.Add( 'THIRD_PARTY_NOTICES.md is not what update-notices.ps1 generates; run scripts\update-notices.ps1' )
+        }
+
+        Set-Text ( Join-Path $fixture 'src\core\Adapted.cpp' ) $adapted
+        Add-Text ( Join-Path $fixture 'docs\provenance.md' ) $provenanceRow
+
+        $stale = Invoke-Script 'check-licences' $withTree
+        $steps.Add( "check-licences after adding a provenance row -> exit $( $stale.Code )" )
+
+        if( $stale.Code -eq 0 -or -not ( $stale.Output | Where-Object { $_ -match "no row for reused project 'Example'" } ) )
+        {
+            $failures.Add( 'check-licences did not report stale notices after a new docs/provenance.md row' )
+        }
+
+        $first     = Invoke-Script 'update-notices' $withTree
+        $firstText = [IO.File]::ReadAllText( $notices )
+        $second    = Invoke-Script 'update-notices' $withTree
+        $passed    = Invoke-Script 'check-licences' $withTree
+        $steps.Add( "update-notices -> exit $( $first.Code ), again -> exit $( $second.Code ) ($( $second.Output -join ' ' )), check-licences -> exit $( $passed.Code )" )
+
+        if( $first.Code -ne 0 -or $second.Code -ne 0 -or ( [IO.File]::ReadAllText( $notices ) -cne $firstText ) -or
+            -not ( $second.Output | Where-Object { $_ -match 'is up to date' } ) )
+        {
+            $failures.Add( 'update-notices.ps1 is not idempotent: the second run changed THIRD_PARTY_NOTICES.md or failed' )
+        }
+
+        if( $passed.Code -ne 0 -or -not ( Select-String -Path $notices -SimpleMatch '| Example | https://example.org/example |' -Quiet ) )
+        {
+            $failures.Add( 'check-licences failed after regeneration, or the reused project is not listed in the notices' )
+        }
+
+        Write-Host '[notices-regeneration] notices regenerated from the installed trees and a new provenance row:'
+        $steps | ForEach-Object { Write-Host "    $_" }
     }
 }
 finally
@@ -273,5 +388,5 @@ if( $failures.Count -gt 0 )
     exit 1
 }
 
-Write-Host "check-selftest: OK ($( $checkNames.Count ) checks pass on the clean copy; $( $cases.Count ) deliberate violations detected; $( $allowedCases.Count ) allowed case(s) pass and are reported)" -ForegroundColor Green
+Write-Host "check-selftest: OK ($( $checkNames.Count ) checks pass on the clean copy; $( $cases.Count ) deliberate violations detected; $( $allowedCases.Count ) allowed case(s) pass and are reported; notices regeneration is idempotent)" -ForegroundColor Green
 exit 0

@@ -70,70 +70,16 @@ $provenancePath = Join-Path $Root 'docs\provenance.md'
 $provenanceOk   = Test-Path $provenancePath
 $destinations   = New-Object System.Collections.Generic.List[string]
 $incomplete     = New-Object System.Collections.Generic.List[string]
-$required       = @( 'Project', 'URL', 'Version / commit', 'Original path(s)', 'Licence', 'Destination file(s)', 'Step ID' )
 
-function Split-TableRow( [string]$Line )
+foreach( $row in ( Get-AppProvenanceRows $Root ) )
 {
-    $cells = $Line.Trim().Trim( '|' ) -split '\|'
-    return @( $cells | ForEach-Object { $_.Trim() } )
-}
-
-if( $provenanceOk )
-{
-    $columns = $null
-
-    foreach( $line in [IO.File]::ReadAllLines( $provenancePath ) )
+    if( $row.Missing.Count -gt 0 )
     {
-        if( $line -notmatch '^\s*\|' )
-        {
-            $columns = $null
-            continue
-        }
-
-        $cells = Split-TableRow $line
-
-        if( $null -eq $columns )
-        {
-            if( $cells -contains 'Destination file(s)' )
-            {
-                $columns = $cells
-            }
-
-            continue
-        }
-
-        if( $line -match '^\s*\|[\s:|-]+\|\s*$' )
-        {
-            continue
-        }
-
-        $row = @{}
-
-        for( $i = 0; $i -lt $columns.Count; $i++ )
-        {
-            $value = ''
-
-            if( $i -lt $cells.Count )
-            {
-                $value = $cells[$i]
-            }
-
-            $row[$columns[$i]] = $value
-        }
-
-        $missing = @( $required | Where-Object { -not $row.ContainsKey( $_ ) -or $row[$_] -match '^(|-|\?|TBD|n/a)$' } )
-        $entries = @( ( $row['Destination file(s)'] -split '(<br\s*/?>|,|;)' ) |
-                      ForEach-Object { ( $_ -replace '[`*]', '' -replace '\\', '/' ).Trim() } |
-                      Where-Object { $_ -and $_ -notmatch '^(<br\s*/?>|,|;)$' } )
-
-        if( $missing.Count -gt 0 )
-        {
-            $incomplete.Add( "$( $entries -join ', ' ) (missing: $( $missing -join ', ' ))" )
-            continue
-        }
-
-        $entries | ForEach-Object { $destinations.Add( $_ ) }
+        $incomplete.Add( "$( $row.Destinations -join ', ' ) (missing: $( $row.Missing -join ', ' ))" )
+        continue
     }
+
+    $row.Destinations | ForEach-Object { $destinations.Add( $_ ) }
 }
 
 # True when a complete provenance row names the file or a folder that contains it.

@@ -117,13 +117,14 @@ locally (hosted CI open, ADR 0033).
   - Deliverables: the scaffold's `scripts/check-spdx.ps1` already fails on a missing SPDX header and on a third-party file not mentioned anywhere in `docs/provenance.md`; this step parses the provenance table and requires the file path (or its third-party project folder) in the "Destination file(s)" column of a complete row (licence, URL, version, step ID filled in)
   - Tests: T-11 `scripts/check-selftest.ps1` cases: a source without an SPDX header fails (Accept: CR-07a); a third-party-marked file without a provenance row, and one named only in prose or in an incomplete row, fail (Accept: CR-07b); the repository passes
   - Done when: both failure modes detected, repository green, check documented in `scripts/README` header comment
-- [ ] **S0.02.2: Add the licence manifest check and regenerate THIRD_PARTY_NOTICES**
+- [x] **S0.02.2: Add the licence manifest check and regenerate THIRD_PARTY_NOTICES**
   - Requirements: P-30, CR-07
   - Modules: scripts, docs
   - Depends on: S0.02.1, S0.01.6
   - Deliverables: `scripts/check-licences.ps1` (every `vcpkg.json` dependency has an allowed licence per spec 4.3 and a `THIRD_PARTY_NOTICES.md` entry); `scripts/update-notices.ps1` (builds `THIRD_PARTY_NOTICES.md` from installed vcpkg copyright files plus `docs/provenance.md`)
   - Tests: T-11 check fails on a fixture manifest with a GPL-2.0-only dependency; regeneration is idempotent (second run produces no diff)
   - Done when: check green on the repository and red on the fixture; notices regenerated
+  - Notes: the reviewed licence of every port (direct, transitive and build-time) lives in `docs/licence-manifest.json` with the version it was verified for, because vcpkg's metadata is missing or wrong for several ports (qtbase, double-conversion, opengl-registry, ngspice). `scripts/common-licences.ps1` evaluates SPDX expressions against spec 4.3 (`link` for libraries; `copy` for `docs/provenance.md` rows, where LGPL-2.1-only is refused). `update-notices.ps1` regenerates only the marked sections of `THIRD_PARTY_NOTICES.md` and records the SHA-256 of each installed licence text instead of quoting it. Corrections found: the notices had the Khronos header licences swapped (opengl-registry is MIT, egl-registry Apache-2.0, as in ADR 0004), and pcre2 is `BSD-2-Clause AND BSD-3-Clause WITH PCRE2-exception` (sljit), not only the latter as ADR 0004 says. `check-selftest.ps1` now also checks the failure message of each licence case.
 - [ ] **S0.02.3: Harden the network-API check and document third-party socket imports**
   - Requirements: P-03, CR-06, T-11
   - Modules: scripts, docs

@@ -35,7 +35,8 @@ may depend on; `scripts/check-layering.ps1` enforces the dependencies.
 |---|---|
 | Build | `scripts/build.ps1 -Configuration Debug` (or `Release`, `Headless`) |
 | Test | `scripts/test.ps1` (Headless) or `scripts/test.ps1 -Configuration Debug` |
-| Static checks | `scripts/check-layering.ps1`, `scripts/check-spdx.ps1`, `scripts/check-network-apis.ps1` |
+| Static checks | `scripts/check-layering.ps1`, `scripts/check-spdx.ps1`, `scripts/check-network-apis.ps1`, `scripts/check-licences.ps1` |
+| Third-party notices | `scripts/update-notices.ps1` regenerates `THIRD_PARTY_NOTICES.md` |
 | Documentation | `scripts/docs.ps1` (HTML), `scripts/docs.ps1 -Pdf` (PDF, needs LaTeX) |
 
 ## Licence
