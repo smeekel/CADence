@@ -11,7 +11,10 @@
     4. Runs the static checks: check-layering, check-spdx, check-network-apis (with the built binaries),
        check-headless (with the built binaries when the configuration is Headless), check-build-hygiene,
        check-cpp-features, check-licences, check-format and check-clean-room.
-    JUnit XML for all of them is written to out/test-results/<Configuration>/. Exits non-zero on any failure.
+    JUnit XML is written to out/test-results/<Configuration>/: one file per test executable, cli-smoke.xml, and
+    one <check-name>.xml per static check with the check's output as the failure message. Every scripts/check-*.ps1
+    except check-selftest.ps1 runs here; check-selftest.ps1 fails when one is missing. Exits non-zero on any
+    failure.
 
 .PARAMETER Configuration
     Configuration to build and test. Headless (default) for automated runs; Debug also runs Ui.Tests.
@@ -23,7 +26,7 @@
     Skip the build and test the existing binaries.
 
 .PARAMETER NoChecks
-    Skip the static checks.
+    Skip the static checks (they run by default; skipping them is for quick local iterations only).
 
 .PARAMETER Bench
     Run benchmark executables (*.Bench.exe, T-08) instead of the tests.
@@ -227,12 +230,15 @@ if( -not $NoChecks -and -not $Bench -and -not $Fuzz )
     foreach( $check in $checks )
     {
         $checkArgs = $check.Args
-        & "$PSScriptRoot\$( $check.Name ).ps1" @checkArgs
-        $code   = $LASTEXITCODE
-        $cases += [pscustomobject]@{ Name = $check.Name; Passed = ( $code -eq 0 ); Message = "exit code $code" }
+        $output    = @( & "$PSScriptRoot\$( $check.Name ).ps1" @checkArgs *>&1 | ForEach-Object { "$_" } )
+        $code      = $LASTEXITCODE
+        $output | ForEach-Object { Write-Host $_ }
+
+        $case   = [pscustomobject]@{ Name = $check.Name; Passed = ( $code -eq 0 ); Message = "exit code ${code}: $( $output -join "`n" )" }
+        $cases += $case
+        Write-AppJUnit -Path ( Join-Path $resultsDir "$( $check.Name ).xml" ) -SuiteName 'StaticChecks' -Cases @( $case )
     }
 
-    Write-AppJUnit -Path ( Join-Path $resultsDir 'static-checks.xml' ) -SuiteName 'StaticChecks' -Cases $cases
     $cases | Where-Object { -not $_.Passed } | ForEach-Object { $failures.Add( "$( $_.Name ) failed" ) }
 }
 

@@ -12,7 +12,8 @@
     ADR 0026) must pass and appear in the check's summary. Finally THIRD_PARTY_NOTICES.md is regenerated on a copy
     from the installed vcpkg trees (vcpkg_installed\, created by scripts\build.ps1): it must already be up to date,
     a new docs/provenance.md row must make check-licences fail until it is regenerated, and a second
-    update-notices run must change nothing. The repository itself is never modified. Exits non-zero if any
+    update-notices run must change nothing. Every scripts/check-*.ps1 must have at least one deliberate-violation
+    case here and be run by scripts/test.ps1. The repository itself is never modified. Exits non-zero if any
     expectation is not met.
 
 .PARAMETER KeepFixtures
@@ -371,6 +372,24 @@ $allowedCases = @(
 
 $checkNames = @( @( $cases ) + @( $allowedCases ) | ForEach-Object { $_.Check } | Select-Object -Unique )
 
+# Every check script needs at least one deliberate violation above and a run in scripts/test.ps1.
+$violationChecks = @( $cases | ForEach-Object { $_.Check } | Select-Object -Unique )
+$testScript      = [IO.File]::ReadAllText( ( Join-Path $PSScriptRoot 'test.ps1' ) )
+$checkScripts    = @( Get-ChildItem -Path $PSScriptRoot -Filter 'check-*.ps1' | Where-Object { $_.BaseName -ne 'check-selftest' } )
+
+foreach( $script in $checkScripts )
+{
+    if( $violationChecks -notcontains $script.BaseName )
+    {
+        $failures.Add( "$( $script.BaseName ) has no deliberate-violation case in check-selftest.ps1" )
+    }
+
+    if( $testScript -notmatch ( "Name\s*=\s*'" + [regex]::Escape( $script.BaseName ) + "'" ) )
+    {
+        $failures.Add( "$( $script.BaseName ) is not run by scripts/test.ps1" )
+    }
+}
+
 try
 {
     $clean = New-Fixture 'clean'
@@ -505,5 +524,5 @@ if( $failures.Count -gt 0 )
     exit 1
 }
 
-Write-Host "check-selftest: OK ($( $checkNames.Count ) checks pass on the clean copy; $( $cases.Count ) deliberate violations detected; $( $allowedCases.Count ) allowed case(s) pass and are reported; notices regeneration is idempotent)" -ForegroundColor Green
+Write-Host "check-selftest: OK ($( $checkScripts.Count ) check scripts, each with a violation case and run by test.ps1; $( $checkNames.Count ) checks pass on the clean copy; $( $cases.Count ) deliberate violations detected; $( $allowedCases.Count ) allowed case(s) pass and are reported; notices regeneration is idempotent)" -ForegroundColor Green
 exit 0
