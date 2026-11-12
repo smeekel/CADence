@@ -1,0 +1,33 @@
+---
+description: GPL-3.0-or-later licensing, SPDX headers, code reuse and provenance, clean-room rules. Apply when creating files, adding dependencies, or reusing outside code or data.
+alwaysApply: false
+---
+
+# Licensing, provenance and clean room
+
+Full detail: `docs/notepads/Licensing_and_Provenance.md` and spec sections 2 and 4.3.
+
+## Header for every original source file (C++, PowerShell, schemas with comments)
+
+```cpp
+// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-FileCopyrightText: 2026 The APP Authors
+```
+
+Use the comment syntax of the file type (`#` for PowerShell and YAML). JSON files without comment support are exempt.
+
+## Reusing outside code
+
+- Fresh implementation is the default. Reuse open-source code only when it is GPL-3.0-compatible (spec 4.3) and saves substantial effort on a hard problem.
+- **Never** copy GPL-2.0-only code, proprietary code, "source-available" code, code with no licence, or anything from SOLIDWORKS, Altium or other proprietary CAD (code, SDK headers, docs, icons, sample files, UI layouts).
+- When you reuse code, in the same change:
+  1. keep the original copyright and licence lines at the top of the file, then add `SPDX-FileCopyrightText: 2026 The APP Authors` for your modifications;
+  2. put verbatim third-party files under `third_party/<project>/`; adapted code may live in `src/` but is marked with `// Adapted from <project> <url> @ <commit>`;
+  3. add a row to `docs/provenance.md`: project, URL, version/commit, original path, licence, destination files, what was changed;
+  4. update `THIRD_PARTY_NOTICES.md`.
+- `scripts/check-spdx.ps1` fails on missing headers or on third-party markers without a provenance entry.
+
+## Data
+
+- Seed data (materials, fasteners, profiles, hole tables, footprint parameters) comes from public factual sources. Record each source in `docs/data-sources.md`. Never reproduce paid standards documents verbatim.
+- Do not name UI features with vendor trademarks; use generic engineering terms.

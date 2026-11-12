@@ -1,0 +1,80 @@
+---
+description: C++ formatting and naming style for all APP source files
+globs: src/**/*.h,src/**/*.hpp,src/**/*.cpp,src/**/*.inl,tests/**/*.h,tests/**/*.cpp
+alwaysApply: false
+---
+
+# C++ code style
+
+The repository `.clang-format` enforces most of this. Format every file you touch with it. The rules below also cover what clang-format cannot do.
+
+## Layout
+
+1. **Braces on their own lines** (Allman), for namespaces, classes, functions, control statements and lambdas with bodies. Always use braces, even for one-line bodies.
+2. **Parentheses spacing:** no space between a keyword or function name and `(`; one space inside non-empty parentheses: `if( a == b )`, `while( true )`, `for( auto& item : items )`, `solve( sketch, options )`. Empty parentheses stay `()`.
+3. **Align `=`** on consecutive assignment lines.
+4. **Align variable names** on consecutive declaration lines (types left, names in one column, initialisers aligned).
+5. **Blank lines between logical blocks:** separate declarations, set-up, each loop or branch group, and the return with one blank line. One blank line between function definitions. Never more than two blank lines in a row.
+6. Indent 4 spaces, no tabs, 120-column limit, LF line endings, UTF-8.
+7. `#pragma once` in every header.
+
+### Example
+
+```cpp
+Result<SolveStatus> SketchSolver::solve( Sketch& sketch, const SolveOptions& options )
+{
+    int                 iterations = 0;
+    double              residual   = 0.0;
+    std::vector<double> x          = sketch.parameters();
+
+    m_lastIterations = 0;
+    m_lastResidual   = 0.0;
+    m_converged      = false;
+
+    if( sketch.empty() )
+    {
+        return SolveStatus::Empty;
+    }
+
+    while( iterations < options.maxIterations )
+    {
+        residual = evaluate( sketch, x );
+
+        if( residual < options.tolerance )
+        {
+            m_converged = true;
+            break;
+        }
+
+        ++iterations;
+    }
+
+    return m_converged ? SolveStatus::Solved : SolveStatus::NotConverged;
+}
+```
+
+## Naming
+
+| Item | Convention | Example |
+|---|---|---|
+| Namespaces | `lower_case`, under `app::` | `app::ecad::pcb` |
+| Types (class, struct, enum, alias, concept) | `PascalCase` | `SketchSolver`, `LayerStack` |
+| Functions and methods | `camelCase`, verb first | `solveSketch()`, `addTrack()` |
+| Local variables and parameters | `camelCase` | `trackWidth` |
+| Non-static data members | `m_` + `camelCase` | `m_tolerance` |
+| Static data members | `s_` + `camelCase` | `s_registry` |
+| Constants and `constexpr` values | `k` + `PascalCase` | `kMagicUuid` |
+| Enumerators (scoped enums only) | `PascalCase` | `SolveStatus::NotConverged` |
+| Macros (avoid) | `APP_UPPER_SNAKE` | `APP_ASSERT` |
+| Files | match the main type: `SketchSolver.h` / `SketchSolver.cpp` | |
+
+## Language usage
+
+- Use `enum class`, `std::span`, `std::string_view`, `std::optional`, `std::variant`, `std::expected` (as `app::Result<T>`), ranges, `constexpr`, concepts. Check `docs/cpp-features.md` before using any C++23/26 feature.
+- Errors: return `app::Result<T>` (`std::expected<T, app::Error>`) across module boundaries. Exceptions must not cross module public APIs. Use `APP_ASSERT` for programmer errors.
+- Ownership: `std::unique_ptr` by default, `std::shared_ptr` only for genuinely shared lifetime. No owning raw pointers. No `new`/`delete` outside factories.
+- Units: never pass bare `double` lengths across module APIs without a documented unit. Use the `app::core` quantity types where they exist. Mechanical lengths are mm (`double`); PCB coordinates are `int64_t` nanometres.
+- No global mutable state. No singletons except the documented service locator in `core`.
+- `const` everything that can be. Mark single-argument constructors `explicit`. Use `[[nodiscard]]` on functions returning `Result`.
+- Third-party types stay inside their adapter module (OCCT only in `geom`, Qt only in `ui`/`render`/`platform`, Chrono and ngspice only in `sim`).
+- Warnings are errors (`/W4 /WX`). Fix them; never silence them with pragmas unless the warning is in a third-party header (wrap those in the project's `ThirdPartyIncludeBegin.h`/`End.h`).

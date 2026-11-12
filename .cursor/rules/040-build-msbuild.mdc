@@ -1,0 +1,20 @@
+---
+description: Rules for Visual Studio solution, project and props files, vcpkg manifest and build scripts
+globs: **/*.slnx,**/*.vcxproj,**/*.vcxproj.filters,**/*.props,**/*.targets,vcpkg.json,vcpkg-configuration.json,scripts/*.ps1
+alwaysApply: false
+---
+
+# Build system: Visual Studio solutions (no CMake)
+
+- One solution: `APP.slnx` (XML solution format). Solution folders mirror `src/` and `tests/`.
+- One `.vcxproj` per module. Static library by default; `ui` and `cli` are applications; `tests/<module>` are console applications using GoogleTest.
+- **Settings belong in `build/props/`, not in project files.** `Directory.Build.props` imports `Common.props`, `Cpp.props` and `Vcpkg.props` for every project. UI projects also import `Qt.props`; test projects import `Tests.props`; the `Headless` configuration imports `Headless.props`.
+- A `.vcxproj` contains only: project GUID, configuration type, its file list, `ProjectReference` items and genuinely module-specific settings. Do not set warning levels, language standard, output paths or defines per project.
+- Configurations: `Debug`, `Release`, `Headless`. Platform: `x64` only.
+- Compiler baseline (in `Cpp.props`): `/std:c++latest /permissive- /Zc:__cplusplus /Zc:preprocessor /utf-8 /W4 /WX /external:anglebrackets /external:W0 /MP`, with `/sdl` in Debug.
+- vcpkg: manifest mode via `VcpkgEnableManifest=true`, triplet `x64-windows`, baseline pinned in `vcpkg-configuration.json`. Add dependencies only to `vcpkg.json`; check the licence first (rule `070`).
+- Qt `moc`, `uic` and `rcc` run through custom build rules defined once in `Qt.props`; do not depend on the Qt VS Tools extension.
+- No build logic in source code (`#pragma comment(lib, …)` is forbidden). Precompiled headers are optional and must never be required for a file to compile.
+- Keep everything migration-ready: a cross-platform build system will replace the solution later, so module folders map one-to-one to future targets.
+- Scripts are PowerShell 7 (`pwsh`), with `Set-StrictMode -Version Latest` and `$ErrorActionPreference = 'Stop'`, and exit non-zero on failure.
+- `scripts/build.ps1 -Configuration <Debug|Release|Headless>` and `scripts/test.ps1` must keep working after every change.

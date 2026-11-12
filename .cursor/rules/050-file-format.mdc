@@ -1,0 +1,22 @@
+---
+description: Open project file format rules (JSON/BSON, magic UUID, schemas, migrations, library scopes)
+globs: src/doc/**,docs/format/**,libraries/**,**/*.schema.json
+alwaysApply: false
+---
+
+# Open file format
+
+Full detail: `docs/notepads/Data_Model_and_File_Format.md` and spec section 6 (F-01 … F-10).
+
+- Two encodings of one tree: **JSON** (project folder `.apj`, pretty-printed, Git-friendly) and **BSON** (single file `.apb`). Conversion is lossless and byte-stable (`json → bson → json` gives identical bytes).
+- Use `nlohmann::ordered_json`, never `nlohmann::json`. Key order is significant.
+- **Magic first:** the root object of every project, document and library file starts with `"$magic": "d9a3877a-3f27-4df8-9528-f8dfde59773d"`. In BSON it is the first element, binary subtype 0x04, so bytes 4–32 of every file are constant. Reject files without it. The UUID never changes.
+- Next come `formatVersion` (semver) and `type`, then the remaining keys in schema order.
+- Deterministic output: stable key and array order, shortest round-trip float formatting, LF line endings, 2-space JSON indent.
+- Store design intent only. Derived data (B-rep, meshes, DRC results) is non-authoritative cache under `cache/` and must be safe to delete.
+- Every document type has a JSON Schema (draft 2020-12) in `docs/format/schemas/` and a Markdown page in `docs/format/`. Change schema, docs, migration and tests in the same step.
+- Version changes: bump `formatVersion`, add a forward migration in `src/doc/migrations/`, add a round-trip test and a migration test with a fixture of the old version.
+- Unknown fields are preserved on load and written back on save.
+- Loaders never crash on bad input: return an `app::Error` naming the file, JSON path and reason. Every loader gets a fuzz target.
+- Blobs: stored as `blobs/<sha256>.bin` (no magic), referenced by hash.
+- Libraries resolve **project → user → global** (F-10). Never write into the global seed during normal operation except through an explicit library edit command.

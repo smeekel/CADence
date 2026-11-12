@@ -1,0 +1,63 @@
+# Licensing, provenance and clean room
+
+Spec: section 2 (CR-01 … CR-07), section 4.3, P-30.
+
+## Product licence
+
+- **GPL-3.0-or-later.** `LICENSE` contains the unmodified GPL-3.0 text.
+- Every original file starts with:
+
+```cpp
+// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-FileCopyrightText: 2026 The APP Authors
+```
+
+- The About dialog shows the licence, a written source offer and `THIRD_PARTY_NOTICES.md`, all offline.
+
+## Compatibility quick reference (spec 4.3)
+
+| Licence | Link a library | Copy code into APP |
+|---|---|---|
+| MIT, BSD-2/3, BSL-1.0, zlib, ISC | Yes | Yes, keep notice |
+| Apache-2.0 | Yes | Yes, keep notice + NOTICE file contents |
+| MPL-2.0 | Yes | Yes, MPL-covered files stay MPL |
+| LGPL-2.1-or-later / LGPL-3.0 | Yes | Yes, as GPL-3.0 |
+| LGPL-2.1-only | Yes (link only) | **No** |
+| GPL-2.0-or-later, GPL-3.0(-or-later) | Yes | Yes, with attribution (fresh code preferred) |
+| GPL-2.0-only | **No** | **No** |
+| AGPL-3.0 | Only by ADR | Only by ADR |
+| Proprietary, source-available, non-commercial, no licence | **No** | **No** |
+
+## Clean-room rules (CR-01 … CR-06)
+
+- Never use anything from SOLIDWORKS, Altium or other proprietary CAD: code, binaries, SDK headers, API docs, help text, icons, templates, sample files, UI layouts or native file formats.
+- Use generic engineering names in the UI, not vendor trademarks (e.g. "Hole tool", "Guided routing", "Signal path").
+- Paid standards (IPC-7351, ISO fastener standards…) are never reproduced verbatim. Use editable parameter tables; record sources of shipped data.
+- No telemetry, licence servers or phone-home code.
+
+## Reusing open-source code (CR-04, CR-07)
+
+Default: write fresh code. Reuse only when the source is compatible (table above) **and** it saves substantial effort on a hard problem (for example robust polygon pours, push-and-shove routing heuristics, a constraint solver reference).
+
+Checklist for every reuse, all in the same change:
+
+1. Keep the original copyright/licence header at the top of the file; add `SPDX-FileCopyrightText: 2026 The APP Authors` below it if modified.
+2. Verbatim imports go under `third_party/<project>/` with the project's `LICENSE`. Adapted code in `src/` carries `// Adapted from <project> <url> @ <commit>` near the top.
+3. Add a row to `docs/provenance.md`.
+4. Regenerate/update `THIRD_PARTY_NOTICES.md`.
+5. `scripts/check-spdx.ps1` must pass.
+
+### `docs/provenance.md` row format
+
+| Date | Project | URL | Version / commit | Original path(s) | Licence | Destination file(s) | Changes made | Step ID |
+|---|---|---|---|---|---|---|---|---|
+
+### `docs/data-sources.md` row format
+
+| Library kind | Table / item | Source (title, publisher, URL or citation) | Terms | Retrieved | Transformation |
+|---|---|---|---|---|---|
+
+## Dependencies
+
+- Added only via `vcpkg.json`; licence checked against the table; listed in `THIRD_PARTY_NOTICES.md` (generated from vcpkg's installed copyright files plus `provenance.md`).
+- Record each new dependency in an ADR (why, alternatives, licence).

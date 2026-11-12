@@ -1,0 +1,36 @@
+---
+description: How to write and maintain the implementation checklist, stage plans, traceability CSV and ADRs. Apply when planning, updating docs/IMPLEMENTATION_CHECKLIST.md, docs/stages, docs/traceability.csv or docs/adr.
+globs: docs/IMPLEMENTATION_CHECKLIST.md,docs/stages/**,docs/traceability.csv,docs/adr/**,docs/RISKS.md
+alwaysApply: false
+---
+
+# Planning artefacts
+
+## Checklist step format (docs/IMPLEMENTATION_CHECKLIST.md)
+
+```markdown
+- [ ] **S<stage>.<package>.<step>: <imperative title>**
+  - Requirements: <IDs>
+  - Modules: <modules>
+  - Depends on: <step IDs or "none">
+  - Deliverables: <files, commands, schemas, docs>
+  - Tests: <test categories and names>
+  - Done when: <objective, checkable criteria>
+```
+
+- Step IDs are permanent. Never renumber; insert new steps with suffixes (`S2.03.4a`) and mark removed steps `~~struck~~` with a reason.
+- Each stage ends with work package `Sx.99 Stage gate`, which includes `Human review checkpoint: stop and wait for approval`.
+- States: `[ ]` not started, `[~]` in progress (add a `Status:` line), `[x]` done. Only tick a step when every "Done when" item is met and the build and tests are green.
+
+## Traceability (docs/traceability.csv)
+
+- Columns: `id,title,source,stage,status,steps,tests,notes`. Status is one of `not-started`, `in-progress`, `done`, `deferred`.
+- Update it in the same change as the code. A requirement is `done` only when all its steps are done and all its `Accept:` tests pass.
+
+## ADRs (docs/adr/NNNN-kebab-title.md)
+
+Sections: Status (Proposed/Accepted/Superseded by NNNN), Context, Decision, Consequences, Alternatives considered, Related requirements. Write an ADR for every spike outcome, every new dependency, every deviation from the spec, and every ambiguity you resolved.
+
+## Stage plans (docs/stages/Sx.md)
+
+Goal, requirements delivered, work packages, entry criteria, exit criteria (from the spec), risks, golden data introduced. Update when the checklist for that stage changes.

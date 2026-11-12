@@ -1,0 +1,72 @@
+---
+description: Doxygen documentation requirements for C++ code and Markdown docs (HTML and PDF output)
+globs: src/**/*.h,src/**/*.hpp,src/**/*.cpp,docs/**/*.md
+alwaysApply: false
+---
+
+# Documentation (Doxygen → HTML and PDF)
+
+All documentation is generated with Doxygen from the repository `Doxyfile` (`scripts/docs.ps1`). HTML goes to `out/docs/html`; LaTeX goes to `out/docs/latex`, where `make.bat` builds `refman.pdf`. Docs must build offline with **zero warnings** for code you touched.
+
+## What must be documented
+
+- Every header: a file comment with `@file`, `@brief`, and `@req` for the requirements it implements.
+- Every public or protected class, struct, enum, enumerator, function, method, type alias, concept and data member.
+- Every function: `@brief`, each `@param` (with direction `[in]`, `[out]` or `[in,out]` where not obvious), `@return`, and `@units` for physical quantities. Use `@pre`, `@post`, `@note`, `@warning` and `@see` where they add information.
+- Commands exposed on the command bus: `@cmd` with the command name.
+- Private implementation: brief `//` comments explaining *why*, not *what*.
+
+## Comment style
+
+Use `///` line comments for Doxygen blocks. Put declarations' docs in headers, not in `.cpp` files.
+
+```cpp
+// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-FileCopyrightText: 2026 The APP Authors
+
+/// @file   SketchSolver.h
+/// @brief  Geometric constraint solver for 2D sketches.
+/// @req    M-SKT-02
+
+#pragma once
+
+#include "core/Result.h"
+#include "sketch/Sketch.h"
+
+namespace app::sketch
+{
+
+/// @brief Options that control a sketch solve.
+struct SolveOptions
+{
+    int    maxIterations = 50;    ///< Upper bound on Newton iterations.
+    double tolerance     = 1e-10; ///< Residual norm treated as solved. @units mm
+};
+
+/// @brief Solves the constraint system of a sketch in place.
+///
+/// Uses damped Newton iterations with degree-of-freedom analysis. On failure the
+/// sketch geometry is left unchanged.
+///
+/// @req M-SKT-02
+class SketchSolver
+{
+public:
+    /// @brief  Solve every constraint in @p sketch.
+    /// @param[in,out] sketch   Sketch to solve; entity parameters are updated on success.
+    /// @param[in]     options  Iteration limit and tolerance.
+    /// @return Solve status, or an error if the constraint system is inconsistent.
+    /// @cmd    sketch.solve
+    [[nodiscard]] Result<SolveStatus> solve( Sketch& sketch, const SolveOptions& options );
+};
+
+} // namespace app::sketch
+```
+
+## Markdown documentation
+
+- Narrative docs live in `docs/` as Markdown and are included in the Doxygen build (`docs/mainpage.md` is the main page). Give every page a level-1 heading and an `{#page-id}` anchor so it can be cross-referenced: `# File format {#format}`.
+- Each module has `src/<module>/README.md` (purpose, allowed dependencies, main types). Doxygen picks it up as a module page.
+- File-format docs (`docs/format/`) are the public, normative specification of the file format. Keep them in sync with the JSON Schemas in the same change.
+- Diagrams: prefer Doxygen `@dot` blocks or committed SVG/PNG under `docs/images/`. No externally hosted images.
+- The `@req` alias builds a "Requirements Traceability" page automatically. Tag implementing classes and functions with the requirement IDs they satisfy.

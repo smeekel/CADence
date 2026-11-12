@@ -1,0 +1,20 @@
+---
+description: Test harness rules (GoogleTest, golden data, replay, acceptance tests)
+globs: tests/**
+alwaysApply: false
+---
+
+# Testing
+
+Full detail: `docs/notepads/Testing_Strategy.md` and spec section 7 (T-01 … T-14).
+
+- Framework: GoogleTest + GoogleMock. One test project per module: `tests/<module>/<Module>.Tests.vcxproj`.
+- Test names: `TEST( <TypeOrArea>, <Behaviour>_<Condition> )`, for example `TEST( SketchSolver, ReportsConflict_WhenOverConstrained )`. Add a comment `// Accept: M-SKT-02` on tests that implement a spec acceptance criterion.
+- Every requirement's `Accept:` criteria map to named tests. List them in the checklist step and in `docs/traceability.csv`.
+- **Golden data is generated, not hand-made:** command scripts in `tests/data/scripts/*.cmd.json` build golden models through the command bus. Expected values (mass properties, counts, netlists, outputs) live beside them as `*.expected.json`. Regenerating a golden output needs an explicit `-UpdateGolden` flag and a reason in the commit message.
+- Numeric comparisons use explicit tolerances (relative 1e-6 by default for geometry). Never compare floating-point values with `==`.
+- Output conformance: generated Gerber, Excellon, IPC-2581, STEP, STL, 3MF, DXF and PDF files are parsed back by test-side readers, with volatile fields (timestamps, UUIDs) masked.
+- UI replay tests run off-screen through the command journal plus Qt Test events. Visual snapshots compare with SSIM ≥ 0.98.
+- Tests are deterministic: fixed random seeds, no wall-clock dependence, no network, temporary directories only.
+- Never disable, skip or weaken a failing test to make a step pass. Fix the code or record the step as in progress.
+- Benchmarks (`tests/bench/`) and fuzz targets (`tests/fuzz/`) are separate projects, run with `scripts/test.ps1 -Bench` / `-Fuzz`.

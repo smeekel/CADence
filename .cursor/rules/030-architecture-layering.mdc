@@ -1,0 +1,46 @@
+---
+description: Module boundaries, allowed dependencies and architecture patterns (command bus, regeneration graph, kernel adapter)
+globs: src/**
+alwaysApply: false
+---
+
+# Architecture and layering
+
+Full detail: `docs/notepads/Architecture_and_Build.md` and `docs/notepads/Command_Bus_and_Module_Contracts.md`.
+
+## Allowed dependencies (a module may depend only on modules listed for it)
+
+| Module | May depend on |
+|---|---|
+| `core` | standard library, Eigen |
+| `platform` | `core` |
+| `doc` | `core` |
+| `geom` | `core`, `doc` (OCCT allowed **only** here) |
+| `sketch` | `core`, `doc`, `geom` |
+| `part` | `core`, `doc`, `geom`, `sketch` |
+| `asm` | `core`, `doc`, `geom`, `sketch`, `part` |
+| `drw` | `core`, `doc`, `geom`, `part`, `asm` |
+| `ecad/lib` | `core`, `doc` |
+| `ecad/sch` | `core`, `doc`, `ecad/lib` |
+| `ecad/pcb` | `core`, `doc`, `ecad/lib`, `ecad/sch` (Clipper2 allowed here) |
+| `ecad/out` | `core`, `doc`, `ecad/lib`, `ecad/pcb`, `drw` |
+| `link` | `core`, `doc`, `geom`, `sketch`, `part`, `asm`, `ecad/pcb` |
+| `sim` | `core`, `doc`, `geom`, `asm`, `ecad/sch` (Chrono, ngspice only here) |
+| `io` | `core`, `doc`, `geom`, `part`, `asm`, `ecad/pcb` |
+| `render` | `core`, `doc`, `geom`, `platform` (graphics API here) |
+| `cli` | every domain module; never `ui` |
+| `ui` | everything (Qt Widgets only here) |
+| `tests/<m>` | `<m>` and its dependencies, GoogleTest |
+
+`scripts/check-layering.ps1` enforces this table on `.vcxproj` references and `#include` paths. Update the script and this table together, and only with an ADR.
+
+## Patterns you must use
+
+- **Command bus (A-03):** every data-changing action is an `app::core::Command` with a dotted name (`part.feature.extrude.create`), JSON parameters, `execute()` and `undo()`. Register commands in the module's `registerCommands()` function. UI code calls commands; it never mutates documents directly.
+- **Stable IDs (A-04):** every persistent object has an `app::core::ObjectId` (UUID v7). Never use pointers or indices as persistent references.
+- **Regeneration graph (A-07):** derived data is computed by nodes in the dependency graph. Never recompute eagerly in setters; mark dirty and let the graph regenerate.
+- **Kernel adapter (A-05):** OCCT types never appear in headers outside `src/geom/`. Other modules use `app::geom` handles.
+- **Persistent naming (A-06):** references to faces, edges and vertices go through `app::geom::TopoRef`, never raw kernel indices.
+- **Headless first (A-02):** domain modules never include Qt Widgets and never block on UI.
+- **Threads (A-10):** long work runs on `app::core::JobSystem` with progress and cancellation. The UI thread never waits more than 100 ms.
+- **Factories (A-11):** feature types, importers, exporters and DRC checks register via factories; no central `switch` over types.

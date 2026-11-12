@@ -1,0 +1,34 @@
+---
+description: Core project facts and non-negotiable constraints for APP (integrated MCAD + ECAD desktop CAD)
+alwaysApply: true
+---
+
+# APP: core project rules
+
+**What APP is:** a clean-room, fully offline, Windows-first desktop CAD application that combines parametric 3D mechanical design with schematic/PCB electronics design in one shared parametric model. The authoritative spec is `docs/spec/cad-functional-requirements.md`. Modular summaries are in `docs/notepads/` (start with `00_Index.md`).
+
+## Non-negotiables
+
+- **Spec wins.** When unsure, read the spec section for the requirement ID. Never invent requirements; record assumptions as ADRs in `docs/adr/`.
+- **Language:** C++26 via `/std:c++latest`, only features MSVC implements and GCC/Clang support. See `docs/cpp-features.md`.
+- **Build:** Visual Studio 2026 solution `APP.slnx`, one `.vcxproj` per module, shared settings in `build/props/*.props`. **Never add CMake files** (planned later, not now).
+- **Dependencies:** vcpkg manifest mode only (`vcpkg.json`). Never vendor binaries. Never add a dependency without checking its licence against spec section 4.3 and updating `THIRD_PARTY_NOTICES.md`.
+- **Offline:** no network access in product code: no HTTP clients, sockets, update checks, telemetry or online lookups.
+- **Licence:** GPL-3.0-or-later. Every source file starts with the SPDX header (rule `070-licensing-provenance`).
+- **Clean room:** never use code, docs, icons, file formats or UI layouts from proprietary CAD products. Prefer fresh implementations; reuse GPL-compatible open-source code only with a provenance entry.
+- **Command first:** every data-changing operation is a command on the command bus, usable from the CLI and tested headless, before any UI is built for it.
+- **No fake completion:** never return hard-coded results to make tests pass, never skip or disable tests to go green, never tick a checklist step whose "Done when" criteria are not met.
+
+## Working agreement
+
+- Work from `docs/IMPLEMENTATION_CHECKLIST.md` one step at a time. Reference step and requirement IDs in commit messages, e.g. `S2.03.4 M-PRT-01: extrude up-to-surface end condition`.
+- After each step: build (`scripts/build.ps1`), test (`scripts/test.ps1`), run the check scripts, update `docs/traceability.csv`.
+- Stop at every "Human review checkpoint" in the checklist.
+- Keep changes small and focused. Do not refactor unrelated code in the same step.
+- When a schema or file format changes: bump `formatVersion`, add a migration, add a round-trip test, update `docs/format/`.
+
+## Key identifiers
+
+- File-format magic UUID: `d9a3877a-3f27-4df8-9528-f8dfde59773d` (spec F-09). Never change it.
+- Root namespace: `app::` with one sub-namespace per module (`app::core`, `app::geom`, `app::ecad::pcb`, …).
+- Requirement ID prefixes: P platform, A architecture, B build, L language, F format, U UI, T tests, CR clean room, M mechanical, E electronics, X cross-domain.
