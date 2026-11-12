@@ -343,6 +343,15 @@ names. The Headless build has no third-party network import. No other third-part
 - **`.gitignore`:** it already keeps out `/out/` (all build output and intermediates, because `OutDir` and `IntDir`
   are both under `out/`), `/vcpkg_installed/` and `.vs/`. The root-anchored `/out/` keeps the `src/ecad/out/` and
   `tests/ecad/out/` sources tracked.
-- **Commits:** four logical commits on `main`: the project inputs; the scaffold; the planning documents; and the
-  planning-session reports and checker. A fifth commit records the push result in this report. The hashes are in
-  the session's reply and in `git log`.
+- **Commits on `main`,** on top of `535926a` ("first commit"):
+
+  | Commit | Content |
+  |---|---|
+  | `fed918f` | Project inputs: the spec, the notepads, `CURSOR_PLAN_PROMPT.md`, `KIT_README.md`, `.cursor/rules` and `.cursor/commands` (28 files) |
+  | `4cd42ea` | S0 scaffold: the root configuration files, `README.md`, `LICENSE`, `Doxyfile`, `build/`, `src/`, `tests/`, `libraries/`, `scripts/` and the Doxygen pages in `docs/` (203 files) |
+  | `9764bba` | Planning documents: the checklist, the traceability CSV, the stage plans, the risks, the ADRs, `FOLDER_STRUCTURE.md` and `network-imports.md` (53 files) |
+  | `5596b9c` | Planning-session reports and `checks/check_plan.py` (5 files) |
+  | the next commit | Records the push result in this section |
+
+- **Push:** `git push -u origin main` gave `535926a..5596b9c  main -> main`, exit 0, with no force. `main` tracks
+  `origin/main`, and 289 files are tracked.
