@@ -2,8 +2,8 @@ id,title,source,stage,status,steps,tests,notes
 CR-01,No proprietary sources or materials,,S0,not-started,S0.02.6;S0.13.3,,
 CR-02,"Generic functional terms, no vendor trademarks",,S0,not-started,S0.02.6,,
 CR-03,No proprietary native file formats,,S0,not-started,S0.02.6,,
-CR-04,"Reuse of GPL-compatible code allowed, fresh preferred",,S0,not-started,S0.02.1,,
-CR-07,Attribution and provenance,,S0,not-started,S0.02.1;S0.02.2,"CR-07a: S0.02.1 T-11 scripts/check-selftest.ps1 cases: a source without an SPDX header fails | CR-07b: S0.02.1 a third-party-marked file without a provenance row, and one named only in prose or in an incomplete row, fail",Provenance table docs/provenance.md
+CR-04,"Reuse of GPL-compatible code allowed, fresh preferred",,S0,done,S0.02.1,S0.02.1 T-11 check-spdx.ps1 requires a complete docs/provenance.md row for reused code (check-selftest spdx-third-party-*),
+CR-07,Attribution and provenance,,S0,in-progress,S0.02.1;S0.02.2,"CR-07a: S0.02.1 T-11 scripts/check-selftest.ps1 cases: a source without an SPDX header fails | CR-07b: S0.02.1 a third-party-marked file without a provenance row, and one named only in prose or in an incomplete row, fail | S0.02.1 check-selftest spdx-missing-header (Accept: CR-07a); spdx-third-party-without-provenance, spdx-third-party-prose-only, spdx-third-party-incomplete-row fail and spdx-third-party-complete-row passes (Accept: CR-07b)",Provenance table docs/provenance.md
 CR-05,Standards data: calculators and public factual data only,,S0,not-started,S0.02.6;S2.04.7;S2.08.1;S4.03.6;S4.04.1;S5.03.4;S7.02.2;S8.04.1;S8.06.1;S10.03.1;S10.04.1;S10.04.2,,Data-source table docs/data-sources.md
 CR-06,No telemetry or phone-home,,S0,not-started,S0.02.3;S0.02.6,,
 P-01,Desktop application,,S0,not-started,S0.12.1;S0.13.4,,

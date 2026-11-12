@@ -11,8 +11,11 @@
       2. original files (licence GPL-3.0-or-later, not under third_party/, no "Adapted from" marker) also carry
          "SPDX-FileCopyrightText: <year> The APP Authors";
       3. third-party files (under third_party/, marked "Adapted from", or with another licence or copyright holder)
-         are named in docs/provenance.md: by their repository-relative path, or by their third_party/<project>/
-         folder;
+         are named in the "Destination file(s)" column of a complete row of the docs/provenance.md table (CR-07):
+         by their repository-relative path, by a folder that contains them (ending in "/"), or by their
+         third_party/<project>/ folder. A row is complete when Project, URL, Version / commit, Original path(s),
+         Licence, Destination file(s) and Step ID are all filled in. A mention in prose or in an incomplete row
+         does not count;
       4. LICENSE (GPL-3.0 text) and THIRD_PARTY_NOTICES.md exist.
     JSON, Markdown and IDE-generated files (.slnx, .vcxproj.filters) carry no header and are not checked.
 
@@ -64,11 +67,93 @@ if( -not ( Test-Path ( Join-Path $Root 'THIRD_PARTY_NOTICES.md' ) ) )
 }
 
 $provenancePath = Join-Path $Root 'docs\provenance.md'
-$provenance     = ''
+$provenanceOk   = Test-Path $provenancePath
+$destinations   = New-Object System.Collections.Generic.List[string]
+$incomplete     = New-Object System.Collections.Generic.List[string]
+$required       = @( 'Project', 'URL', 'Version / commit', 'Original path(s)', 'Licence', 'Destination file(s)', 'Step ID' )
 
-if( Test-Path $provenancePath )
+function Split-TableRow( [string]$Line )
 {
-    $provenance = ( Get-Content -Raw $provenancePath ) -replace '\\', '/'
+    $cells = $Line.Trim().Trim( '|' ) -split '\|'
+    return @( $cells | ForEach-Object { $_.Trim() } )
+}
+
+if( $provenanceOk )
+{
+    $columns = $null
+
+    foreach( $line in [IO.File]::ReadAllLines( $provenancePath ) )
+    {
+        if( $line -notmatch '^\s*\|' )
+        {
+            $columns = $null
+            continue
+        }
+
+        $cells = Split-TableRow $line
+
+        if( $null -eq $columns )
+        {
+            if( $cells -contains 'Destination file(s)' )
+            {
+                $columns = $cells
+            }
+
+            continue
+        }
+
+        if( $line -match '^\s*\|[\s:|-]+\|\s*$' )
+        {
+            continue
+        }
+
+        $row = @{}
+
+        for( $i = 0; $i -lt $columns.Count; $i++ )
+        {
+            $value = ''
+
+            if( $i -lt $cells.Count )
+            {
+                $value = $cells[$i]
+            }
+
+            $row[$columns[$i]] = $value
+        }
+
+        $missing = @( $required | Where-Object { -not $row.ContainsKey( $_ ) -or $row[$_] -match '^(|-|\?|TBD|n/a)$' } )
+        $entries = @( ( $row['Destination file(s)'] -split '(<br\s*/?>|,|;)' ) |
+                      ForEach-Object { ( $_ -replace '[`*]', '' -replace '\\', '/' ).Trim() } |
+                      Where-Object { $_ -and $_ -notmatch '^(<br\s*/?>|,|;)$' } )
+
+        if( $missing.Count -gt 0 )
+        {
+            $incomplete.Add( "$( $entries -join ', ' ) (missing: $( $missing -join ', ' ))" )
+            continue
+        }
+
+        $entries | ForEach-Object { $destinations.Add( $_ ) }
+    }
+}
+
+# True when a complete provenance row names the file or a folder that contains it.
+function Test-Provenance( [string]$RelativePath, [string]$Key )
+{
+    foreach( $entry in $destinations )
+    {
+        if( $entry.Equals( $RelativePath, [StringComparison]::OrdinalIgnoreCase ) -or
+            $entry.Equals( $Key, [StringComparison]::OrdinalIgnoreCase ) )
+        {
+            return $true
+        }
+
+        if( $entry.EndsWith( '/' ) -and $RelativePath.StartsWith( $entry, [StringComparison]::OrdinalIgnoreCase ) )
+        {
+            return $true
+        }
+    }
+
+    return $false
 }
 
 $files = @( Get-AppSourceFiles -Root $Root -Extensions $extensions )
@@ -109,13 +194,20 @@ foreach( $file in $files )
         $key = 'third_party/' + ( $rel -split '/' )[1] + '/'
     }
 
-    if( -not $provenance )
+    if( -not $provenanceOk )
     {
         $violations.Add( "${rel}: third-party file (licence '$licence') but docs/provenance.md does not exist (CR-07)" )
     }
-    elseif( $provenance.IndexOf( $key, [StringComparison]::OrdinalIgnoreCase ) -lt 0 )
+    elseif( -not ( Test-Provenance $rel $key ) )
     {
-        $violations.Add( "${rel}: third-party file (licence '$licence') has no entry for '$key' in docs/provenance.md (CR-07)" )
+        $hint = ''
+
+        if( @( $incomplete | Where-Object { $_.IndexOf( $rel, [StringComparison]::OrdinalIgnoreCase ) -ge 0 -or $_.IndexOf( $key, [StringComparison]::OrdinalIgnoreCase ) -ge 0 } ).Count -gt 0 )
+        {
+            $hint = '; its row is incomplete'
+        }
+
+        $violations.Add( "${rel}: third-party file (licence '$licence') is not in the 'Destination file(s)' column of a complete docs/provenance.md row$hint (CR-07)" )
     }
 }
 

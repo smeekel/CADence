@@ -110,7 +110,7 @@ locally (hosted CI open, ADR 0033).
 
 ### S0.02 Static checks and clean-room guards
 
-- [ ] **S0.02.1: Tighten the SPDX check's provenance rule to the provenance table columns**
+- [x] **S0.02.1: Tighten the SPDX check's provenance rule to the provenance table columns**
   - Requirements: CR-07, CR-04
   - Modules: scripts, docs
   - Depends on: S0.01.1

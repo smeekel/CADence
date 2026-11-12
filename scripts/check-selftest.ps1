@@ -83,6 +83,8 @@ function Invoke-Check( [string]$Check, [string]$FixtureRoot, [string]$BinaryDir 
 }
 
 $header = "// SPDX-License-Identifier: GPL-3.0-or-later`n// SPDX-FileCopyrightText: 2026 The APP Authors`n"
+$adapted = "// SPDX-License-Identifier: MIT`n// SPDX-FileCopyrightText: 2020 Example Project`n// Adapted from example https://example.org/example @ 0123abc`n"
+$provenanceRow = "| 2026-11-12 | Example | https://example.org/example | 0123abc | src/example.cpp | MIT | ``src/core/Adapted.cpp`` | none | S0.02.1 |`n"
 
 $cases = @(
     @{ Name = 'layering-include'; Check = 'check-layering'
@@ -100,13 +102,26 @@ $cases = @(
        Apply = { param( $r )
                  Add-Text ( Join-Path $r 'src\part\Module.cpp' ) "`n#include <gp_Pnt.hxx>`n"
                  Add-Text ( Join-Path $r 'src\doc\Module.cpp' ) "`n#include <QWidget>`n" } },
+    # Accept: CR-07a
     @{ Name = 'spdx-missing-header'; Check = 'check-spdx'
        What = 'a new C++ file without an SPDX header'
        Apply = { param( $r ) Set-Text ( Join-Path $r 'src\core\NoHeader.cpp' ) "int answer() { return 42; }`n" } },
+    # Accept: CR-07b
     @{ Name = 'spdx-third-party-without-provenance'; Check = 'check-spdx'
        What = 'an MIT-licensed adapted file with no docs/provenance.md entry'
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\core\Adapted.cpp' ) $adapted } },
+    # Accept: CR-07b
+    @{ Name = 'spdx-third-party-prose-only'; Check = 'check-spdx'
+       What = 'an adapted file named only in the prose of docs/provenance.md'
        Apply = { param( $r )
-                 Set-Text ( Join-Path $r 'src\core\Adapted.cpp' ) "// SPDX-License-Identifier: MIT`n// SPDX-FileCopyrightText: 2020 Example Project`n// Adapted from example https://example.org/example @ 0123abc`n" } },
+                 Set-Text ( Join-Path $r 'src\core\Adapted.cpp' ) $adapted
+                 Add-Text ( Join-Path $r 'docs\provenance.md' ) "`nNote: src/core/Adapted.cpp was adapted from the example project.`n" } },
+    # Accept: CR-07b
+    @{ Name = 'spdx-third-party-incomplete-row'; Check = 'check-spdx'
+       What = 'an adapted file whose provenance row has no URL'
+       Apply = { param( $r )
+                 Set-Text ( Join-Path $r 'src\core\Adapted.cpp' ) $adapted
+                 Add-Text ( Join-Path $r 'docs\provenance.md' ) ( $provenanceRow.Replace( '| https://example.org/example |', '| |' ) ) } },
     @{ Name = 'network-source'; Check = 'check-network-apis'
        What = 'io includes winsock2.h and calls WSAStartup'
        Apply = { param( $r )
@@ -173,6 +188,12 @@ $cases = @(
 
 # Cases that must pass, with output that must match.
 $allowedCases = @(
+    @{ Name = 'spdx-third-party-complete-row'; Check = 'check-spdx'
+       What = 'an adapted file listed in a complete docs/provenance.md row passes'
+       Expect = 'check-spdx: OK'
+       Apply = { param( $r )
+                 Set-Text ( Join-Path $r 'src\core\Adapted.cpp' ) $adapted
+                 Add-Text ( Join-Path $r 'docs\provenance.md' ) $provenanceRow } },
     @{ Name = 'network-third-party-import'; Check = 'check-network-apis'; BinaryDir = 'bin'
        What = 'a third-party DLL imports ws2_32.dll: allowed and listed in the summary'
        Expect = 'allowed: vendornet\.dll -> WS2_32\.dll'
@@ -252,5 +273,5 @@ if( $failures.Count -gt 0 )
     exit 1
 }
 
-Write-Host "check-selftest: OK ($( $checkNames.Count ) checks pass on the clean copy; $( $cases.Count ) deliberate violations detected; $( $allowedCases.Count ) allowed case passes and is reported)" -ForegroundColor Green
+Write-Host "check-selftest: OK ($( $checkNames.Count ) checks pass on the clean copy; $( $cases.Count ) deliberate violations detected; $( $allowedCases.Count ) allowed case(s) pass and are reported)" -ForegroundColor Green
 exit 0
