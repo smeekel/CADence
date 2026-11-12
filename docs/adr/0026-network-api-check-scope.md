@@ -22,7 +22,8 @@ that a **third-party** library imports is allowed. It is not a failure, but the 
      `wininet`, `Qt6Network`, …);
   3. network ports or `qtbase` network features in `vcpkg.json` (Qt Network, curl, …), because APP would be asking for
      network support;
-  4. network imports in executables that APP builds (`-BinaryDir`).
+  4. network imports in executables and DLLs that APP builds (`-BinaryDir`), recognised by their project name or
+     `<TargetName>`; DLLs were added in step S0.02.3.
 - A third-party DLL that imports a network DLL, or that is a network library itself, is **allowed**. With
   `-BinaryDir`, the check prints a summary of every such import on every run: the library, the network DLL and the
   imported APIs (WinSock ordinals are translated to names), and the folders it was found in. With `-SummaryPath` it

@@ -90,6 +90,24 @@ function Invoke-Check( [string]$Check, [string]$FixtureRoot, [string]$BinaryDir 
     return Invoke-Script $Check $arguments
 }
 
+# A Windows DLL that imports WINHTTP.dll directly, to stand in for an APP-built DLL using WinHTTP.
+function Get-WinHttpFixture
+{
+    $dumpbin = Get-AppDumpbinPath
+
+    foreach( $name in @( 'bitsigd.dll', 'AxInstSv.dll', 'AuthBroker.dll', 'cloudidsvc.dll' ) )
+    {
+        $path = Join-Path $env:SystemRoot "System32\$name"
+
+        if( ( Test-Path $path ) -and ( @( & $dumpbin /nologo /dependents $path ) -match '^\s*WINHTTP\.dll\s*$' ) )
+        {
+            return $path
+        }
+    }
+
+    throw 'no Windows DLL importing WINHTTP.dll found for the network-own-dll-winhttp case; add one to Get-WinHttpFixture'
+}
+
 # A vcpkg dependency pinned with an override, optionally reviewed in docs/licence-manifest.json and listed in
 # THIRD_PARTY_NOTICES.md.
 function Add-FixturePort( [string]$FixtureRoot, [string]$Port, [string]$Licence, [bool]$Reviewed, [bool]$Noticed )
@@ -154,30 +172,45 @@ $cases = @(
        Apply = { param( $r )
                  Set-Text ( Join-Path $r 'src\core\Adapted.cpp' ) $adapted
                  Add-Text ( Join-Path $r 'docs\provenance.md' ) ( $provenanceRow.Replace( '| https://example.org/example |', '| |' ) ) } },
+    # Accept: P-03b
     @{ Name = 'network-source'; Check = 'check-network-apis'
        What = 'io includes winsock2.h and calls WSAStartup'
+       Expect = "src/io/Net\.cpp:4: network API call 'WSAStartup'"
        Apply = { param( $r )
                  Set-Text ( Join-Path $r 'src\io\Net.cpp' ) ( $header + "#include <winsock2.h>`nint start() { WSADATA d; return WSAStartup( 0x0202, &d ); }`n" ) } },
     @{ Name = 'network-link-input'; Check = 'check-network-apis'
        What = 'Cli.vcxproj links ws2_32.lib'
+       Expect = "src/cli/Cli\.vcxproj:\d+: link input 'ws2_32\.lib' is a network library"
        Apply = { param( $r )
                  $p = Join-Path $r 'src\cli\Cli.vcxproj'
                  $x = [IO.File]::ReadAllText( $p )
                  $x = $x.Replace( '<SubSystem>Console</SubSystem>', '<SubSystem>Console</SubSystem><AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>' )
                  Set-Text $p $x } },
-    @{ Name = 'network-vcpkg'; Check = 'check-network-apis'
-       What = 'vcpkg.json adds curl and the qtbase network feature'
+    @{ Name = 'network-vcpkg-port'; Check = 'check-network-apis'
+       What = 'vcpkg.json adds curl'
+       Expect = "vcpkg\.json: dependency 'curl' is a networking library"
        Apply = { param( $r )
                  $p = Join-Path $r 'vcpkg.json'
-                 $x = [IO.File]::ReadAllText( $p )
-                 $x = $x.Replace( '"name": "gtest",', '"name": "curl" }, { "name": "gtest",' ).Replace( '"widgets"', '"widgets", "network"' )
-                 Set-Text $p $x } },
+                 Set-Text $p ( [IO.File]::ReadAllText( $p ).Replace( '"name": "gtest",', '"name": "curl" }, { "name": "gtest",' ) ) } },
+    @{ Name = 'network-vcpkg-qt-feature'; Check = 'check-network-apis'
+       What = 'vcpkg.json adds the qtbase network feature'
+       Expect = "vcpkg\.json: qtbase feature 'network' enables networking"
+       Apply = { param( $r )
+                 $p = Join-Path $r 'vcpkg.json'
+                 Set-Text $p ( [IO.File]::ReadAllText( $p ).Replace( '"widgets"', '"widgets", "network"' ) ) } },
     # wsock32.dll ships with Windows and imports ws2_32.dll, so it stands in for a binary with a socket import.
     @{ Name = 'network-own-binary'; Check = 'check-network-apis'; BinaryDir = 'bin'
        What = 'an APP-built executable (Cli.exe) imports ws2_32.dll'
+       Expect = "bin/Cli/Cli\.exe: APP-built executable imports network DLL 'WS2_32\.dll'"
        Apply = { param( $r )
                  New-Item -ItemType Directory -Force ( Join-Path $r 'bin\Cli' ) | Out-Null
                  Copy-Item ( Join-Path $env:SystemRoot 'System32\wsock32.dll' ) ( Join-Path $r 'bin\Cli\Cli.exe' ) } },
+    @{ Name = 'network-own-dll-winhttp'; Check = 'check-network-apis'; BinaryDir = 'bin'
+       What = 'an APP-built DLL (Core.dll) imports WINHTTP.dll'
+       Expect = "bin/Core/Core\.dll: APP-built DLL imports network DLL 'WINHTTP\.dll'"
+       Apply = { param( $r )
+                 New-Item -ItemType Directory -Force ( Join-Path $r 'bin\Core' ) | Out-Null
+                 Copy-Item ( Get-WinHttpFixture ) ( Join-Path $r 'bin\Core\Core.dll' ) } },
     # Accept: P-04
     @{ Name = 'headless-links-qt-widgets'; Check = 'check-headless'
        What = 'Cli.vcxproj (built in Headless) links Qt6Widgets.lib'
@@ -255,7 +288,21 @@ $allowedCases = @(
        Expect = 'allowed: vendornet\.dll -> WS2_32\.dll'
        Apply = { param( $r )
                  New-Item -ItemType Directory -Force ( Join-Path $r 'bin\Vendor' ) | Out-Null
-                 Copy-Item ( Join-Path $env:SystemRoot 'System32\wsock32.dll' ) ( Join-Path $r 'bin\Vendor\vendornet.dll' ) } }
+                 Copy-Item ( Join-Path $env:SystemRoot 'System32\wsock32.dll' ) ( Join-Path $r 'bin\Vendor\vendornet.dll' ) } },
+    # Accept: P-03b
+    @{ Name = 'network-qt6core-import'; Check = 'check-network-apis'; BinaryDir = 'bin'
+       What = 'the installed Qt6Core.dll imports ws2_32.dll: listed in the summary, not a failure'
+       Expect = 'allowed: Qt6Core\.dll -> WS2_32\.dll: .*WSAStartup'
+       Apply = { param( $r )
+                 $qt = Join-Path $root 'vcpkg_installed\full\x64-windows\bin\Qt6Core.dll'
+
+                 if( -not ( Test-Path $qt ) )
+                 {
+                     throw "'$qt' is missing; run scripts\build.ps1 -Configuration Debug first"
+                 }
+
+                 New-Item -ItemType Directory -Force ( Join-Path $r 'bin\Ui' ) | Out-Null
+                 Copy-Item $qt ( Join-Path $r 'bin\Ui\Qt6Core.dll' ) } }
 )
 
 $checkNames = @( @( $cases ) + @( $allowedCases ) | ForEach-Object { $_.Check } | Select-Object -Unique )
