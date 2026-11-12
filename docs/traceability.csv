@@ -1,0 +1,161 @@
+id,title,source,stage,status,steps,tests,notes
+CR-01,No proprietary sources or materials,,S0,not-started,S0.02.6;S0.13.3,,
+CR-02,"Generic functional terms, no vendor trademarks",,S0,not-started,S0.02.6,,
+CR-03,No proprietary native file formats,,S0,not-started,S0.02.6,,
+CR-04,"Reuse of GPL-compatible code allowed, fresh preferred",,S0,not-started,S0.02.1,,
+CR-07,Attribution and provenance,,S0,not-started,S0.02.1;S0.02.2,"CR-07a: S0.02.1 T-11 scripts/check-selftest.ps1 cases: a source without an SPDX header fails | CR-07b: S0.02.1 a third-party-marked file without a provenance row, and one named only in prose or in an incomplete row, fail",Provenance table docs/provenance.md
+CR-05,Standards data: calculators and public factual data only,,S0,not-started,S0.02.6;S2.04.7;S2.08.1;S4.03.6;S4.04.1;S5.03.4;S7.02.2;S8.04.1;S8.06.1;S10.03.1;S10.04.1;S10.04.2,,Data-source table docs/data-sources.md
+CR-06,No telemetry or phone-home,,S0,not-started,S0.02.3;S0.02.6,,
+P-01,Desktop application,,S0,not-started,S0.12.1;S0.13.4,,
+P-02,Initial target,,S0,not-started,S0.01.1,,
+P-03,Fully offline,,S0,not-started,S0.02.3;S0.08.7;S0.99.1;S1.99.1;S2.99.1;S3.99.1;S4.99.1;S5.99.1;S6.99.1;S7.99.1;S8.99.1;S9.99.1;S10.06.7;S10.99.1,"P-03a: S0.08.7 T-11 offline smoke of cli, ui (start and close) and Integration.Tests with no errors and no outbound connection attempts | P-03b: S0.02.3 network APIs in src/ fail; third-party network imports such as Qt6Core's ws2_32.dll are allowed, noted and summarised",C-12 decided by the owner 2026-11-11 (ADR 0026 Accepted): third-party network imports allowed and listed in docs/network-imports.md; APP code in src/ still fails
+P-04,Portability,,S0,not-started,S0.01.3;S0.03.13;S0.11.1;S0.11.5;S0.11.6;S0.99.1,P-04: S0.01.3 T-11 check passes on the solution and fails on a fixture project that links Qt6Widgets,C-09 (ADR 0023)
+P-05,Language,,S0,not-started,S0.01.2,,
+P-06,Units,,S0,not-started,S0.03.4;S0.03.5,,
+P-07,Precision,,S0,not-started,S0.03.4;S5.02.2,,
+P-10,Cold start to usable empty window,,S0,not-started,S0.13.15;S0.99.2;S10.99.2,,
+P-11,"Viewport frame rate, 5 million triangles, shaded with edges",,S3;S10,not-started,S0.12.1;S0.12.2;S3.02.4;S3.99.2;S10.01.1;S10.01.2;S10.02.4;S10.02.6;S10.99.2,,C-05: early measurement SP-8a S3.02.4; target S10
+P-12,Full rebuild of a 200-feature part,,S2,not-started,S2.10.1;S2.99.2;S8.99.2;S10.99.2,,
+P-13,"Sketch solve, 500 entities / 800 constraints, interactive drag",,S1,not-started,S1.01.2;S1.01.3;S1.03.11;S1.99.2;S10.99.2,,
+P-14,"Open a 2,000-part assembly in lightweight mode",,S3;S10,not-started,S3.02.4;S3.99.2;S10.01.1;S10.01.2;S10.02.5;S10.99.2,,C-05: early measurement SP-8a S3.02.4; target S10
+P-15,"PCB with 2,000 components, 5,000 nets: interactive routing response",,S5,not-started,S5.01.2;S5.01.3;S5.02.3;S5.09.10;S5.99.2;S10.06.8;S10.99.2,,
+P-16,"Batch DRC, 8-layer board, 2,000 components",,S5,not-started,S5.02.3;S5.08.6;S5.99.2;S10.99.2,,
+P-17,Save or load a 50 MB project,,S0;S6,not-started,S0.08.4;S0.99.2;S6.11.4;S6.99.2;S10.99.2,,C-05: 50 MB target in S6
+P-20,Crash safety,,S0,not-started,S0.11.2;S0.11.3;S0.13.13,,
+P-21,No silent data loss,,S0,not-started,S0.05.4;S2.01.2;S2.03.8;S6.02.3,,
+P-22,Undo/redo,,S0,not-started,S0.04.3,,
+P-23,Logging,,S0,not-started,S0.03.10;S0.11.3;S0.11.4;S0.13.13,,
+P-30,Licence GPL-3.0-or-later,,S0,not-started,S0.01.6;S0.02.2;S0.13.12,,
+B-01,Solution,,S0,not-started,S0.01.1;S0.01.4,,
+B-02,One project per module,,S0,not-started,S0.01.4,,
+B-03,Shared settings,,S0,not-started,S0.01.4,,
+B-04,Configurations,,S0,not-started,S0.01.3,,
+B-05,Dependencies,,S0,not-started,S0.01.1;S0.01.6,,
+B-06,Command-line build,,S0,not-started,S0.01.1,,
+B-07,Migration-ready,,S0,not-started,S0.01.4,,
+L-01,Standard switch,,S0,not-started,S0.01.1;S0.01.2,,
+L-02,Supported features only,,S0,not-started,S0.01.2;S9.01.1;S9.03.1;S10.04.3,,
+L-03,Portable subset,,S0,not-started,S0.01.2;S0.01.5,,
+L-04,Feature-test macros,,S0,not-started,S0.01.2;S0.01.5,,
+L-05,Modules,,S0,not-started,S0.01.2;S0.01.5;S9.03.1,,
+A-01,Layering,,S0,not-started,S0.01.3;S0.02.7;S0.03.1;S0.09.4;S0.10.3;S1.01.1;S3.01.1;S5.01.1;S9.01.1,A-01: S0.09.4 T-11 fixture header outside geom that includes TopoDS_Shape.hxx fails,"Layering extensions ADRs 0016-0022 (C-07, C-08)"
+A-02,Headless first,,S0,not-started,S0.03.2;S0.05.5;S0.10.1;S0.10.4;S0.11.6;S7.04.6,,
+A-03,Command bus,,S0,not-started,S0.03.2;S0.03.9;S0.04.1;S0.04.2;S0.04.3;S0.04.4;S0.04.5;S0.05.5;S0.14.2;S1.04.8,,
+A-04,Stable identities,,S0,not-started,S0.03.3;S0.05.1;S0.05.2;S0.09.7;S6.02.1,,
+A-05,Kernel adapter,,S0,not-started,S0.09.1;S0.09.2;S0.09.3;S0.09.4,,
+A-06,Topological naming,,S0,not-started,S0.09.5;S0.09.6;S0.09.7;S2.01.3;S2.06.1;S2.06.2;S3.03.1;S6.03.1;S7.01.6;S10.03.4,A-06: S2.06.2 T-04 Golden.Tests TopoNaming.Case01..20,
+A-07,Regeneration engine,,S0,not-started,S0.03.8;S0.03.9;S0.05.3;S0.05.4;S0.10.1;S1.06.2;S2.01.2;S2.07.3;S2.10.1;S6.01.1;S6.01.2;S6.02.3;S7.01.6;S8.01.3;S10.05.3,,
+A-08,Expression engine,,S0,not-started,S0.03.6;S0.03.7;S0.03.8;S0.05.2;S0.13.8;S1.03.9;S1.06.4;S5.05.1;S6.02.2,,
+A-09,PCB coordinate model,,S0,not-started,S0.03.5;S4.02.2;S5.01.1;S5.02.1;S5.02.2;S5.13.1;S6.02.2,,
+A-10,Threading,,S0,not-started,S0.03.11;S0.05.4;S0.13.11;S2.09.2;S5.15.3;S7.07.1;S7.07.6,,
+A-11,Extensibility seam,,S0,not-started,S0.03.12;S0.04.1;S0.10.1;S0.10.2;S3.02.2;S4.07.1;S5.08.1;S6.09.2;S7.03.1;S9.04.1,,
+F-01,Open and documented,,S0,not-started,S0.04.2;S0.06.1;S0.14.1;S0.14.2;S1.02.1;S2.01.1;S3.02.1;S4.01.1;S5.02.1;S6.02.1;S7.01.1;S9.01.5,,
+F-02,Two equivalent encodings,,S0,not-started,S0.06.4;S0.06.6;S0.06.7;S0.06.11;S0.10.5;S6.11.4,F-02: S0.06.11 T-03 Format.Tests RoundTrip.JsonBsonJsonIsByteIdentical,C-21 UUID encoding in BSON (ADR 0028)
+F-03,Deterministic output,,S0,not-started,S0.06.2;S0.06.3,,
+F-04,Parametric source of truth,,S0,not-started,S0.05.1;S0.06.6;S0.06.9;S3.02.3,,
+F-05,Versioning and migration,,S0,not-started,S0.06.8;S2.01.1,,
+F-06,Blobs,,S0,not-started,S0.06.6;S4.05.4,,
+F-07,Library files,,S0,not-started,S0.06.10;S0.07.1;S2.04.7;S2.08.1;S4.01.1;S7.02.5,,
+F-08,Robust loading,,S0,not-started,S0.06.3;S0.08.5,F-08: S0.08.5 T-09 each target runs 10 minutes without crash or hang,C-20 unknown-field preservation (ADR 0027)
+F-09,Magic value (file identification),,S0,not-started,S0.06.1;S0.06.2;S0.06.4;S0.06.5;S0.06.10;S0.06.11;S0.10.5,F-09a: S0.06.11 Magic.BsonPrefixPerDocumentType | F-09b: S0.06.11 Magic.JsonStartsWithMagicKey | F-09c: S0.06.11 Magic.RejectsWrongOrMissingMagic,Magic UUID d9a3877a-3f27-4df8-9528-f8dfde59773d
+F-10,"Library scopes (global seed, per-user, per-project)",,S0;S4,not-started,S0.03.13;S0.07.1;S0.07.2;S0.07.3;S0.11.1;S4.03.4;S4.03.5;S4.10.2,F-10a: S0.07.1 T-01 Doc.Tests LibraryResolver.ProjectShadowsUserShadowsGlobal and FallsBackWhenProjectItemDeleted | F-10b: S4.03.4 T-02 Integration.Tests Library.OpensIdenticallyOnCleanMachine | F-10c: S4.03.5 T-02 Integration.Tests Library.SeedUpgradeThreeWayReview,Q-09 writable global folder (ADR 0032); C-11 (ADR 0024)
+T-01,Unit tests,,S0,not-started,S0.08.1,,
+T-02,Integration tests,,S0,not-started,S0.04.5;S0.08.2;S0.10.4;S0.10.5,,
+T-03,Format round-trip tests,,S0,not-started,S0.06.11;S0.08.2;S0.10.5,,
+T-04,Geometry golden tests,,S0,not-started,S0.08.1;S0.08.2;S0.08.3;S2.03.9;S2.04.10;S2.06.2;S2.08.4;S3.03.7,,
+T-05,UI replay tests,,S0,not-started,S0.13.14;S1.07.7;S2.11.4;S4.10.5;S6.12.1,,
+T-06,Visual snapshot tests,,S0,not-started,S0.12.2;S0.13.14;S7.01.9;S7.02.6;S7.06.3,,
+T-07,Output conformance tests,,S0,not-started,S0.08.3;S6.09.1;S7.04.7;S7.07.7,,
+T-08,Benchmarks,,S0,not-started,S0.08.4;S0.99.2;S1.99.2;S2.99.2;S3.99.2;S4.99.2;S5.99.2;S6.99.2;S7.99.2;S8.99.2;S9.99.2;S10.99.2,,
+T-09,Fuzzing,,S0,not-started,S0.08.5,,
+T-10,Domain verification suites,,S0,not-started,S0.08.3;S1.03.10;S4.07.4;S5.08.5;S9.01.6;S9.02.4;S9.03.7,,
+T-11,Static checks,,S0,not-started,S0.02.3;S0.02.4;S0.02.5;S0.02.7;S0.08.7;S0.14.1;S0.15.1;S0.99.1;S1.99.1;S2.99.1;S3.99.1;S4.99.1;S5.99.1;S6.99.1;S7.99.1;S8.99.1;S9.99.1;S10.99.1,,
+T-12,Coverage,,S0,not-started,S0.08.6,,
+T-13,One-command run,,S0,not-started,S0.02.7;S0.08.2;S0.15.1;S0.99.1;S0.99.3;S1.08.1;S1.99.1;S1.99.3;S2.99.1;S2.99.3;S3.99.1;S3.99.3;S4.99.1;S4.99.3;S5.99.1;S5.99.3;S6.99.1;S6.99.3;S7.99.1;S7.99.3;S8.99.1;S8.99.3;S9.99.1;S9.99.3;S10.99.1;S10.99.3,,"CI open (Q2, ADR 0033): local scripts now, hosted later"
+T-14,Reference scenario test,,S6;S8,not-started,S6.11.1;S6.11.2;S6.11.3;S6.99.1;S7.99.1;S8.01.4;S8.99.1;S9.99.1;S10.99.1,,C-01 (ADR 0015 Accepted); C-02 split variant from S8
+U-01,Modern visual design,,S0,not-started,S0.13.1;S0.13.3,,
+U-02,High-DPI and multi-monitor,,S0,not-started,S0.13.2,,
+U-03,Workspace layout,,S0,not-started,S0.13.2;S2.11.1;S3.09.1,,
+U-04,Contextual command bar,,S0,not-started,S0.13.6;S1.07.1;S7.09.1;S9.05.1;S9.05.3;S10.04.6,,
+U-05,Command palette,,S0,not-started,S0.13.7,,
+U-06,Properties inspector,,S0,not-started,S0.13.8;S1.07.4;S1.07.5;S2.11.5;S6.12.3,,
+U-07,In-canvas editing,,S1;S2;S10,not-started,S1.07.4;S2.11.2;S7.09.2;S8.08.2;S10.06.1,,
+U-08,Navigation,,S0;S10,not-started,S0.12.4;S0.12.5;S0.13.4;S3.09.5;S4.10.1;S5.15.1;S10.06.2,,
+U-09,Selection,,S0;S10,not-started,S0.12.3;S0.13.5;S3.09.2;S10.06.3,,
+U-10,Keyboard,,S0,not-started,S0.03.13;S0.13.9;S9.03.6,,
+U-11,Messages,,S0,not-started,S0.13.10;S1.07.6;S2.11.3;S4.10.4;S5.15.4,,
+U-12,Accessibility,,S0;S10,not-started,S0.13.1;S5.15.1;S10.06.4,,
+U-13,Localisation-ready,,S0;S10,not-started,S0.13.1;S10.06.5,,
+U-14,Start page,,S10,not-started,S10.06.6,,
+U-15,Offline help,,S10,not-started,S10.06.7,,
+M-SKT-01,Sketch entities and tools,SW-SKT-01,S1,not-started,S1.02.1;S1.02.2;S1.02.3;S1.02.4;S1.02.5;S1.02.6;S1.04.1;S1.04.2;S1.04.3;S1.04.4;S1.04.5;S1.04.6;S1.04.7;S1.04.8;S1.04.9;S1.07.1;S1.07.7,M-SKT-01a: S1.04.8 T-01 Sketch.Tests CommandCoverage.AllEntitiesAndTools | M-SKT-01b: S1.04.8 T-04 Golden.Tests SketchTools.TrimExtendOffset01..15 | M-SKT-01c: S1.04.7 T-04 Golden.Tests SketchRegions.Nested01..10,
+M-SKT-02,Sketch constraints and dimensions,SW-SKT-02,S1,not-started,S1.01.2;S1.01.3;S1.03.1;S1.03.2;S1.03.3;S1.03.4;S1.03.5;S1.03.6;S1.03.7;S1.03.8;S1.03.9;S1.03.10;S1.03.11;S1.03.12;S1.04.9;S1.07.2;S1.07.3;S1.07.6;S1.07.7,M-SKT-02a: S1.03.10 T-10 Golden.Tests SketchSolverSuite.* | M-SKT-02b: S1.03.11 T-08 Bench.SketchDrag500x800 median under 16 ms | M-SKT-02c: S1.03.12 T-04 Golden.Tests SketchDof.*,
+M-SKT-03,3D sketching,SW-SKT-03,S1;S2;S8,not-started,S1.05.1;S1.05.2;S1.05.3;S2.03.5;S8.06.2;S8.07.1,M-SKT-03a: S1.05.3 T-04 Golden.Tests Sketch3d.HandrailFullyDefined | M-SKT-03b: S2.03.5 Golden.Tests Sketch3d.HandrailDrivesSweep | M-SKT-03c: S8.06.2 T-04 Golden.Tests Weldments.HandrailStructureMembers,C-06: spans S1/S2/S8
+M-SKT-04,Equations and global parameters,SW-SKT-04,S1,not-started,S1.03.9;S1.06.1;S1.06.2;S1.06.3;S1.06.4;S1.07.5;S3.05.5,M-SKT-04a: S3.05.5 T-02 Integration.Tests Params.WallThicknessRegeneratesAll | M-SKT-04b: S1.06.2 T-01 Doc.Tests ParameterCycle.RejectsAandB,
+M-PRT-10,Reference geometry,implied by SW-SKT-01 / SW-PRT-01,S2,not-started,S2.02.1;S2.02.2;S2.02.3;S9.01.3;S9.04.1,M-PRT-10: S2.02.3 T-04 Golden.Tests RefGeometry.*,
+M-PRT-01,Solid features,SW-PRT-01,S2;S8,not-started,S2.01.2;S2.03.1;S2.03.2;S2.03.3;S2.03.4;S2.03.5;S2.03.6;S2.03.7;S2.03.8;S2.03.9;S2.11.2;S8.02.6,"M-PRT-01a: S2.03.9 T-04 Golden.Tests PartGolden.SolidFeatureMatrix | M-PRT-01b: S2.03.8 T-04 Golden.Tests PartErrors.OpenProfile, PartErrors.SelfIntersectingResult","Boundary feature should in S2, must by S8 (S8.02.6)"
+M-PRT-02,Applied features,SW-PRT-02,S2,not-started,S2.04.1;S2.04.2;S2.04.3;S2.04.4;S2.04.5;S2.04.6;S2.04.7;S2.04.8;S2.04.9;S2.04.10;S2.11.2,M-PRT-02a: S2.04.10 T-04 Golden.Tests PartGolden.AppliedFeatureMatrix | M-PRT-02b: S2.04.8 Golden.Tests Hole.M6TappedMatchesTable,
+M-PRT-03,Patterns and mirrors,SW-PRT-03,S2,not-started,S2.05.1;S2.05.2;S2.05.3;S2.05.4;S2.05.5,M-PRT-03: S2.05.5 T-04 Golden.Tests Patterns.Suite incl. skipped instances and a 10-instance variable pattern,
+M-PRT-04,Feature tree,SW-PRT-04,S2,not-started,S2.01.1;S2.07.1;S2.07.2;S2.07.3;S2.11.1;S2.11.3;S2.11.4,"M-PRT-04a: S2.11.4 T-05 Ui.Tests Replay.FeatureTreeReorder, Replay.RollbackInsert, Replay.DeleteWithDependants | M-PRT-04b: S2.07.2 T-01 Part.Tests FeatureTree.ReorderRefusedWithExplanation",
+M-PRT-05,Multibody parts,SW-PRT-05,S8,not-started,S8.01.1;S8.01.2;S8.01.3;S8.01.4;S8.08.1,M-PRT-05: S8.01.4 T-04 Golden.Tests Multibody.EnclosureSplitTwoBodiesTwoDerived,
+M-PRT-06,Surface modeling,SW-PRT-06,S8,not-started,S8.02.1;S8.02.2;S8.02.3;S8.02.4;S8.02.5;S8.02.7;S8.08.1,M-PRT-06a: S8.02.7 T-04 Golden.Tests Surfaces.KnitFormsValidSolid | M-PRT-06b: S8.02.7 Surfaces.ThickenedLoftVolume,
+M-PRT-07,Direct editing,SW-PRT-07,S8,not-started,S8.03.1;S8.03.2;S8.03.3;S8.08.2,M-PRT-07: S8.03.3 T-04 Golden.Tests DirectEdit.BracketMoveHoleDeleteFilletOffset,
+M-PRT-09,Materials and mass properties,SW-PRT-09,S2,not-started,S2.08.1;S2.08.2;S2.08.3;S2.08.4;S2.11.5,M-PRT-09a: S2.08.2 T-04 Golden.Tests MassProps.PrimitivesWithin1e-6 | M-PRT-09b: S2.08.4 T-04 Golden.Tests GoldenParts.MassWithin1e-4,
+M-PRT-11,Configurations,SW-PRT-11,S3,not-started,S3.04.1;S3.04.2;S3.04.3;S3.04.4;S3.09.3;S6.07.2,M-PRT-11a: S3.04.4 T-04 Golden.Tests Configs.Bolt12MassValues | M-PRT-11b: S3.04.4 Configs.AssemblySwapsComponentConfigs,
+M-SHM-01,Sheet metal features,SW-SHM-01,S8,not-started,S8.04.1;S8.04.2;S8.04.3;S8.04.4;S8.04.5;S8.04.6;S8.08.3,M-SHM-01: S8.04.6 T-04 Golden.Tests SheetMetal.GoldenRebuildWithBendMetadata,
+M-SHM-02,Flat pattern,SW-SHM-02,S8,not-started,S8.05.1;S8.05.2;S8.05.3;S8.05.4;S8.08.3,M-SHM-02a: S8.05.2 T-04 Golden.Tests FlatPattern.LengthsWithin0_01mm | M-SHM-02b: S8.05.3 T-07 Golden.Tests FlatPattern.DxfReimportsWithLayers,
+M-WLD-01,Weldments and structural frames,SW-WLD-01,S8,not-started,S8.06.1;S8.06.2;S8.06.3;S8.06.4;S8.06.5;S8.08.3,M-WLD-01a: S8.06.5 T-04 Golden.Tests Weldments.FrameLengthsAndMass | M-WLD-01b: S8.06.5 T-02 Integration.Tests Weldments.Sketch3dChangeUpdatesMembers,
+M-WLD-02,Cut lists,SW-WLD-02,S8,not-started,S8.06.6;S8.08.3,M-WLD-02: S8.06.6 T-04 Golden.Tests Weldments.CutListMatches,
+M-ASM-01,Mates,SW-ASM-01,S3,not-started,S3.01.2;S3.01.3;S3.02.1;S3.02.2;S3.03.1;S3.03.2;S3.03.3;S3.03.4;S3.03.5;S3.03.6;S3.03.7;S3.09.1;S3.09.2,M-ASM-01: S3.03.7 T-04 Golden.Tests Mechanisms.DofAndDragReplay01..15,
+M-ASM-02,Top-down (in-context) design,SW-ASM-02,S3,not-started,S3.05.1;S3.05.2;S3.05.3;S3.05.4,M-ASM-02a: S3.05.4 T-02 Integration.Tests InContext.LidFollowsBaseRim | M-ASM-02b: S3.05.4 InContext.LockStopsUpdate | M-ASM-02c: S3.05.4 InContext.ExternalRefListStatus,
+M-ASM-03,Large assembly handling,SW-ASM-03,S3;S10,not-started,S3.02.3;S3.02.4;S10.01.1;S10.01.2;S10.02.1;S10.02.2;S10.02.3;S10.02.4;S10.02.5,M-ASM-03a: S10.02.5 T-08 Bench.OpenLightweight2000 under 20 s on the reference machine | M-ASM-03b: S10.02.1 T-02 Integration.Tests LargeAsm.EditLightweightResolves,"C-06: foundations S3; target S10 (SP-8, ADR 0041)"
+M-ASM-04,Interference and clearance detection,SW-ASM-04,S3,not-started,S3.06.1;S3.06.2;S3.06.3;S3.09.3;S6.06.1,M-ASM-04: S3.06.3 T-04 Golden.Tests Interference.SeededExactly,
+M-ASM-05,Smart components and fasteners,SW-ASM-05,S10,not-started,S10.03.1;S10.03.2;S10.03.3;S10.03.4;S10.03.5;S10.03.6,M-ASM-05a: S10.03.3 T-04 Golden.Tests Fasteners.EnclosureFourSeries | M-ASM-05b: S10.03.4 T-02 Integration.Tests Fasteners.LidThicknessUpdatesLengths,
+M-ASM-06,Exploded views and assembly animation,SW-ASM-06,S3;S7,not-started,S3.07.1;S3.07.2;S3.07.3;S3.09.4;S7.01.5;S10.04.4,M-ASM-06a: S3.07.3 T-02 Integration.Tests Explode.SaveReloadReplayIdentical | M-ASM-06b: S7.01.5 T-06 Golden.Tests Snapshot.ExplodedDrawingViewShowsLines,Clause b accepted in S7.01.5
+M-ASM-07,Basic motion and animation,SW-ASM-07,S3,not-started,S3.01.2;S3.08.1;S3.08.2;S3.08.3;S3.08.4;S3.09.4,M-ASM-07: S3.08.4 T-10 Golden.Tests Motion.SliderCrankWithin0_1Percent,Q-08 MP4 seam (S3.08.3)
+M-DRW-01,Drawing views,SW-DRW-01,S7,not-started,S7.01.1;S7.01.2;S7.01.3;S7.01.4;S7.01.5;S7.01.6;S7.01.7;S7.01.8;S7.01.9;S7.02.1;S7.09.1,M-DRW-01a: S7.01.9 T-06 Golden.Tests Snapshot.Drawings01..10 | M-DRW-01b: S7.02.1 T-02 Integration.Tests Drawings.HoleMoveUpdatesSectionDetailAndDims,
+M-DRW-02,Annotations,SW-DRW-02,S7;S10,not-started,S7.02.1;S7.02.2;S7.02.3;S7.02.4;S7.02.5;S7.02.6;S7.09.2;S9.02.1;S10.05.3,M-DRW-02a: S7.02.6 T-06 Golden.Tests Snapshot.Annotations* | M-DRW-02b: S10.05.3 T-02 Integration.Tests Tolerances.DrawingToStackUpAndInspection,Clause b accepted in S10.05.3 after M-SIM-05 and M-INS-01 exist
+M-DRW-03,Drawing tables,SW-DRW-03,S7,not-started,S7.03.1;S7.03.2;S7.03.3;S7.05.2;S7.09.2;S8.05.4;S8.06.6,M-DRW-03a: S7.03.2 T-04 Golden.Tests BomTable.ExpectedRows | M-DRW-03b: S7.03.2 T-02 Integration.Tests BomTable.AssemblyChangeUpdatesBomAndBalloons,
+M-SIM-04,Motion analysis (rigid-body dynamics),SW-SIM-04,S9,not-started,S9.01.1;S9.01.2;S9.01.3;S9.01.4;S9.01.5;S9.01.6;S9.01.7;S9.05.1;S10.04.4,M-SIM-04a: S9.01.6 T-10 Sim.Tests MotionBench.AllWithin0_5Percent | M-SIM-04b: S9.01.7 T-10 Sim.Tests MotionBench.CamFollowerStaysInContact,
+M-SIM-05,Tolerance stack-up analysis,SW-SIM-05,S9,not-started,S9.02.1;S9.02.2;S9.02.3;S9.02.4;S9.05.2;S10.05.3,M-SIM-05: S9.02.4 T-10 Sim.Tests ToleranceSuite.All,
+M-INS-01,Inspection documentation,SW-INS-01,S10,not-started,S10.05.1;S10.05.2;S10.05.3;S10.05.4,M-INS-01a: S10.05.2 T-04 Golden.Tests Inspection.FortyCharacteristicsTable | M-INS-01b: S10.05.3 T-02 Integration.Tests Inspection.RevisionKeepsNumbers,
+M-VIS-01,Photorealistic rendering,SW-VIS-01,S10,not-started,S10.04.1;S10.04.2;S10.04.3;S10.04.4;S10.04.5;S10.04.6,M-VIS-01a: S10.04.3 T-06 Golden.Tests Render.FiveGoldenScenes | M-VIS-01b: S10.04.5 T-08 Bench.RenderPreview1080p under 60 s on the reference machine,
+E-PRJ-01,Unified project and compilation,AD-PRJ-01,S4;S5,not-started,S4.01.1;S4.06.1;S4.06.4;S4.10.4;S5.06.1;S5.06.2;S5.15.2;S6.12.3,E-PRJ-01a: S4.06.4 T-02 Integration.Tests Netlist.GoldenProjectCompiles | E-PRJ-01b: S5.06.2 T-02 Integration.Tests Sync.BothDirectionsZeroDifferences,
+E-PRJ-03,Assembly variants,AD-PRJ-03,S6,not-started,S6.07.1;S6.09.5;S7.04.4;S7.06.2;S9.03.2,E-PRJ-03: S6.09.5 T-04 Golden.Tests Variants.ThreeVariantsBomAndPnp,"C-01: minimal BOM and pick-and-place in S6.09.5 (ADR 0015, Accepted)"
+E-PRJ-04,Design reuse,AD-PRJ-04,S4;S5,not-started,S4.09.1;S5.14.1,E-PRJ-04: S5.14.1 T-02 Integration.Tests Reuse.BuckRegulatorBlock,C-06: spans S4/S5
+E-LIB-01,Component model,AD-LIB-01,S4,not-started,S4.02.1;S4.02.2;S4.02.3;S4.02.4;S4.03.6;S4.10.3;S5.13.2;S9.03.2,E-LIB-01a: S4.02.4 T-04 Golden.Tests Components.ValidateCleanly | E-LIB-01b: S4.02.4 Components.MismatchedPinPadReported,
+E-LIB-02,Local library management,AD-LIB-02,S4,not-started,S4.01.2;S4.03.1;S4.03.2;S4.03.3;S4.10.2,E-LIB-02a: S4.03.2 T-02 Integration.Tests Library.EditReleasedCreatesRevB | E-LIB-02b: S4.03.2 Library.ProjectReportsAndAppliesUpdate,
+E-LIB-03,Footprint generator,AD-LIB-03,S4,not-started,S4.04.1;S4.04.2;S4.04.3;S4.04.4;S4.04.5;S4.04.6;S4.04.7;S4.04.8;S4.10.3,E-LIB-03: S4.04.8 T-04 Golden.Tests FpGen.Cases01..20,
+E-SCH-01,Schematic capture,AD-SCH-01,S4,not-started,S4.05.1;S4.05.2;S4.05.3;S4.05.4;S4.05.5;S4.10.1;S4.10.5,E-SCH-01: S4.10.5 T-05 Ui.Tests Replay.Schematic2SheetCompiles,
+E-SCH-02,Hierarchy and multi-channel design,AD-SCH-02,S4,not-started,S4.06.1;S4.06.2;S4.06.3,E-SCH-02a: S4.06.2 T-04 Golden.Tests Netlist.Hierarchical4Sheet | E-SCH-02b: S4.06.3 T-04 Golden.Tests Netlist.EightChannel,
+E-SCH-03,Electrical rules check (ERC),AD-SCH-03,S4,not-started,S4.07.1;S4.07.2;S4.07.3;S4.07.4;S4.10.4,E-SCH-03: S4.07.4 T-04 Golden.Tests Erc.Seeded12Exactly,
+E-SCH-04,Annotation,AD-SCH-04,S4;S5,not-started,S4.08.1;S5.06.2,E-SCH-04a: S4.08.1 T-04 Golden.Tests Annotation.ExpectedDesignators | E-SCH-04b: S5.06.2 Annotation.BackAnnotateByPosition,Clause b accepted in S5.06.2
+E-SCH-05,Schematic directives,AD-SCH-05,S4;S5,not-started,S4.08.2;S5.06.3,E-SCH-05: S5.06.3 T-02 Integration.Tests Directives.UsbPairCreatesDiffPairClass,
+E-SIM-01,Circuit simulation,AD-SIM-01,S9,not-started,S9.03.1;S9.03.2;S9.03.3;S9.03.4;S9.03.5;S9.03.6;S9.03.7;S9.05.3,E-SIM-01: S9.03.7 T-10 Sim.Tests SpiceSuite.All,"ngspice licence to be verified (ADR 0008, S9.03.1)"
+E-PCB-01,Layer stack,AD-PCB-01,S5,not-started,S5.03.1;S5.03.2;S5.03.3;S5.03.4;S5.10.3;S5.15.6,E-PCB-01a: S5.03.3 T-04 Golden.Tests Stack.FourAndEightLayerThickness | E-PCB-01b: S5.03.3 Golden.Tests Impedance.Within1Percent,
+E-PCB-02,Board shape and regions,AD-PCB-02,S5,not-started,S5.02.1;S5.04.1;S5.04.2;S5.13.4;S5.15.1;S6.04.2;S6.05.2,E-PCB-02: S5.13.4 T-06 Golden.Tests Snapshot.BoardCutoutsKeepouts2d3d,
+E-PCB-03,Component placement,AD-PCB-03,S5,not-started,S5.07.1;S5.07.2;S5.07.3;S5.07.4;S5.15.2;S6.05.3,E-PCB-03a: S5.15.2 T-05 Ui.Tests Replay.PlaceGoldenBoard | E-PCB-03b: S5.07.4 T-04 Golden.Tests Placement.RoomCopy4Channels,
+E-PCB-04,Interactive routing,AD-PCB-04,S5,not-started,S5.01.2;S5.01.3;S5.09.1;S5.09.2;S5.09.3;S5.09.4;S5.09.5;S5.09.6;S5.09.7;S5.09.8;S5.09.9;S5.09.10;S5.15.3,E-PCB-04a: S5.09.10 T-08 Bench.RouteMouseMove2000x5000 | E-PCB-04b: S5.15.3 T-05 Ui.Tests Replay.RouteGoldenBoard | E-PCB-04c: S5.09.9 T-04 Golden.Tests Router.ShoveSuiteZeroDrc,
+E-PCB-05,High-speed routing,AD-PCB-05,S5,not-started,S5.01.3;S5.10.1;S5.10.2;S5.10.3;S5.10.4;S5.10.5;S5.15.4,E-PCB-05a: S5.10.5 T-04 Golden.Tests HighSpeed.DdrTunedWithin0_1mm | E-PCB-05b: S5.10.5 HighSpeed.ReturnPathFindsSeeded,
+E-PCB-07,Copper pours,AD-PCB-07,S5;S10,not-started,S5.01.4;S5.01.5;S5.11.1;S5.11.2;S5.11.3;S5.11.4;S5.11.5;S5.15.6;S10.06.8,E-PCB-07a: S5.11.5 T-04 Golden.Tests Pours.AreaWithin0_1Percent | E-PCB-07b: S5.11.5 Pours.ThermalReliefGeometry | E-PCB-07c: S5.11.5 Pours.NoClearanceViolations,Auto re-pour (should) in S10.06.8
+E-PCB-08,HDI and fabrication features,AD-PCB-08,S5;S6,not-started,S5.03.2;S5.12.1;S5.12.2;S5.12.3;S5.12.4;S6.09.4;S7.04.2,E-PCB-08: S6.09.4 Golden.Tests Hdi.DrillSpansAndStackData,C-01: IPC-2581 acceptance in S6 (ADR 0015 Accepted)
+E-RUL-01,Design rules,AD-RUL-01,S5,not-started,S5.03.4;S5.05.1;S5.05.2;S5.05.3;S5.06.3;S5.07.3;S5.08.2;S5.08.3;S5.09.5;S5.15.4,E-RUL-01: S5.05.2 T-04 Golden.Tests Rules.Resolution30Cases,
+E-RUL-02,Design rule check (DRC),AD-RUL-02,S5,not-started,S5.02.3;S5.08.1;S5.08.2;S5.08.3;S5.08.4;S5.08.5;S5.08.6;S5.13.3;S5.15.4;S6.06.1,E-RUL-02a: S5.08.5 T-10 Golden.Tests Drc.SeededSuite | E-RUL-02b: S5.08.6 T-08 Bench.BatchDrc8Layer2000 under 15 s,
+E-3D-01,3D board model,AD-3D-01,S5,not-started,S5.13.1;S5.13.2;S5.13.3;S5.13.4;S5.15.5;S6.03.1,E-3D-01a: S5.15.5 T-06 Ui.Tests Snapshot.Board3dMatchesStack | E-3D-01b: S5.13.1 T-04 Golden.Tests Board3d.ThicknessAndHolesExact,C-10: board 3D in link via providers (ADR 0025)
+E-DOC-01,Fabrication and assembly drawings,AD-DOC-01,S7,not-started,S7.06.1;S7.06.2;S7.06.3,E-DOC-01a: S7.06.3 T-06 Golden.Tests Snapshot.FabAndAssemblyDrawings | E-DOC-01b: S7.06.1 T-02 Integration.Tests PcbDrawings.NewHoleSizeAddsRowAndSymbol,
+E-OUT-01,Manufacturing outputs,AD-OUT-01,S6;S7,not-started,S6.09.1;S6.09.2;S6.09.3;S6.09.4;S6.09.5;S6.11.3;S7.04.1;S7.04.2;S7.04.3;S7.04.4;S7.04.5;S7.04.6;S7.04.7;S7.09.3,E-OUT-01: S7.04.7 T-07 Golden.Tests FabConformance.GerberCountsAndPositionsExact,C-01: minimal writers in S6 (ADR 0015 Accepted); full in S7
+E-BOM-01,Basic parts list,AD-BOM-01,S6;S7,not-started,S6.09.5;S7.05.1,E-BOM-01: S7.05.1 T-04 Golden.Tests Bom.RowsPerVariant,
+E-MB-01,Multi-board systems,AD-MB-01,S6,not-started,S6.08.1;S6.08.2,E-MB-01a: S6.08.2 T-02 Integration.Tests MultiBoard.TwoBoardStackCompiles | E-MB-01b: S6.08.2 MultiBoard.SwappedPinPairReported,
+X-01,Board as an assembly component,AD-MCAD-01,S6,not-started,S6.03.1;S6.03.2;S6.11.1,X-01: S6.03.2 T-02 Integration.Tests Links.BoardMatesDof0,
+X-02,Board outline linking,AD-MCAD-01,S6,not-started,S6.02.2;S6.04.1;S6.04.2;S6.04.3;S6.11.1;S6.11.2,X-02a: S6.04.1 T-02 Integration.Tests Links.BoardWidthResizesCavity | X-02b: S6.04.2 T-02 Integration.Tests Links.WallResizesBoardAndDrcReportsOutside,
+X-03,Mounting holes and fixings,AD-MCAD-01,S6,not-started,S6.05.1;S6.11.1,X-03: S6.05.1 T-02 Integration.Tests Links.HoleMoveMovesBoss3mm,
+X-04,Height limits and keepouts from the enclosure,AD-MCAD-01,S6,not-started,S6.05.2;S6.11.2,X-04: S6.05.2 T-02 Integration.Tests Links.LidLowered3mmCapViolatesHeight,
+X-05,Mechanically constrained components,AD-MCAD-01,S6,not-started,S6.05.3;S6.05.4;S6.11.1;S6.11.2,X-05: S6.05.4 T-02 Integration.Tests Links.ConnectorMove5mmMovesCutout,
+X-06,Unified interference and clearance,AD-MCAD-01,S6,not-started,S6.06.1;S6.11.2;S6.12.3,X-06: S6.06.1 T-02 Integration.Tests Links.CapVsRibFoundByBothChecks,
+X-07,Combined product BOM,"AD-MCAD-01, AD-BOM-01, SW-DRW-03",S7,not-started,S7.05.2,X-07: S7.05.2 T-04 Golden.Tests Bom.ProductBomQuantities,Delivered in S7 (C-06); link->drw (ADR 0018)
+X-08,Configurations and variants,"AD-PRJ-03, SW-PRT-11",S6,not-started,S6.07.2;S6.11.3;S10.03.2;S10.03.6,X-08: S6.07.2 T-02 Integration.Tests Links.NoUsbConfigRemovesConnectorAndCutout,
+X-09,Cross-domain change propagation and review,AD-MCAD-01,S6,not-started,S6.01.1;S6.01.2;S6.02.4;S6.12.2,X-09: S6.02.4 T-02 Integration.Tests Links.ReviewModeHoldsUntilAccepted,
+X-10,Link manager,AD-MCAD-01,S6,not-started,S6.01.1;S6.01.2;S6.02.1;S6.02.3;S6.12.1,X-10a: S6.12.1 T-05 Ui.Tests Replay.LinkCreateLockBreakRetarget | X-10b: S6.02.1 Link.Tests Cycles.RejectedAtCreation,
+E-MCAD-02,3D export of boards and products,AD-MCAD-02,S6;S7,not-started,S6.10.1;S7.08.2;S7.08.3,E-MCAD-02: S6.10.1 T-07 Golden.Tests StepExport.ProductReimports,C-06: spans S6/S7
+M-IO-01,Neutral file formats,SW-IO-01,S2;S7,not-started,S2.09.1;S2.09.2;S2.09.3;S2.11.6;S6.10.1;S7.01.7;S7.01.8;S7.07.1;S7.07.2;S7.07.3;S7.07.4;S7.07.5;S7.07.6;S7.07.7;S8.05.3,"M-IO-01a: S2.09.2 StepRoundTrip.PartMassPreserved, S7.07.7 T-07 Golden.Tests IoRoundTrip.AllFormats | M-IO-01b: S2.09.3 T-07 Golden.Tests StepImport.ThirdParty01..20",C-06: spans S2/S7
+M-3DP-01,Export for 3D printing,"user requirement (""Export parts and assemblies for 3D printing"")",S2;S7,not-started,S0.10.2;S2.09.4;S2.09.5;S2.11.6;S6.11.3;S7.07.4;S7.08.1;S7.08.2;S7.08.4,M-3DP-01a: S2.09.5 T-07 Golden.Tests Print.GoldenPartsWatertight | M-3DP-01b: S2.09.5 Print.MeshVolumeWithin0_1Percent | M-3DP-01c: S2.09.5 Print.ThreeMfValidatesWithLib3mf,C-06: spans S2/S7
