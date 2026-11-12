@@ -9,7 +9,7 @@ CR-06,No telemetry or phone-home,,S0,not-started,S0.02.3;S0.02.6,,
 P-01,Desktop application,,S0,not-started,S0.12.1;S0.13.4,,
 P-02,Initial target,,S0,done,S0.01.1,"S0.01.1 T-11 clean-clone build of Debug, Release and Headless with 0 warnings (ADR 0029 verification)",
 P-03,Fully offline,,S0,not-started,S0.02.3;S0.08.7;S0.99.1;S1.99.1;S2.99.1;S3.99.1;S4.99.1;S5.99.1;S6.99.1;S7.99.1;S8.99.1;S9.99.1;S10.06.7;S10.99.1,"P-03a: S0.08.7 T-11 offline smoke of cli, ui (start and close) and Integration.Tests with no errors and no outbound connection attempts | P-03b: S0.02.3 network APIs in src/ fail; third-party network imports such as Qt6Core's ws2_32.dll are allowed, noted and summarised",C-12 decided by the owner 2026-11-11 (ADR 0026 Accepted): third-party network imports allowed and listed in docs/network-imports.md; APP code in src/ still fails
-P-04,Portability,,S0,not-started,S0.01.3;S0.03.13;S0.11.1;S0.11.5;S0.11.6;S0.99.1,P-04: S0.01.3 T-11 check passes on the solution and fails on a fixture project that links Qt6Widgets,C-09 (ADR 0023)
+P-04,Portability,,S0,in-progress,S0.01.3;S0.03.13;S0.11.1;S0.11.5;S0.11.6;S0.99.1,P-04: S0.01.3 T-11 check passes on the solution and fails on a fixture project that links Qt6Widgets | S0.01.3 check-selftest case headless-links-qt-widgets passes on the repository and fails on the fixture (Accept: P-04),C-09 (ADR 0023)
 P-05,Language,,S0,in-progress,S0.01.2,,S0.01.2 blocked: MSVC column verified (ADR 0034 Proposed); GCC 14/Clang 18 not installed in WSL
 P-06,Units,,S0,not-started,S0.03.4;S0.03.5,,
 P-07,Precision,,S0,not-started,S0.03.4;S5.02.2,,
@@ -29,7 +29,7 @@ P-30,Licence GPL-3.0-or-later,,S0,not-started,S0.01.6;S0.02.2;S0.13.12,,"C-25 re
 B-01,Solution,,S0,in-progress,S0.01.1;S0.01.4,S0.01.1 T-11 clean-clone build of APP.slnx,
 B-02,One project per module,,S0,not-started,S0.01.4,,
 B-03,Shared settings,,S0,not-started,S0.01.4,,
-B-04,Configurations,,S0,not-started,S0.01.3,,
+B-04,Configurations,,S0,done,S0.01.3,"S0.01.3 T-11 scripts/check-headless.ps1 (Headless project graph, link inputs, sources, out/Headless binaries) with check-selftest cases headless-links-qt-widgets, headless-references-ui, headless-windows-ui",
 B-05,Dependencies,,S0,in-progress,S0.01.1;S0.01.6,"S0.01.1 baseline 177e8175 verified, clean-clone vcpkg restore (ADR 0029)",
 B-06,Command-line build,,S0,done,S0.01.1,"S0.01.1 T-11 scripts/build.ps1 Debug, Release, Headless; T-13 scripts/test.ps1",
 B-07,Migration-ready,,S0,not-started,S0.01.4,,
@@ -38,7 +38,7 @@ L-02,Supported features only,,S0,in-progress,S0.01.2;S9.01.1;S9.03.1;S10.04.3,,S
 L-03,Portable subset,,S0,in-progress,S0.01.2;S0.01.5,,S0.01.2 blocked: MSVC column verified (ADR 0034 Proposed); GCC 14/Clang 18 not installed in WSL
 L-04,Feature-test macros,,S0,in-progress,S0.01.2;S0.01.5,,S0.01.2 blocked: MSVC column verified (ADR 0034 Proposed); GCC 14/Clang 18 not installed in WSL
 L-05,Modules,,S0,in-progress,S0.01.2;S0.01.5;S9.03.1,,S0.01.2 blocked: MSVC column verified (ADR 0034 Proposed); GCC 14/Clang 18 not installed in WSL
-A-01,Layering,,S0,not-started,S0.01.3;S0.02.7;S0.03.1;S0.09.4;S0.10.3;S1.01.1;S3.01.1;S5.01.1;S9.01.1,A-01: S0.09.4 T-11 fixture header outside geom that includes TopoDS_Shape.hxx fails,"Layering extensions ADRs 0016-0022 (C-07, C-08)"
+A-01,Layering,,S0,in-progress,S0.01.3;S0.02.7;S0.03.1;S0.09.4;S0.10.3;S1.01.1;S3.01.1;S5.01.1;S9.01.1,A-01: S0.09.4 T-11 fixture header outside geom that includes TopoDS_Shape.hxx fails | S0.01.3 T-11 check-headless.ps1 rejects UI project references from Headless projects,"Layering extensions ADRs 0016-0022 (C-07, C-08)"
 A-02,Headless first,,S0,not-started,S0.03.2;S0.05.5;S0.10.1;S0.10.4;S0.11.6;S7.04.6,,
 A-03,Command bus,,S0,not-started,S0.03.2;S0.03.9;S0.04.1;S0.04.2;S0.04.3;S0.04.4;S0.04.5;S0.05.5;S0.14.2;S1.04.8,,
 A-04,Stable identities,,S0,not-started,S0.03.3;S0.05.1;S0.05.2;S0.09.7;S6.02.1,,

@@ -79,7 +79,7 @@ locally (hosted CI open, ADR 0033).
   - Deliverables: `docs/adr/0034-spike-sp1-toolchain.md`; every row of `docs/cpp-features.md` verified for MSVC v145, GCC 14 and Clang 18 (WSL)
   - Tests: feature probe compiled with MSVC `/std:c++latest`, GCC and Clang `-std=c++2c`; result table in the ADR
   - Done when: each listed feature has a verified status on all three compilers; ADR 0034 Accepted by the owner
-- [ ] **S0.01.3: Add the Headless dependency check**
+- [x] **S0.01.3: Add the Headless dependency check**
   - Requirements: P-04, B-04, A-01
   - Modules: scripts, build
   - Depends on: S0.01.1

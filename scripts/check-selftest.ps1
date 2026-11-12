@@ -6,8 +6,8 @@
 
 .DESCRIPTION
     Copies the checked parts of the repository (src, tests, build, scripts, docs, root files; no build output) into
-    a temporary folder, verifies that check-layering, check-spdx and check-network-apis pass on the clean copy, then
-    applies one deliberate violation per case to a fresh copy and verifies that the matching check fails.
+    a temporary folder, verifies that every check named by a case below passes on the clean copy, then applies one
+    deliberate violation per case to a fresh copy and verifies that the matching check fails.
     Allowed cases (a third-party DLL that imports ws2_32.dll, ADR 0026) must pass and appear in the check's summary.
     The repository itself is never modified. Exits non-zero if any expectation is not met.
 
@@ -130,7 +130,26 @@ $cases = @(
        What = 'an APP-built executable (Cli.exe) imports ws2_32.dll'
        Apply = { param( $r )
                  New-Item -ItemType Directory -Force ( Join-Path $r 'bin\Cli' ) | Out-Null
-                 Copy-Item ( Join-Path $env:SystemRoot 'System32\wsock32.dll' ) ( Join-Path $r 'bin\Cli\Cli.exe' ) } }
+                 Copy-Item ( Join-Path $env:SystemRoot 'System32\wsock32.dll' ) ( Join-Path $r 'bin\Cli\Cli.exe' ) } },
+    # Accept: P-04
+    @{ Name = 'headless-links-qt-widgets'; Check = 'check-headless'
+       What = 'Cli.vcxproj (built in Headless) links Qt6Widgets.lib'
+       Apply = { param( $r )
+                 $p = Join-Path $r 'src\cli\Cli.vcxproj'
+                 $x = [IO.File]::ReadAllText( $p )
+                 $x = $x.Replace( '<SubSystem>Console</SubSystem>', '<SubSystem>Console</SubSystem><AdditionalDependencies>Qt6Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>' )
+                 Set-Text $p $x } },
+    @{ Name = 'headless-references-ui'; Check = 'check-headless'
+       What = 'Cli.vcxproj (built in Headless) references the Ui project'
+       Apply = { param( $r )
+                 $p = Join-Path $r 'src\cli\Cli.vcxproj'
+                 $x = [IO.File]::ReadAllText( $p )
+                 $x = $x.Replace( '<ProjectReference Include="..\core\Core.vcxproj">', '<ProjectReference Include="..\ui\Ui.vcxproj"><Project>{FD1FCC4C-7A67-43E1-9A7C-221342B59D06}</Project></ProjectReference><ProjectReference Include="..\core\Core.vcxproj">' )
+                 Set-Text $p $x } },
+    @{ Name = 'headless-windows-ui'; Check = 'check-headless'
+       What = 'doc includes windows.h and calls MessageBoxW outside src/platform/'
+       Apply = { param( $r )
+                 Add-Text ( Join-Path $r 'src\doc\Module.cpp' ) "`n#include <windows.h>`nstatic int warn() { return MessageBoxW( nullptr, L`"x`", L`"x`", 0 ); }`n" } }
 )
 
 # Cases that must pass, with output that must match.
@@ -143,11 +162,13 @@ $allowedCases = @(
                  Copy-Item ( Join-Path $env:SystemRoot 'System32\wsock32.dll' ) ( Join-Path $r 'bin\Vendor\vendornet.dll' ) } }
 )
 
+$checkNames = @( @( $cases ) + @( $allowedCases ) | ForEach-Object { $_.Check } | Select-Object -Unique )
+
 try
 {
     $clean = New-Fixture 'clean'
 
-    foreach( $check in 'check-layering', 'check-spdx', 'check-network-apis' )
+    foreach( $check in $checkNames )
     {
         $result = Invoke-Check $check $clean
         Write-Host "[clean] $check -> exit $( $result.Code )"
@@ -212,5 +233,5 @@ if( $failures.Count -gt 0 )
     exit 1
 }
 
-Write-Host "check-selftest: OK (3 checks pass on the clean copy; $( $cases.Count ) deliberate violations detected; $( $allowedCases.Count ) allowed case passes and is reported)" -ForegroundColor Green
+Write-Host "check-selftest: OK ($( $checkNames.Count ) checks pass on the clean copy; $( $cases.Count ) deliberate violations detected; $( $allowedCases.Count ) allowed case passes and is reported)" -ForegroundColor Green
 exit 0

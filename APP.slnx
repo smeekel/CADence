@@ -24,6 +24,8 @@
     <File Path="scripts/check-layering.ps1" />
     <File Path="scripts/check-spdx.ps1" />
     <File Path="scripts/check-network-apis.ps1" />
+    <File Path="scripts/check-headless.ps1" />
+    <File Path="scripts/probe-cpp-features.ps1" />
     <File Path="scripts/check-selftest.ps1" />
     <File Path="scripts/common.ps1" />
   </Folder>

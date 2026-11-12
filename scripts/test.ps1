@@ -8,7 +8,8 @@
     1. Builds the chosen configuration with scripts/build.ps1 (Headless by default: no Qt, no UI projects).
     2. Runs every *.Tests.exe under out/<Configuration>/ with --gtest_output=xml (JUnit-style XML).
     3. Runs the CLI smoke test (Cli.exe --version must print the version and exit 0).
-    4. Runs the static checks: check-layering, check-spdx and check-network-apis (with the built binaries).
+    4. Runs the static checks: check-layering, check-spdx, check-network-apis (with the built binaries) and
+       check-headless (with the built binaries when the configuration is Headless).
     JUnit XML for all of them is written to out/test-results/<Configuration>/. Exits non-zero on any failure.
 
 .PARAMETER Configuration
@@ -202,11 +203,19 @@ if( -not $Bench -and -not $Fuzz )
 
 if( -not $NoChecks -and -not $Bench -and -not $Fuzz )
 {
-    $cases  = @()
+    $cases        = @()
+    $headlessArgs = @{}
+
+    if( $Configuration -eq 'Headless' )
+    {
+        $headlessArgs = @{ BinaryDir = $binDir }
+    }
+
     $checks = @(
         @{ Name = 'check-layering';     Args = @{} },
         @{ Name = 'check-spdx';         Args = @{} },
-        @{ Name = 'check-network-apis'; Args = @{ BinaryDir = $binDir } }
+        @{ Name = 'check-network-apis'; Args = @{ BinaryDir = $binDir } },
+        @{ Name = 'check-headless';     Args = $headlessArgs }
     )
 
     foreach( $check in $checks )
