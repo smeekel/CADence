@@ -29,6 +29,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="PropertySheets" />
   <ItemGroup>
+    <ClCompile Include="CompatTests.cpp" />
     <ClCompile Include="ModuleTests.cpp" />
   </ItemGroup>
   <ItemGroup>

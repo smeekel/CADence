@@ -21,4 +21,6 @@ it on project references and `#include` paths. It changes only together with an 
 
 ## Main types
 
-`ModuleInfo` and the product version constants (scaffold). Planned: `Result`/`Error`, `ObjectId`, `Command`, `CommandBus`, `UndoStack`, `JobSystem`, `EventBus`, `ExpressionEngine`.
+`ModuleInfo` and the product version constants (scaffold). `Compat.h`: required feature-test macros and the
+`compat::` wrappers for conditional C++23/26 features (`enumerate`, `zip`, `zipTransform`, `FlatMap`, `FlatSet`; L-04).
+Planned: `Result`/`Error`, `ObjectId`, `Command`, `CommandBus`, `UndoStack`, `JobSystem`, `EventBus`, `ExpressionEngine`.

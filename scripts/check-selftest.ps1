@@ -8,7 +8,7 @@
     Copies the checked parts of the repository (src, tests, build, scripts, docs, root files; no build output) into
     a temporary folder, verifies that every check named by a case below passes on the clean copy, then applies one
     deliberate violation per case to a fresh copy and verifies that the matching check fails.
-    A case with an expected message must also report it. Allowed cases (a third-party DLL that imports ws2_32.dll,
+    A case with expected messages (one regular expression or a list) must also report each of them. Allowed cases (a third-party DLL that imports ws2_32.dll,
     ADR 0026) must pass and appear in the check's summary. Finally THIRD_PARTY_NOTICES.md is regenerated on a copy
     from the installed vcpkg trees (vcpkg_installed\, created by scripts\build.ps1): it must already be up to date,
     a new docs/provenance.md row must make check-licences fail until it is regenerated, and a second
@@ -250,6 +250,29 @@ $cases = @(
     @{ Name = 'hygiene-two-projects'; Check = 'check-build-hygiene'
        What = 'a module folder holds two projects'
        Apply = { param( $r ) Copy-Item ( Join-Path $r 'src\core\Core.vcxproj' ) ( Join-Path $r 'src\core\CoreExtra.vcxproj' ) } },
+    @{ Name = 'cppfeatures-generator'; Check = 'check-cpp-features'
+       What = 'a test includes <generator> (not allowed)'
+       Expect = "tests/core/Counting\.cpp:3: C\+\+ feature 'std::generator \(<generator>\)' is not allowed"
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'tests\core\Counting.cpp' ) ( $header + "#include <generator>`nstd::generator<int> count();`n" ) } },
+    @{ Name = 'cppfeatures-import-std'; Check = 'check-cpp-features'
+       What = 'core imports the standard library module (L-05)'
+       Expect = "src/core/Modules\.cpp:3: C\+\+ feature 'Named modules \(import, export module, import std;\)' is not allowed"
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\core\Modules.cpp' ) ( $header + "import std;`nint size() { return 1; }`n" ) } },
+    @{ Name = 'cppfeatures-stacktrace-outside-platform'; Check = 'check-cpp-features'
+       What = 'doc uses std::stacktrace outside src/platform/'
+       Expect = "src/doc/Trace\.cpp:4: C\+\+ feature 'std::stacktrace \(<stacktrace>\) outside src/platform/' is not allowed"
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\doc\Trace.cpp' ) ( $header + "#include <stacktrace>`nauto trace() { return std::stacktrace::current(); }`n" ) } },
+    @{ Name = 'cppfeatures-conditional-direct'; Check = 'check-cpp-features'
+       What = 'core uses std::views::enumerate directly instead of compat::enumerate (L-04)'
+       Expect = "src/core/Indexing\.cpp:4: C\+\+ feature 'std::views::zip, zip_transform, enumerate' is conditional, use it through src/core/Compat\.h"
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\core\Indexing.cpp' ) ( $header + "#include <ranges>`nauto indexed( const int ( &v )[3] ) { return std::views::enumerate( v ); }`n" ) } },
+    @{ Name = 'cppfeatures-language'; Check = 'check-cpp-features'
+       What = 'core uses pack indexing, a placeholder variable, = delete("reason") and contract_assert'
+       Expect = @( "src/core/Newer\.cpp:3: C\+\+ feature 'Pack indexing \(Ts\.\.\.\[N\]\)' is not allowed",
+                   "src/core/Newer\.cpp:4: C\+\+ feature '_ placeholder variables' is not allowed",
+                   "src/core/Newer\.cpp:5: C\+\+ feature '= delete\(`"reason`"\)' is not allowed",
+                   "src/core/Newer\.cpp:6: C\+\+ feature 'Contracts \(pre, post, contract_assert\)' is not allowed" )
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\core\Newer.cpp' ) ( $header + "template <typename... Ts> auto second( Ts... v ) { return v...[1]; }`nvoid f() { auto _ = 1; }`nvoid legacy() = delete( `"use f`" );`nint g( int x ) { contract_assert( x > 0 ); return x; }`n" ) } },
     @{ Name = 'format-misformatted'; Check = 'check-format'
        What = 'a test source with cramped braces and double spaces'
        Expect = 'tests/core/Misformatted\.cpp:\d+: code should be clang-formatted'
@@ -310,6 +333,13 @@ $allowedCases = @(
        Apply = { param( $r )
                  Set-Text ( Join-Path $r 'src\core\Adapted.cpp' ) $adapted
                  Add-Text ( Join-Path $r 'docs\provenance.md' ) $provenanceRow } },
+    @{ Name = 'cppfeatures-allowed'; Check = 'check-cpp-features'
+       What = 'std::stacktrace in src/platform/, banned names in comments and strings, and compat::enumerate pass'
+       Expect = 'check-cpp-features: OK'
+       Apply = { param( $r )
+                 Set-Text ( Join-Path $r 'src\platform\Trace.cpp' ) ( $header + "#include <stacktrace>`nauto trace() { return std::stacktrace::current(); }`n" )
+                 Set-Text ( Join-Path $r 'src\core\Words.cpp' ) ( $header + "// import std; and <generator> are banned (L-05).`nconst char* note = `"no std::generator, no import std;`";`n" )
+                 Set-Text ( Join-Path $r 'src\doc\Indexed.cpp' ) ( $header + "#include `"core/Compat.h`"`n#include <vector>`nint sum( std::vector<int>& v ) { int s = 0; for( auto&& [i, x] : app::core::compat::enumerate( v ) ) { s += static_cast<int>( i ) * x; } return s; }`n" ) } },
     @{ Name = 'network-third-party-import'; Check = 'check-network-apis'; BinaryDir = 'bin'
        What = 'a third-party DLL imports ws2_32.dll: allowed and listed in the summary'
        Expect = 'allowed: vendornet\.dll -> WS2_32\.dll'
@@ -370,9 +400,15 @@ try
         {
             $failures.Add( "$( $case.Check ) did not detect: $( $case.What )" )
         }
-        elseif( $case['Expect'] -and -not ( $result.Output | Where-Object { $_ -match $case.Expect } ) )
+        else
         {
-            $failures.Add( "$( $case.Check ) failed without reporting '$( $case.Expect )': $( $case.What )" )
+            foreach( $expect in @( $case['Expect'] | Where-Object { $_ } ) )
+            {
+                if( -not ( $result.Output | Where-Object { $_ -match $expect } ) )
+                {
+                    $failures.Add( "$( $case.Check ) failed without reporting '$expect': $( $case.What )" )
+                }
+            }
         }
     }
 

@@ -10,7 +10,7 @@
     3. Runs the CLI smoke test (Cli.exe --version must print the version and exit 0).
     4. Runs the static checks: check-layering, check-spdx, check-network-apis (with the built binaries),
        check-headless (with the built binaries when the configuration is Headless), check-build-hygiene,
-       check-licences, check-format and check-clean-room.
+       check-cpp-features, check-licences, check-format and check-clean-room.
     JUnit XML for all of them is written to out/test-results/<Configuration>/. Exits non-zero on any failure.
 
 .PARAMETER Configuration
@@ -218,6 +218,7 @@ if( -not $NoChecks -and -not $Bench -and -not $Fuzz )
         @{ Name = 'check-network-apis'; Args = @{ BinaryDir = $binDir } },
         @{ Name = 'check-headless';     Args = $headlessArgs },
         @{ Name = 'check-build-hygiene'; Args = @{} },
+        @{ Name = 'check-cpp-features'; Args = @{} },
         @{ Name = 'check-licences';     Args = @{} },
         @{ Name = 'check-format';       Args = @{} },
         @{ Name = 'check-clean-room';   Args = @{} }

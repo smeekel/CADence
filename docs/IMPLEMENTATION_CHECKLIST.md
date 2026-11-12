@@ -101,13 +101,14 @@ locally (hosted CI open, ADR 0033).
   - Deliverables: `scripts/check-build-hygiene.ps1` (fails on `#pragma comment(lib`, warning or standard settings inside a `.vcxproj`, a source that needs the PCH to compile, any CMake file, a module folder without exactly one project)
   - Tests: T-11 check passes on the solution and fails on one fixture per rule
   - Done when: check green on the repository, red on every fixture, run by `scripts/test.ps1`
-- [ ] **S0.01.5: Add the C++ feature allow-list check and the feature-test helper header**
+- [x] **S0.01.5: Add the C++ feature allow-list check and the feature-test helper header**
   - Requirements: L-03, L-04, L-05
   - Modules: core, scripts
   - Depends on: S0.01.2
   - Deliverables: `scripts/check-cpp-features.ps1` (reads the "Not allowed" rows of `docs/cpp-features.md`; fails on `import`/`export module`, banned headers such as `<generator>`); `src/core/Compat.h` with `__cpp_*` / `__cpp_lib_*` helpers and fallbacks
   - Tests: T-11 check fails on a fixture using `<generator>` and on one using `import std;`; T-01 `Core.Tests Compat.*`
   - Done when: check and tests green; `Compat.h` documented with `@req L-04`
+  - Notes: the check reads a "Detected by" column of regular expressions that this step added to the "Not allowed" and "Allowed with a feature-test check and fallback" tables of `docs/cpp-features.md` (with an "Allowed in" column for `std::stacktrace` in `src/platform/`), and matches them in `src/` and `tests/` after blanking comments and literal contents. Conditional features are used only through `src/core/Compat.h` (`compat::enumerate`, `zip`, `zipTransform`, `FlatMap`, `FlatSet`), so direct use elsewhere fails too; `std::mdspan` has no wrapper yet. `Compat.h` also stops the build with `#error` when a feature-test macro of an "Allowed" feature is missing. The fallbacks are always compiled and `Core.Tests Compat.*` (9 tests) compares them with the standard views. `scripts/test.ps1` runs the check; `check-selftest.ps1` gains five failing cases (`<generator>`, `import std;`, `std::stacktrace` outside `src/platform/`, direct `std::views::enumerate`, and pack indexing / `_` / `= delete("reason")` / `contract_assert` in one file, each message checked) and one allowed case, and a case may now list several expected messages. Only `tests/core/spikes/cpp_feature_probe.cpp` is exempt (ADR 0034).
 - [x] **S0.01.6: Pin dependency versions and record licence verification**
   - Requirements: B-05, P-30
   - Modules: build, docs
