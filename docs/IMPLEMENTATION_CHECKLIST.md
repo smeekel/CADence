@@ -149,13 +149,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-11 check fails on a mis-formatted fixture and passes on the repository
   - Done when: repository formatted and green; check run by `scripts/test.ps1`
   - Notes: the repository already matched `.clang-format` with clang-format 22.1.3 (63 files). The check passes `--style=file:<root>/.clang-format` explicitly, and `check-selftest.ps1` now copies `.clang-format` and `.clang-tidy` into its fixtures; its `format-misformatted` case fails on a mis-formatted `tests/core` source.
-- [ ] **S0.02.6: Add clean-room and data-source guards**
+- [~] **S0.02.6: Add clean-room and data-source guards**
   - Requirements: CR-01, CR-02, CR-03, CR-05, CR-06
   - Modules: scripts, docs, libraries
   - Depends on: S0.01.1
   - Deliverables: `docs/clean-room.md` (contributor checklist for CR-01 … CR-07); `scripts/check-clean-room.ps1` (banned vendor trademark terms in UI strings and translations, banned native CAD file extensions in importer/exporter registrations, telemetry and update-check keywords, every data file under `libraries/` listed in `docs/data-sources.md`)
   - Tests: T-11 one failing fixture per rule; passes on the repository
   - Done when: all rules detected on fixtures; repository green; term list reviewed by the owner
+  - Status: awaiting owner review of the term lists. Everything else is done: `docs/clean-room.md` (checklist for CR-01 to CR-07 and the three term tables the check reads), `scripts/check-clean-room.ps1` (run by `scripts/test.ps1`; repository green), and one failing `check-selftest.ps1` fixture per rule (`cleanroom-trademark`, `cleanroom-translation`, `cleanroom-native-extension`, `cleanroom-telemetry`, `cleanroom-undocumented-data`) plus an allowed case (comments, a local crash-dump string and a documented data file pass). Assumptions for the review: UI strings are C++ string literals under `src/`, Qt `.ui`/`.ts`/`.qml` files and library JSON; telemetry keywords are checked in code and strings, not comments or Markdown; `Creo` was left out of the trademark list because it is a common Spanish word in translations; `libraries/seed-manifest.json` and `README.md` files are not data. CR-01 and CR-04 cannot be checked automatically.
 - [ ] **S0.02.7: Run every check from test.ps1 and extend check-selftest.ps1 to all checks**
   - Requirements: T-11, T-13, A-01
   - Modules: scripts

@@ -254,6 +254,28 @@ $cases = @(
        What = 'a test source with cramped braces and double spaces'
        Expect = 'tests/core/Misformatted\.cpp:\d+: code should be clang-formatted'
        Apply = { param( $r ) Set-Text ( Join-Path $r 'tests\core\Misformatted.cpp' ) ( $header + "int  misformatted(int a){return a;}`n" ) } },
+    @{ Name = 'cleanroom-trademark'; Check = 'check-clean-room'
+       What = 'a UI string names a vendor feature (Hole Wizard)'
+       Expect = "src/ui/Labels\.cpp:3: vendor trademark term in a UI string \(CR-02\) 'Hole Wizard'"
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\ui\Labels.cpp' ) ( $header + "const char* holeToolLabel = `"Hole Wizard...`";`n" ) } },
+    @{ Name = 'cleanroom-translation'; Check = 'check-clean-room'
+       What = 'a Qt translation names a vendor product'
+       Expect = "src/ui/translations/app_de\.ts:3: vendor trademark term in a UI string \(CR-02\) 'SOLIDWORKS'"
+       Apply = { param( $r )
+                 New-Item -ItemType Directory -Force ( Join-Path $r 'src\ui\translations' ) | Out-Null
+                 Set-Text ( Join-Path $r 'src\ui\translations\app_de.ts' ) "<TS version=`"2.1`" language=`"de`">`n<message><source>Import</source>`n<translation>Aus SolidWorks importieren</translation></message>`n</TS>`n" } },
+    @{ Name = 'cleanroom-native-extension'; Check = 'check-clean-room'
+       What = 'io registers a native CAD file extension'
+       Expect = "src/io/Formats\.cpp:3: native CAD file extension of another product \(CR-03\) '\.sldprt'"
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\io\Formats.cpp' ) ( $header + "const char* partFilter = `"Parts (*.SLDPRT)`";`n" ) } },
+    @{ Name = 'cleanroom-telemetry'; Check = 'check-clean-room'
+       What = 'core adds an update check'
+       Expect = "src/core/Updates\.cpp:3: telemetry or update-check keyword \(CR-06\) 'check for updates'"
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\core\Updates.cpp' ) ( $header + "void checkForUpdates() {}`n" ) } },
+    @{ Name = 'cleanroom-undocumented-data'; Check = 'check-clean-room'
+       What = 'a library data file without a docs/data-sources.md row'
+       Expect = "libraries/materials/steel\.json: data file has no complete row in docs/data-sources\.md"
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'libraries\materials\steel.json' ) "{ `"name`": `"Steel`" }`n" } },
     # Accept: P-30
     @{ Name = 'licences-gpl2-dependency'; Check = 'check-licences'
        What = 'vcpkg.json adds a reviewed and noticed GPL-2.0-only dependency'
@@ -294,6 +316,13 @@ $allowedCases = @(
        Apply = { param( $r )
                  New-Item -ItemType Directory -Force ( Join-Path $r 'bin\Vendor' ) | Out-Null
                  Copy-Item ( Join-Path $env:SystemRoot 'System32\wsock32.dll' ) ( Join-Path $r 'bin\Vendor\vendornet.dll' ) } },
+    @{ Name = 'cleanroom-allowed'; Check = 'check-clean-room'
+       What = 'a comment about telemetry, a local crash-dump string and a documented data file pass'
+       Expect = 'check-clean-room: OK .* 1 library data files'
+       Apply = { param( $r )
+                 Set-Text ( Join-Path $r 'src\core\Notes.cpp' ) ( $header + "// No telemetry and no update check (CR-06).`nconst char* dumpFolder = `"crash dumps stay local`";`n" )
+                 Set-Text ( Join-Path $r 'libraries\materials\steel.json' ) "{ `"name`": `"Steel`" }`n"
+                 Add-Text ( Join-Path $r 'docs\data-sources.md' ) "| material | ``libraries/materials/steel.json`` | Example handbook, Example Press, 2020 | public factual data | 2026-11-12 | original values |`n" } },
     # Accept: P-03b
     @{ Name = 'network-qt6core-import'; Check = 'check-network-apis'; BinaryDir = 'bin'
        What = 'the installed Qt6Core.dll imports ws2_32.dll: listed in the summary, not a failure'

@@ -207,8 +207,9 @@ All `[now]`: `mainpage.md` (Doxygen main page), `FOLDER_STRUCTURE.md` (this page
 `data-sources.md` (CR-05), `format/README.md`, `commands/README.md`, `adr/0000-template.md`,
 `adr/0001-record-architecture-decisions.md`, `adr/0002` … `adr/0014` (spec decisions D-01 … D-13 in order) and
 `stages/S0.md` … `stages/S10.md`. `network-imports.md` (third-party network imports, P-03, ADR 0026) is generated
-by `scripts/check-network-apis.ps1 -SummaryPath`. `licence-manifest.json` (reviewed licence and verified version of
-every vcpkg port, P-30) is added in S0.02.2 and read by `scripts/check-licences.ps1` and `scripts/update-notices.ps1`.
+by `scripts/check-network-apis.ps1 -SummaryPath`. `clean-room.md` (contributor checklist and the term lists of
+`scripts/check-clean-room.ps1`, CR-01 to CR-07) is added in S0.02.6. `licence-manifest.json` (reviewed licence and
+verified version of every vcpkg port, P-30) is added in S0.02.2 and read by `scripts/check-licences.ps1` and `scripts/update-notices.ps1`.
 `docs/rules-language.md` (PCB rule query language, E-RUL-01)
 appears in S5.
 
