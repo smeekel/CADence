@@ -16,6 +16,17 @@ free of Qt so it builds in the Headless configuration.
   export) uses an off-screen context created by `platform` (step S0.11.6).
 - Shaders, picking, edge rendering and section caps live in `render`; no OpenGL calls outside it.
 
+## Licence verification (S0.01.6, 2026-11-12)
+
+Checked against the vcpkg port metadata (`ports/<port>/vcpkg.json`) and portfile at the pinned baseline
+`177e8175` (read from vcpkg's registry cache), the upstream licence file (GitHub licence API) and, for installed
+ports, the installed `share/<port>/copyright` file. Spec section 4.3 is the yardstick.
+
+OpenGL itself is the Windows system library `opengl32` (vcpkg `opengl` port, Windows SDK licence) plus the
+Khronos headers (`opengl-registry`, MIT per file; `egl-registry`, Apache-2.0), all allowed. Open item for
+S0.12.1: the GL function loader is chosen in its own ADR; candidates at the baseline are `glad` 0.1.36 (MIT),
+`libepoxy` 1.5.10#2 (MIT) and `glbinding` 3.5.0 (MIT).
+
 ## Consequences
 
 - Snapshot tests (T-06) run without a visible window.

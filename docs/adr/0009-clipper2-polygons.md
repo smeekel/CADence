@@ -16,6 +16,15 @@ integer coordinates fit the PCB nanometre grid (A-09), and it is the basis for c
 - Arcs are approximated with a documented maximum chord error; exact arcs are kept in the board database.
 - The pour engine design (incremental re-pour, islands, thermal reliefs) is decided by spike SP-6 in ADR 0039.
 
+## Licence verification (S0.01.6, 2026-11-12)
+
+Checked against the vcpkg port metadata (`ports/<port>/vcpkg.json`) and portfile at the pinned baseline
+`177e8175` (read from vcpkg's registry cache), the upstream licence file (GitHub licence API) and, for installed
+ports, the installed `share/<port>/copyright` file. Spec section 4.3 is the yardstick.
+
+`clipper2` 2.0.1 at the baseline: `BSL-1.0` in the port metadata; GitHub `AngusJohnson/Clipper2` reports
+BSL-1.0. Allowed (4.3: Boost). Not in `vcpkg.json` yet; pinned and re-verified when added in S5.
+
 ## Consequences
 
 - Integer arithmetic makes clearance results exact on the grid (P-07).

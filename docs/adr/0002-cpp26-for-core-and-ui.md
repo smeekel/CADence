@@ -18,6 +18,16 @@ features with feature-test macros (L-04), and do not use named modules (L-05).
   revision of the list comes from spike SP-1 (ADR 0034, step S0.01.2).
 - C# is not used for the core.
 
+## Licence verification (S0.01.6, 2026-11-12)
+
+Checked against the vcpkg port metadata (`ports/<port>/vcpkg.json`) and portfile at the pinned baseline
+`177e8175` (read from vcpkg's registry cache), the upstream licence file (GitHub licence API) and, for installed
+ports, the installed `share/<port>/copyright` file. Spec section 4.3 is the yardstick.
+
+No third-party library is introduced by this decision. The compiler runtime (`vcruntime140`, `msvcp140`) is
+shipped as Microsoft's Visual C++ redistributable, a system library of the platform; its packaging is decided with
+the installer (out of scope for S0).
+
 ## Consequences
 
 - Wrapping C/C++ libraries is direct; no interop layer.

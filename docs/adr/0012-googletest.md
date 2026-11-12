@@ -17,6 +17,15 @@ projects through its included adapter, which suits a solution-based build withou
   `-Filter`, `-Coverage`, `-Bench`, `-Fuzz` and `-UpdateGolden -Reason`.
 - Tests that encode spec Accept criteria carry `// Accept: <ID>` comments (rule 060).
 
+## Licence verification (S0.01.6, 2026-11-12)
+
+Checked against the vcpkg port metadata (`ports/<port>/vcpkg.json`) and portfile at the pinned baseline
+`177e8175` (read from vcpkg's registry cache), the upstream licence file (GitHub licence API) and, for installed
+ports, the installed `share/<port>/copyright` file. Spec section 4.3 is the yardstick.
+
+`gtest` 1.18.0 (pinned with `overrides`): `BSD-3-Clause` in the port metadata, in the installed copyright file
+and on GitHub `google/googletest`. Allowed. Linked only by test projects and never shipped.
+
 ## Consequences
 
 - Test Explorer and the command line run the same tests.

@@ -16,6 +16,16 @@ Spec D-13 chooses Intel Embree (Apache-2.0) and an in-house progressive path tra
   sits behind a seam; any denoiser library needs its own ADR and licence check.
 - Rendering runs as a cancellable job (A-10); output PNG and EXR up to 8K.
 
+## Licence verification (S0.01.6, 2026-11-12)
+
+Checked against the vcpkg port metadata (`ports/<port>/vcpkg.json`) and portfile at the pinned baseline
+`177e8175` (read from vcpkg's registry cache), the upstream licence file (GitHub licence API) and, for installed
+ports, the installed `share/<port>/copyright` file. Spec section 4.3 is the yardstick.
+
+`embree` 4.4.1 at the baseline: the port metadata has no licence field; the portfile installs upstream
+`LICENSE.txt`, and GitHub `RenderKit/embree` reports Apache-2.0. Allowed (4.3: Apache-2.0 is compatible with
+GPL-3.0). Its threading dependency (oneTBB, Apache-2.0) is verified and both are pinned when Embree is added in S10.
+
 ## Consequences
 
 - No GPU requirement for photoreal output; preview time target (M-VIS-01b, under 60 s at 1920×1080) is measured by

@@ -25,12 +25,12 @@ P-20,Crash safety,,S0,not-started,S0.11.2;S0.11.3;S0.13.13,,
 P-21,No silent data loss,,S0,not-started,S0.05.4;S2.01.2;S2.03.8;S6.02.3,,
 P-22,Undo/redo,,S0,not-started,S0.04.3,,
 P-23,Logging,,S0,not-started,S0.03.10;S0.11.3;S0.11.4;S0.13.13,,
-P-30,Licence GPL-3.0-or-later,,S0,not-started,S0.01.6;S0.02.2;S0.13.12,,"C-25 resolved by owner decision 2026-11-11: OCCT is LGPL-2.1-only WITH OCCT-exception-1.0 (spec 4.3 says LGPL-2.1-or-later), ngspice is BSD-3-Clause; both recorded in THIRD_PARTY_NOTICES.md (ADRs 0005, 0008)"
+P-30,Licence GPL-3.0-or-later,,S0,in-progress,S0.01.6;S0.02.2;S0.13.12,S0.01.6 manual licence dry run: every vcpkg.json port verified at baseline 177e8175 (Licence verification sections in ADRs 0002-0014),"C-25 resolved by owner decision 2026-11-11: OCCT is LGPL-2.1-only WITH OCCT-exception-1.0 (spec 4.3 says LGPL-2.1-or-later), ngspice is BSD-3-Clause; both recorded in THIRD_PARTY_NOTICES.md (ADRs 0005, 0008)"
 B-01,Solution,,S0,done,S0.01.1;S0.01.4,S0.01.1 T-11 clean-clone build of APP.slnx | S0.01.4 T-11 check-build-hygiene.ps1: APP.slnx lists exactly the projects under src/ and tests/,
 B-02,One project per module,,S0,done,S0.01.4,S0.01.4 T-11 check-build-hygiene.ps1: exactly one .vcxproj per module folder (check-selftest hygiene-two-projects),
 B-03,Shared settings,,S0,done,S0.01.4,S0.01.4 T-11 check-build-hygiene.ps1: no shared compiler/linker settings in .vcxproj (check-selftest hygiene-project-warning-level),
 B-04,Configurations,,S0,done,S0.01.3,"S0.01.3 T-11 scripts/check-headless.ps1 (Headless project graph, link inputs, sources, out/Headless binaries) with check-selftest cases headless-links-qt-widgets, headless-references-ui, headless-windows-ui",
-B-05,Dependencies,,S0,in-progress,S0.01.1;S0.01.6,"S0.01.1 baseline 177e8175 verified, clean-clone vcpkg restore (ADR 0029)",
+B-05,Dependencies,,S0,done,S0.01.1;S0.01.6,"S0.01.1 baseline 177e8175 verified, clean-clone vcpkg restore (ADR 0029) | S0.01.6 vcpkg.json overrides pin every linked port exactly; clean-clone build repeated",
 B-06,Command-line build,,S0,done,S0.01.1,"S0.01.1 T-11 scripts/build.ps1 Debug, Release, Headless; T-13 scripts/test.ps1",
 B-07,Migration-ready,,S0,done,S0.01.4,"S0.01.4 T-11 check-build-hygiene.ps1: no #pragma comment(lib, no PCH dependency, no CMake files (check-selftest hygiene-pragma-lib, hygiene-needs-pch, hygiene-cmake)",
 L-01,Standard switch,,S0,in-progress,S0.01.1;S0.01.2,S0.01.1 T-11 /std:c++latest builds with 0 warnings,S0.01.2 blocked: MSVC column verified (ADR 0034 Proposed); GCC 14/Clang 18 not installed in WSL

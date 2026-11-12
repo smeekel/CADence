@@ -11,14 +11,16 @@ generating it automatically from those two sources is planned for Stage 0.
 
 ## Libraries linked by the scaffold
 
-vcpkg baseline `177e8175121536d414f405ed8b3099b325a42638` (microsoft/vcpkg, 2026-11-12), triplet `x64-windows`.
+vcpkg baseline `177e8175121536d414f405ed8b3099b325a42638` (microsoft/vcpkg, 2026-11-12), triplet `x64-windows`. Every
+version below is pinned exactly with `overrides` in `vcpkg.json`; licences were verified in step S0.01.6 (see the
+"Licence verification" sections of ADRs 0002 … 0014).
 
 | Library | vcpkg port and version | Licence (SPDX) | Used by | Shipped |
 |---|---|---|---|---|
 | Qt Base (Core, Gui, Widgets) | `qtbase` 6.11.3#1, features `gui`, `widgets`; no Network | LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only (used under LGPL-3.0-only / GPL-3.0-only) | `ui`, `tests/ui` | Yes (DLLs) |
-| PCRE2 | `pcre2` 10.49 (Qt dependency) | BSD-3-Clause WITH PCRE2-exception | `ui` via Qt Core | Yes (DLL) |
+| PCRE2 | `pcre2` 10.49#2 (Qt dependency) | BSD-3-Clause WITH PCRE2-exception | `ui` via Qt Core | Yes (DLL) |
 | double-conversion | `double-conversion` 3.4.0 (Qt dependency) | BSD-3-Clause | `ui` via Qt Core | Yes (DLL) |
-| zlib | `zlib` 1.3.2 (Qt dependency) | Zlib | `ui` via Qt Core | Yes (DLL) |
+| zlib | `zlib` 1.3.2#3 (Qt dependency) | Zlib | `ui` via Qt Core | Yes (DLL) |
 | MD4C | `md4c` 0.6.0 (Qt dependency) | MIT | `ui` via Qt Gui | Yes (DLL) |
 | GoogleTest and GoogleMock | `gtest` 1.18.0 | BSD-3-Clause | `tests/*` only | No (test only) |
 
@@ -109,19 +111,19 @@ parts of `ngspice.dll`. APP's own licence already requires its complete source t
 4. **Notices.** Each library's copyright and licence text ships with APP from vcpkg's
    `share/<port>/copyright`, together with the OCCT notice above.
 
-## Libraries planned by the specification (not licence-verified yet)
+## Libraries planned by the specification (licence checked at the baseline, not linked yet)
 
-Added to `vcpkg.json` in the checklist step that first uses them, after a licence check against spec section 4.3
-and an ADR (rule 070):
+Added to `vcpkg.json` in the checklist step that first uses them, where the version is pinned and the licence is
+re-verified (rule 070). The port versions below are those at the baseline (S0.01.6):
 
-| Library | Decision | Expected licence |
+| Library (port and version at the baseline) | Decision | Licence (SPDX) |
 |---|---|---|
-| Eigen | D-05, D-06 | MPL-2.0 |
-| Project Chrono | D-06 | BSD-3-Clause |
-| Clipper2 | D-08 | BSL-1.0 |
-| nlohmann/json | D-09 | MIT |
-| lib3mf | D-10 | BSD-2-Clause |
-| Intel Embree | D-13 | Apache-2.0 |
+| Eigen (`eigen3` 5.0.1) | D-05, D-06 | MPL-2.0 |
+| Project Chrono (`chronoengine` 8.0.0#2) | D-06 | BSD-3-Clause |
+| Clipper2 (`clipper2` 2.0.1) | D-08 | BSL-1.0 |
+| nlohmann/json (`nlohmann-json` 3.12.0#2) | D-09 | MIT |
+| lib3mf (`lib3mf` 2.5.0#1) | D-10 | BSD-2-Clause |
+| Intel Embree (`embree` 4.4.1) | D-13 | Apache-2.0 |
 
 ## Reused source code
 

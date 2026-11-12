@@ -16,6 +16,15 @@ the default `json` type sorts keys alphabetically.
 - Determinism rules on top of the library (schema key order, shortest round-trip floats, LF endings) live in
   `src/doc/format/` (steps S0.06.2, S0.06.3). UUID encoding in BSON follows ADR 0028; unknown fields follow ADR 0027.
 
+## Licence verification (S0.01.6, 2026-11-12)
+
+Checked against the vcpkg port metadata (`ports/<port>/vcpkg.json`) and portfile at the pinned baseline
+`177e8175` (read from vcpkg's registry cache), the upstream licence file (GitHub licence API) and, for installed
+ports, the installed `share/<port>/copyright` file. Spec section 4.3 is the yardstick.
+
+`nlohmann-json` 3.12.0#2 at the baseline: `MIT` in the port metadata; GitHub `nlohmann/json` reports MIT
+(`LICENSE.MIT`). Allowed. Not in `vcpkg.json` yet; pinned when added in S0.03.1 (ADR 0016).
+
 ## Consequences
 
 - Single dependency for both encodings; byte-identical JSON → BSON → JSON round trips are testable (F-02 Accept,

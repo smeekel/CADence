@@ -19,6 +19,20 @@ needs contacts, friction and integrators.
   to `sim`.
 - Mates convert to Chrono joints in `sim` (S9.01.2); kinematic playback in S3 (M-ASM-07) uses the mate solver only.
 
+## Licence verification (S0.01.6, 2026-11-12)
+
+Checked against the vcpkg port metadata (`ports/<port>/vcpkg.json`) and portfile at the pinned baseline
+`177e8175` (read from vcpkg's registry cache), the upstream licence file (GitHub licence API) and, for installed
+ports, the installed `share/<port>/copyright` file. Spec section 4.3 is the yardstick.
+
+| Library | Port and version at baseline | Licence (SPDX) | Evidence | Status |
+|---|---|---|---|---|
+| Project Chrono | `chronoengine` 8.0.0#2 | BSD-3-Clause | Port metadata; GitHub `projectchrono/chrono` reports BSD-3-Clause | Allowed |
+| oneTBB (Chrono dependency) | `tbb` | Apache-2.0 | Port metadata | Allowed |
+| Eigen (Chrono dependency) | `eigen3` 5.0.1 | MPL-2.0 | Port metadata (see ADR 0006) | Allowed |
+
+Not in `vcpkg.json` yet; pinned and re-verified when added in S9.
+
 ## Consequences
 
 - Chrono's build size and vcpkg availability are integration risks (`docs/RISKS.md`); they are checked at the start

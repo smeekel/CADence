@@ -100,7 +100,7 @@ locally (hosted CI open, ADR 0033).
   - Deliverables: `scripts/check-cpp-features.ps1` (reads the "Not allowed" rows of `docs/cpp-features.md`; fails on `import`/`export module`, banned headers such as `<generator>`); `src/core/Compat.h` with `__cpp_*` / `__cpp_lib_*` helpers and fallbacks
   - Tests: T-11 check fails on a fixture using `<generator>` and on one using `import std;`; T-01 `Core.Tests Compat.*`
   - Done when: check and tests green; `Compat.h` documented with `@req L-04`
-- [ ] **S0.01.6: Pin dependency versions and record licence verification**
+- [x] **S0.01.6: Pin dependency versions and record licence verification**
   - Requirements: B-05, P-30
   - Modules: build, docs
   - Depends on: S0.01.1

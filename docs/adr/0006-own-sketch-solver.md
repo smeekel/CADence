@@ -18,6 +18,17 @@ PlaneGCS may serve as references or fallbacks under CR-07.
 - Eigen is allowed in `sketch` internals (ADR 0022); public APIs use `core` math types.
 - Any reuse of third-party solver code needs a CR-07 provenance entry and a new ADR.
 
+## Licence verification (S0.01.6, 2026-11-12)
+
+Checked against the vcpkg port metadata (`ports/<port>/vcpkg.json`) and portfile at the pinned baseline
+`177e8175` (read from vcpkg's registry cache), the upstream licence file (GitHub licence API) and, for installed
+ports, the installed `share/<port>/copyright` file. Spec section 4.3 is the yardstick.
+
+The solver is written fresh. Its only planned library is Eigen: `eigen3` 5.0.1 at the baseline, `MPL-2.0` in
+the port metadata, upstream `libeigen/eigen` on GitLab. Allowed (4.3: MPL-2.0). Open item for S1.01 when Eigen is
+added to `vcpkg.json`: confirm that no non-MPL file remains in the headers APP includes (Eigen's
+`EIGEN_MPL2_ONLY` guard) and pin the version.
+
 ## Consequences
 
 - Full control over diagnostics (DOF colouring, conflict reports) and performance tuning.
