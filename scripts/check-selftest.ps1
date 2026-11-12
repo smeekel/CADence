@@ -149,7 +149,26 @@ $cases = @(
     @{ Name = 'headless-windows-ui'; Check = 'check-headless'
        What = 'doc includes windows.h and calls MessageBoxW outside src/platform/'
        Apply = { param( $r )
-                 Add-Text ( Join-Path $r 'src\doc\Module.cpp' ) "`n#include <windows.h>`nstatic int warn() { return MessageBoxW( nullptr, L`"x`", L`"x`", 0 ); }`n" } }
+                 Add-Text ( Join-Path $r 'src\doc\Module.cpp' ) "`n#include <windows.h>`nstatic int warn() { return MessageBoxW( nullptr, L`"x`", L`"x`", 0 ); }`n" } },
+    @{ Name = 'hygiene-pragma-lib'; Check = 'check-build-hygiene'
+       What = 'a source links a library with #pragma comment(lib'
+       Apply = { param( $r ) Add-Text ( Join-Path $r 'src\core\Module.cpp' ) "`n#pragma comment(lib, `"shlwapi.lib`")`n" } },
+    @{ Name = 'hygiene-project-warning-level'; Check = 'check-build-hygiene'
+       What = 'Core.vcxproj sets its own warning level and language standard'
+       Apply = { param( $r )
+                 $p = Join-Path $r 'src\core\Core.vcxproj'
+                 $x = [IO.File]::ReadAllText( $p )
+                 $x = $x.Replace( '<ConfigurationType>', '<WarningLevel>Level3</WarningLevel><LanguageStandard>stdcpp20</LanguageStandard><ConfigurationType>' )
+                 Set-Text $p $x } },
+    @{ Name = 'hygiene-needs-pch'; Check = 'check-build-hygiene'
+       What = 'a source includes pch.h and so needs the precompiled header'
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\core\NeedsPch.cpp' ) ( $header + "#include `"pch.h`"`n" ) } },
+    @{ Name = 'hygiene-cmake'; Check = 'check-build-hygiene'
+       What = 'a CMakeLists.txt is added'
+       Apply = { param( $r ) Set-Text ( Join-Path $r 'src\core\CMakeLists.txt' ) "add_library(core Module.cpp)`n" } },
+    @{ Name = 'hygiene-two-projects'; Check = 'check-build-hygiene'
+       What = 'a module folder holds two projects'
+       Apply = { param( $r ) Copy-Item ( Join-Path $r 'src\core\Core.vcxproj' ) ( Join-Path $r 'src\core\CoreExtra.vcxproj' ) } }
 )
 
 # Cases that must pass, with output that must match.

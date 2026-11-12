@@ -86,7 +86,7 @@ locally (hosted CI open, ADR 0033).
   - Deliverables: `scripts/check-headless.ps1` (walks the Headless project graph and link inputs; fails on any `Ui` project, Qt6Widgets/Qt6Gui, or Windows UI headers and APIs outside `src/platform/`); called by `scripts/test.ps1`
   - Tests: T-11 check passes on the solution and fails on a fixture project that links Qt6Widgets (Accept: P-04)
   - Done when: check green on the repository, red on the fixture, and run by `scripts/test.ps1`
-- [ ] **S0.01.4: Add the build-hygiene check for migration-ready projects**
+- [x] **S0.01.4: Add the build-hygiene check for migration-ready projects**
   - Requirements: B-01, B-02, B-03, B-07
   - Modules: scripts, build
   - Depends on: S0.01.1
