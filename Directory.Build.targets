@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<!--
+  Imported automatically by MSBuild after the Visual C++ targets. Brings in the vcpkg MSBuild targets from the root
+  chosen in build/props/Vcpkg.props; they must come after the toolset's include paths are known.
+-->
+<Project>
+  <Import Project="$(AppVcpkgRoot)scripts\buildsystems\msbuild\vcpkg.targets"
+          Condition="Exists('$(AppVcpkgRoot)scripts\buildsystems\msbuild\vcpkg.targets')" />
+
+  <Target Name="AppCheckVcpkgRoot" BeforeTargets="PrepareForBuild">
+    <Error Condition="!Exists('$(AppVcpkgRoot)scripts\buildsystems\msbuild\vcpkg.targets')"
+           Text="vcpkg not found at '$(AppVcpkgRoot)'. Install the 'vcpkg package manager' component of Visual Studio 2026, or set VCPKG_ROOT to a vcpkg checkout." />
+  </Target>
+</Project>

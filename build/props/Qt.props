@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<!--
+  Qt.props: Qt 6 from vcpkg (manifest feature "ui") for the UI projects only (D-03, B-05).
+  Imported explicitly by src/ui/Ui.vcxproj and tests/ui/Ui.Tests.vcxproj; no other project may import it.
+
+  Custom build rules, defined once here (no Qt Visual Studio Tools needed):
+    <QtMoc Include="X.h" />    moc   -> $(IntDir)qt\moc\moc_X.cpp, compiled with the project
+    <QtUic Include="X.ui" />   uic   -> $(IntDir)qt\uic\ui_X.h, on the include path
+    <QtRcc Include="X.qrc" />  rcc   -> $(IntDir)qt\rcc\qrc_X.cpp, compiled with the project
+  After linking, the Qt platform and style plugins are copied next to the executable.
+-->
+<Project>
+  <PropertyGroup>
+    <AppUsesQt>true</AppUsesQt>
+    <AppQtDir>$(AppVcpkgTripletDir)</AppQtDir>
+    <AppQtToolsDir>$(AppQtDir)tools\Qt6\bin\</AppQtToolsDir>
+    <AppQtLibSuffix Condition="'$(VcpkgConfiguration)' == 'Debug'">d</AppQtLibSuffix>
+    <AppQtPluginDir Condition="'$(VcpkgConfiguration)' == 'Debug'">$(AppQtDir)debug\Qt6\plugins\</AppQtPluginDir>
+    <AppQtPluginDir Condition="'$(VcpkgConfiguration)' != 'Debug'">$(AppQtDir)Qt6\plugins\</AppQtPluginDir>
+    <AppQtGeneratedDir>$(IntDir)qt\</AppQtGeneratedDir>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(AppQtDir)include\Qt6;$(AppQtDir)include\Qt6\QtCore;$(AppQtDir)include\Qt6\QtGui;$(AppQtDir)include\Qt6\QtWidgets;$(AppQtGeneratedDir)uic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(AppVcpkgLibDir)Qt6Core$(AppQtLibSuffix).lib;$(AppVcpkgLibDir)Qt6Gui$(AppQtLibSuffix).lib;$(AppVcpkgLibDir)Qt6Widgets$(AppQtLibSuffix).lib;$(AppVcpkgLibDir)Qt6EntryPoint$(AppQtLibSuffix).lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(VcpkgConfiguration)' != 'Debug'">
+    <ClCompile>
+      <PreprocessorDefinitions>QT_NO_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <AvailableItemName Include="QtMoc" />
+    <AvailableItemName Include="QtUic" />
+    <AvailableItemName Include="QtRcc" />
+  </ItemGroup>
+
+  <Target Name="AppQtMoc"
+          DependsOnTargets="VcpkgInstallManifestDependencies"
+          Condition="'@(QtMoc)' != ''"
+          Inputs="@(QtMoc);$(AppQtToolsDir)moc.exe"
+          Outputs="@(QtMoc->'$(AppQtGeneratedDir)moc\moc_%(Filename).cpp')">
+    <MakeDir Directories="$(AppQtGeneratedDir)moc" />
+    <Exec Command="&quot;$(AppQtToolsDir)moc.exe&quot; --no-notes &quot;-I$(AppSrcDir.TrimEnd('\'))&quot; &quot;%(QtMoc.FullPath)&quot; -o &quot;$(AppQtGeneratedDir)moc\moc_%(QtMoc.Filename).cpp&quot;" />
+  </Target>
+
+  <Target Name="AppQtUic"
+          DependsOnTargets="VcpkgInstallManifestDependencies"
+          Condition="'@(QtUic)' != ''"
+          Inputs="@(QtUic);$(AppQtToolsDir)uic.exe"
+          Outputs="@(QtUic->'$(AppQtGeneratedDir)uic\ui_%(Filename).h')">
+    <MakeDir Directories="$(AppQtGeneratedDir)uic" />
+    <Exec Command="&quot;$(AppQtToolsDir)uic.exe&quot; &quot;%(QtUic.FullPath)&quot; -o &quot;$(AppQtGeneratedDir)uic\ui_%(QtUic.Filename).h&quot;" />
+  </Target>
+
+  <Target Name="AppQtRcc"
+          DependsOnTargets="VcpkgInstallManifestDependencies"
+          Condition="'@(QtRcc)' != ''"
+          Inputs="@(QtRcc);$(AppQtToolsDir)rcc.exe"
+          Outputs="@(QtRcc->'$(AppQtGeneratedDir)rcc\qrc_%(Filename).cpp')">
+    <MakeDir Directories="$(AppQtGeneratedDir)rcc" />
+    <Exec Command="&quot;$(AppQtToolsDir)rcc.exe&quot; --name &quot;%(QtRcc.Filename)&quot; &quot;%(QtRcc.FullPath)&quot; -o &quot;$(AppQtGeneratedDir)rcc\qrc_%(QtRcc.Filename).cpp&quot;" />
+  </Target>
+
+  <!-- Runs on every build, including when the generators above are up to date, so the generated files are compiled. -->
+  <Target Name="AppQtAddGeneratedSources" BeforeTargets="ClCompile" DependsOnTargets="AppQtMoc;AppQtUic;AppQtRcc">
+    <ItemGroup>
+      <ClCompile Include="@(QtMoc->'$(AppQtGeneratedDir)moc\moc_%(Filename).cpp')" />
+      <ClCompile Include="@(QtRcc->'$(AppQtGeneratedDir)rcc\qrc_%(Filename).cpp')" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="AppQtDeployPlugins" AfterTargets="Link" Condition="'$(ConfigurationType)' == 'Application'">
+    <ItemGroup>
+      <_AppQtPlatformPlugin Include="$(AppQtPluginDir)platforms\*.dll" />
+      <_AppQtStylePlugin Include="$(AppQtPluginDir)styles\*.dll" />
+    </ItemGroup>
+    <Error Condition="'@(_AppQtPlatformPlugin)' == ''" Text="No Qt platform plugins found in '$(AppQtPluginDir)platforms'." />
+    <Copy SourceFiles="@(_AppQtPlatformPlugin)" DestinationFolder="$(OutDir)platforms" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(_AppQtStylePlugin)" DestinationFolder="$(OutDir)styles" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

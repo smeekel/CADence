@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<!--
+  Common.props: toolset, platform, character set and output folders (B-03, B-04).
+  Imported from Directory.Build.props, i.e. before Microsoft.Cpp.Default.props, so every value here is a default
+  that the Visual C++ property sheets keep.
+-->
+<Project>
+  <PropertyGroup>
+    <PlatformToolset>v145</PlatformToolset>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+
+  <!-- Debug uses the debug CRT; Release and Headless are optimised builds. -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+
+  <!-- Spec B-03: out/<Configuration>/<Project>/, intermediates under out/obj/. -->
+  <PropertyGroup>
+    <OutDir>$(AppRoot)out\$(Configuration)\$(MSBuildProjectName)\</OutDir>
+    <IntDir>$(AppRoot)out\obj\$(Configuration)\$(MSBuildProjectName)\</IntDir>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

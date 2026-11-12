@@ -1,0 +1,105 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# APP C++ formatting. Requires clang-format 17 or newer (Visual Studio 2026 bundles a newer one).
+# Enable in Visual Studio: Tools > Options > Text Editor > C/C++ > Code Style > Formatting > "Enable ClangFormat support".
+---
+Language:        Cpp
+Standard:        Latest
+ColumnLimit:     120
+IndentWidth:     4
+TabWidth:        4
+UseTab:          Never
+ContinuationIndentWidth: 4
+AccessModifierOffset:    -4
+NamespaceIndentation:    None
+IndentCaseLabels:        true
+IndentPPDirectives:      AfterHash
+
+# Braces on their own lines (Allman), braces always present.
+BreakBeforeBraces: Allman
+InsertBraces:      true
+AllowShortBlocksOnASingleLine:       Never
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine:        false
+AllowShortFunctionsOnASingleLine:    None
+AllowShortLambdasOnASingleLine:      Empty
+AllowShortCaseLabelsOnASingleLine:   false
+AllowShortEnumsOnASingleLine:        false
+
+# if( a == b ), while( true ), foo( x, y ): no space before "(", one space inside non-empty parentheses.
+SpaceBeforeParens: Never
+SpacesInParens:    Custom
+SpacesInParensOptions:
+  InConditionalStatements: true
+  Other:                   true
+  InEmptyParentheses:      false
+  InCStyleCasts:           false
+SpacesInSquareBrackets: false
+SpacesInAngles:         Never
+SpaceAfterCStyleCast:   false
+SpaceBeforeCpp11BracedList: false
+Cpp11BracedListStyle:   true
+
+# Line up "=" on consecutive assignment lines, and variable names on consecutive declaration lines.
+AlignConsecutiveAssignments:
+  Enabled:          true
+  AcrossEmptyLines: false
+  AcrossComments:   false
+  AlignCompound:    true
+  PadOperators:     true
+AlignConsecutiveDeclarations:
+  Enabled:          true
+  AcrossEmptyLines: false
+  AcrossComments:   false
+AlignConsecutiveMacros:
+  Enabled:          true
+  AcrossEmptyLines: false
+  AcrossComments:   false
+AlignConsecutiveBitFields:
+  Enabled:          true
+AlignTrailingComments:
+  Kind:           Always
+  OverEmptyLines: 0
+AlignOperands:         Align
+AlignAfterOpenBracket: Align
+AlignEscapedNewlines:  Left
+
+# White space between logical blocks.
+SeparateDefinitionBlocks: Always
+MaxEmptyLinesToKeep:      2
+KeepEmptyLinesAtTheStartOfBlocks: false
+EmptyLineBeforeAccessModifier: LogicalBlock
+EmptyLineAfterAccessModifier:  Never
+
+PointerAlignment:   Left
+ReferenceAlignment: Left
+DerivePointerAlignment: false
+QualifierAlignment: Left
+
+AlwaysBreakTemplateDeclarations: Yes
+BreakConstructorInitializers:   BeforeComma
+PackConstructorInitializers:    Never
+BinPackArguments:  false
+BinPackParameters: false
+AllowAllArgumentsOnNextLine:           false
+AllowAllParametersOfDeclarationOnNextLine: false
+AlwaysBreakAfterReturnType: None
+BreakBeforeBinaryOperators: NonAssignment
+BreakStringLiterals: false
+FixNamespaceComments: true
+ShortNamespaceLines:  0
+ReflowComments:       true
+
+SortIncludes:  CaseInsensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+  # 1. The file's own header is placed first automatically (IncludeIsMainRegex).
+  # 2. Project headers
+  - Regex:    '^"'
+    Priority: 2
+  # 3. Third-party libraries
+  - Regex:    '^<(Q|gtest|gmock|nlohmann|Eigen|Standard_|TopoDS|BRep|gp_|lib3mf|clipper2|chrono|ngspice|embree)'
+    Priority: 3
+  # 4. Standard library and system
+  - Regex:    '^<'
+    Priority: 4
+...

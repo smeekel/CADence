@@ -1,0 +1,29 @@
+{
+  "name": "app",
+  "version-semver": "0.0.0",
+  "description": "APP (working name): integrated MCAD + ECAD desktop CAD.",
+  "license": "GPL-3.0-or-later",
+  "supports": "windows & x64",
+  "dependencies": [
+    {
+      "name": "gtest",
+      "version>=": "1.18.0"
+    }
+  ],
+  "features": {
+    "ui": {
+      "description": "Qt 6 Widgets user interface (src/ui, tests/ui). Enabled for Debug and Release, never for Headless.",
+      "dependencies": [
+        {
+          "name": "qtbase",
+          "version>=": "6.11.3#1",
+          "default-features": false,
+          "features": [
+            "gui",
+            "widgets"
+          ]
+        }
+      ]
+    }
+  }
+}

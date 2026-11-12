@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<!--
+  Tests.props: GoogleTest and GoogleMock for every project whose name ends in ".Tests" (D-11, T-01).
+  vcpkg builds GoogleTest as DLLs for x64-windows, hence GTEST_LINKED_AS_SHARED_LIBRARY; main() comes from
+  gtest_main. Test executables keep the spec output layout out/<Configuration>/<Project>/ (B-03); scripts/test.ps1
+  finds them by the *.Tests.exe pattern and writes JUnit XML to $(AppTestResultsDir).
+-->
+<Project>
+  <PropertyGroup>
+    <AppTestResultsDir>$(AppRoot)out\test-results\$(Configuration)\</AppTestResultsDir>
+    <LocalDebuggerCommandArguments>--gtest_break_on_failure</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>GTEST_LINKED_AS_SHARED_LIBRARY=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>$(AppVcpkgLibDir)gtest.lib;$(AppVcpkgLibDir)gmock.lib;$(AppVcpkgLibDir)manual-link\gtest_main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

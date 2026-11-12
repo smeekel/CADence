@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<!--
+  Imported automatically by MSBuild before every project in the repository (B-03).
+  All shared compiler, linker, output and dependency settings live in build/props/.
+  Ui.vcxproj and Ui.Tests.vcxproj additionally import build/props/Qt.props themselves.
+-->
+<Project>
+  <PropertyGroup>
+    <AppRoot>$(MSBuildThisFileDirectory)</AppRoot>
+    <AppPropsDir>$(AppRoot)build\props\</AppPropsDir>
+    <AppSrcDir>$(AppRoot)src\</AppSrcDir>
+    <AppIsTestProject>false</AppIsTestProject>
+    <AppIsTestProject Condition="$(MSBuildProjectName.EndsWith('.Tests'))">true</AppIsTestProject>
+  </PropertyGroup>
+
+  <Import Project="$(AppPropsDir)Common.props" />
+  <Import Project="$(AppPropsDir)Cpp.props" />
+  <Import Project="$(AppPropsDir)Vcpkg.props" />
+  <Import Project="$(AppPropsDir)Headless.props" Condition="'$(Configuration)' == 'Headless'" />
+  <Import Project="$(AppPropsDir)Tests.props" Condition="'$(AppIsTestProject)' == 'true'" />
+</Project>

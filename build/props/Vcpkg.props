@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<!--
+  Vcpkg.props: vcpkg manifest mode through the MSBuild integration (B-05, P-02).
+
+  vcpkg root, in order: the AppVcpkgRoot property, the VCPKG_ROOT environment variable, the vcpkg that ships with
+  Visual Studio ($(VsInstallRoot)\VC\vcpkg). A per-user "vcpkg integrate install" is ignored so that every machine
+  builds with the same root (VCPkgLocalAppDataDisabled). The matching vcpkg.targets is imported from
+  Directory.Build.targets, after the Visual C++ targets.
+
+  Two installed trees keep Headless free of Qt (P-04):
+    vcpkg_installed\full\      Debug and Release, manifest feature "ui" (Qt) enabled
+    vcpkg_installed\headless\  Headless, default features only
+-->
+<Project>
+  <PropertyGroup>
+    <VCPkgLocalAppDataDisabled>true</VCPkgLocalAppDataDisabled>
+    <AppVcpkgRoot Condition="'$(AppVcpkgRoot)' == '' and '$(VCPKG_ROOT)' != ''">$(VCPKG_ROOT)</AppVcpkgRoot>
+    <AppVcpkgRoot Condition="'$(AppVcpkgRoot)' == ''">$(VsInstallRoot)\VC\vcpkg</AppVcpkgRoot>
+    <AppVcpkgRoot>$([MSBuild]::EnsureTrailingSlash('$(AppVcpkgRoot)'))</AppVcpkgRoot>
+
+    <VcpkgRoot>$(AppVcpkgRoot)</VcpkgRoot>
+    <VcpkgEnabled>true</VcpkgEnabled>
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+    <VcpkgManifestRoot>$(AppRoot)</VcpkgManifestRoot>
+    <VcpkgTriplet>x64-windows</VcpkgTriplet>
+    <!-- Libraries are named explicitly in Qt.props and Tests.props; nothing is linked implicitly. -->
+    <VcpkgAutoLink>false</VcpkgAutoLink>
+    <VcpkgConfiguration Condition="'$(Configuration)' == 'Debug'">Debug</VcpkgConfiguration>
+    <VcpkgConfiguration Condition="'$(Configuration)' != 'Debug'">Release</VcpkgConfiguration>
+
+    <AppVcpkgFlavor Condition="'$(Configuration)' == 'Headless'">headless</AppVcpkgFlavor>
+    <AppVcpkgFlavor Condition="'$(Configuration)' != 'Headless'">full</AppVcpkgFlavor>
+    <VcpkgInstalledDir>$(AppRoot)vcpkg_installed\$(AppVcpkgFlavor)\</VcpkgInstalledDir>
+    <VcpkgAdditionalInstallOptions Condition="'$(AppVcpkgFlavor)' == 'full'">--x-feature=ui</VcpkgAdditionalInstallOptions>
+
+    <AppVcpkgTripletDir>$(VcpkgInstalledDir)$(VcpkgTriplet)\</AppVcpkgTripletDir>
+    <AppVcpkgLibDir Condition="'$(VcpkgConfiguration)' == 'Debug'">$(AppVcpkgTripletDir)debug\lib\</AppVcpkgLibDir>
+    <AppVcpkgLibDir Condition="'$(VcpkgConfiguration)' != 'Debug'">$(AppVcpkgTripletDir)lib\</AppVcpkgLibDir>
+  </PropertyGroup>
+
+  <Import Project="$(AppVcpkgRoot)scripts\buildsystems\msbuild\vcpkg.props"
+          Condition="Exists('$(AppVcpkgRoot)scripts\buildsystems\msbuild\vcpkg.props')" />
+</Project>

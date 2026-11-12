@@ -1,0 +1,39 @@
+# Text files are stored with LF and checked out with LF (F-03 deterministic output, rule 010),
+# except the Visual Studio and PowerShell files listed below, which keep CRLF as in .editorconfig.
+* text=auto eol=lf
+
+*.vcxproj           text eol=crlf
+*.vcxproj.filters   text eol=crlf
+*.props             text eol=crlf
+*.targets           text eol=crlf
+*.slnx              text eol=crlf
+*.ps1               text eol=crlf
+*.psm1              text eol=crlf
+*.psd1              text eol=crlf
+*.cmd               text eol=crlf
+*.bat               text eol=crlf
+
+# Project files and golden data must stay byte-identical (T-03); never convert them.
+*.apb               binary
+*.bson              binary
+*.bin               binary
+
+# Third-party exchange files are kept exactly as received.
+*.step              -text
+*.stp               -text
+*.iges              -text
+*.igs               -text
+*.stl               -text
+*.dxf               -text
+*.3mf               binary
+
+# Images and other binaries
+*.png               binary
+*.jpg               binary
+*.jpeg              binary
+*.gif               binary
+*.ico               binary
+*.hdr               binary
+*.exr               binary
+*.pdf               binary
+*.zip               binary

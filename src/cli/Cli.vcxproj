@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Headless|x64">
+      <Configuration>Headless</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <ProjectGuid>{4A795EFA-A6CF-4897-89AB-C316196FB963}</ProjectGuid>
+    <RootNamespace>Cli</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets" />
+  <ItemDefinitionGroup>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Module.h" />
+    <ClInclude Include="CliApp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Module.cpp" />
+    <ClCompile Include="CliApp.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\core\Core.vcxproj">
+      <Project>{3BFDAEDC-31EF-41A1-8800-A95218B3F89E}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\doc\Doc.vcxproj">
+      <Project>{A71D34FF-3C29-4B39-80CE-D5F8331BF5CF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\geom\Geom.vcxproj">
+      <Project>{368EE278-5857-4F04-8E6A-DC48EB46544E}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\sketch\Sketch.vcxproj">
+      <Project>{68B2277D-DF41-40A3-B729-0C72019CFF64}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\part\Part.vcxproj">
+      <Project>{2F8B921F-EFFE-4E62-A54E-E1F9AD031C72}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\asm\Asm.vcxproj">
+      <Project>{FEDFA939-0B4C-4F48-81BB-15CAA2E03DD0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\drw\Drw.vcxproj">
+      <Project>{CA2832DD-3A4C-4ED7-A8C3-31E5FDD215B5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ecad\lib\EcadLib.vcxproj">
+      <Project>{2B6E18AD-677B-4C3C-9F5B-0DF75C26BAC2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ecad\sch\EcadSch.vcxproj">
+      <Project>{366F98F0-0D85-49FE-AA1A-CCAA752052DB}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ecad\pcb\EcadPcb.vcxproj">
+      <Project>{19B3F174-815E-4BB6-83F4-CDC82F15B43B}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ecad\out\EcadOut.vcxproj">
+      <Project>{E894B55E-C7C7-4AA5-B20B-A9E0F25B21CE}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\link\Link.vcxproj">
+      <Project>{C4DE37DD-7550-4485-80C8-72DD13B4967A}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\sim\Sim.vcxproj">
+      <Project>{01224172-28AA-462E-90A6-DDB99BF83AD9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\io\Io.vcxproj">
+      <Project>{E1F9971A-1D6A-410C-9A07-9E60ED41F8C9}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

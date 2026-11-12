@@ -1,0 +1,78 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Headless" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/build/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="build/props/Common.props" />
+    <File Path="build/props/Cpp.props" />
+    <File Path="build/props/Vcpkg.props" />
+    <File Path="build/props/Qt.props" />
+    <File Path="build/props/Headless.props" />
+    <File Path="build/props/Tests.props" />
+    <File Path="vcpkg.json" />
+    <File Path="vcpkg-configuration.json" />
+  </Folder>
+  <Folder Name="/scripts/">
+    <File Path="scripts/build.ps1" />
+    <File Path="scripts/test.ps1" />
+    <File Path="scripts/docs.ps1" />
+    <File Path="scripts/check-layering.ps1" />
+    <File Path="scripts/check-spdx.ps1" />
+    <File Path="scripts/check-network-apis.ps1" />
+    <File Path="scripts/check-selftest.ps1" />
+    <File Path="scripts/common.ps1" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/core/Core.vcxproj" />
+    <Project Path="src/platform/Platform.vcxproj" />
+    <Project Path="src/doc/Doc.vcxproj" />
+    <Project Path="src/geom/Geom.vcxproj" />
+    <Project Path="src/sketch/Sketch.vcxproj" />
+    <Project Path="src/part/Part.vcxproj" />
+    <Project Path="src/asm/Asm.vcxproj" />
+    <Project Path="src/drw/Drw.vcxproj" />
+    <Project Path="src/link/Link.vcxproj" />
+    <Project Path="src/sim/Sim.vcxproj" />
+    <Project Path="src/io/Io.vcxproj" />
+    <Project Path="src/render/Render.vcxproj" />
+    <Project Path="src/cli/Cli.vcxproj" />
+    <Project Path="src/ui/Ui.vcxproj">
+      <Build Solution="Headless|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/src/ecad/">
+    <Project Path="src/ecad/lib/EcadLib.vcxproj" />
+    <Project Path="src/ecad/sch/EcadSch.vcxproj" />
+    <Project Path="src/ecad/pcb/EcadPcb.vcxproj" />
+    <Project Path="src/ecad/out/EcadOut.vcxproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/core/Core.Tests.vcxproj" />
+    <Project Path="tests/platform/Platform.Tests.vcxproj" />
+    <Project Path="tests/doc/Doc.Tests.vcxproj" />
+    <Project Path="tests/geom/Geom.Tests.vcxproj" />
+    <Project Path="tests/sketch/Sketch.Tests.vcxproj" />
+    <Project Path="tests/part/Part.Tests.vcxproj" />
+    <Project Path="tests/asm/Asm.Tests.vcxproj" />
+    <Project Path="tests/drw/Drw.Tests.vcxproj" />
+    <Project Path="tests/link/Link.Tests.vcxproj" />
+    <Project Path="tests/sim/Sim.Tests.vcxproj" />
+    <Project Path="tests/io/Io.Tests.vcxproj" />
+    <Project Path="tests/render/Render.Tests.vcxproj" />
+    <Project Path="tests/cli/Cli.Tests.vcxproj" />
+    <Project Path="tests/ui/Ui.Tests.vcxproj">
+      <Build Solution="Headless|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/tests/ecad/">
+    <Project Path="tests/ecad/lib/EcadLib.Tests.vcxproj" />
+    <Project Path="tests/ecad/sch/EcadSch.Tests.vcxproj" />
+    <Project Path="tests/ecad/pcb/EcadPcb.Tests.vcxproj" />
+    <Project Path="tests/ecad/out/EcadOut.Tests.vcxproj" />
+  </Folder>
+</Solution>

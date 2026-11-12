@@ -1,0 +1,24 @@
+# Build output and generated documentation (scripts/build.ps1, scripts/test.ps1, scripts/docs.ps1)
+/out/
+
+# vcpkg manifest-mode install trees (vcpkg_installed/full and vcpkg_installed/headless)
+/vcpkg_installed/
+
+# Visual Studio local state
+.vs/
+*.user
+*.aps
+*.VC.db
+*.VC.opendb
+CMakeSettings.json
+launchSettings.json
+
+# Editors and tools
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Test and check scratch output
+*.coverage
+TestResults/

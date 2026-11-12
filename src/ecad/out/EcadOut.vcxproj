@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Headless|x64">
+      <Configuration>Headless</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <ProjectGuid>{E894B55E-C7C7-4AA5-B20B-A9E0F25B21CE}</ProjectGuid>
+    <RootNamespace>EcadOut</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets" />
+  <ItemGroup>
+    <ClInclude Include="Module.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Module.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\Core.vcxproj">
+      <Project>{3BFDAEDC-31EF-41A1-8800-A95218B3F89E}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\doc\Doc.vcxproj">
+      <Project>{A71D34FF-3C29-4B39-80CE-D5F8331BF5CF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecad\lib\EcadLib.vcxproj">
+      <Project>{2B6E18AD-677B-4C3C-9F5B-0DF75C26BAC2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecad\pcb\EcadPcb.vcxproj">
+      <Project>{19B3F174-815E-4BB6-83F4-CDC82F15B43B}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\drw\Drw.vcxproj">
+      <Project>{CA2832DD-3A4C-4ED7-A8C3-31E5FDD215B5}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

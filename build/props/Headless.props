@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- SPDX-FileCopyrightText: 2026 The APP Authors -->
+<!--
+  Headless.props: imported for the Headless configuration only (B-04, P-04).
+  Headless is an optimised build of every domain module, the CLI and the tests, without Qt or any UI project.
+  APP.slnx excludes Ui and Ui.Tests from Headless; the guard below also stops a direct build of a Qt project.
+-->
+<Project>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>APP_HEADLESS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <Target Name="AppRejectUiInHeadless" BeforeTargets="PrepareForBuild" Condition="'$(AppUsesQt)' == 'true'">
+    <Error Text="$(MSBuildProjectName) uses Qt and is not part of the Headless configuration (B-04, P-04)." />
+  </Target>
+</Project>
