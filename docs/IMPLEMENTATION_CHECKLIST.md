@@ -272,13 +272,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests JobSystem.*` (cancellation within 50 ms, progress monotonic, dependent tasks ordered)
   - Done when: tests green and stable over 100 repetitions
   - Notes: Namespace `app::core::jobs`. `JobSystem` is a thread pool (default: hardware threads minus one, at least 1) with a dependency graph: `submit(JobFunction, {name, dependencies})` returns a shared `JobHandle` (`status`, `progress`, `cancel`, `wait`, `waitFor`); a job function is `Result<>(JobContext&)` and sees its `CancellationToken` (over `std::stop_token`, so waits can wake on cancellation) and its `Progress`. `Progress` never decreases, clamps to [0, 1], and publishes increasing values in steps of at least 0.001 as `JobProgress` events when the system is given an `EventBus`. Judgement calls, listed for the S0 gate: a dependant of a job that fails or is cancelled is cancelled with a message naming that job; cancelling a pending job finishes it at once without running it, cancelling a running one only signals its token; a job that returns an error other than `Cancelled` after being cancelled is `Failed`; an exception thrown by a job is caught at the worker and becomes `Internal` (the worker keeps running); destroying the system cancels unfinished jobs and waits for running ones; there is no job-finished event yet (completion is read from the handle; the UI's job panel can add one). Tests: `JobSystem.*`, `Progress.*`, `CancellationToken.*` (15), passed 100 repetitions in Debug and Headless; a running job stops within 50 ms of `cancel()`.
-- [ ] **S0.03.12: Implement the factory registry and service locator**
+- [x] **S0.03.12: Implement the factory registry and service locator**
   - Requirements: A-11
   - Modules: core
   - Depends on: S0.03.2
   - Deliverables: `src/core/Registry.h`, `src/core/ServiceLocator.{h,cpp}`
   - Tests: T-01 `Core.Tests Registry.*` (duplicate registration is an error, lookup by name)
   - Done when: tests green
+  - Notes: `Registry<Product, Args...>` (header-only) maps names to factories returning `Result<std::unique_ptr<Product>>`: `add` (`Conflict` on a duplicate, which keeps the first factory), `find`, `create` (`NotFound` names the kind, for example "Unknown export format 'dxf'."), sorted `names()`. `ServiceLocator` maps a service type to one non-owning object; `provide<T>()` returns a move-only `ServiceRegistration` that withdraws the service when destroyed; `global()` is the one process-wide instance (rule 010), and tests use their own. Judgement calls, listed for the S0 gate: registry names are 1 to 64 ASCII letters, digits, '.', '_' or '-' and case-sensitive; registration is not synchronised (done at start-up, before sharing), lookups are safe from any thread; a factory returning null is `Internal`; the locator is keyed by the requested type exactly (providing `FixedClock` does not provide `IClock`) and is thread-safe. Tests: `Registry.*` (7) and `ServiceLocator.*` (7).
 - [ ] **S0.03.13: Add known-folder and settings interfaces**
   - Requirements: F-10, P-04, U-10
   - Modules: core

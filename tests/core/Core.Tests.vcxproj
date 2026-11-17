@@ -33,6 +33,7 @@
     <ClCompile Include="EventBusTests.cpp" />
     <ClCompile Include="JobSystemTests.cpp" />
     <ClCompile Include="LogTests.cpp" />
+    <ClCompile Include="RegistryTests.cpp" />
     <ClCompile Include="ExprDepsTests.cpp" />
     <ClCompile Include="ExprEvalTests.cpp" />
     <ClCompile Include="ExprParserTests.cpp" />

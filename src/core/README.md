@@ -34,6 +34,9 @@ storage (ADR 0022) whose API does not need Eigen except through `eigen()`; and `
 types `Nm`, `NmPoint`, `NmVector` and `NmRect` with overflow-checked arithmetic returning `Result` (A-09; no floating
 point).
 `EventBus.h`: `EventBus`, `Subscription` and the events `DocumentChanged`, `RegenStateChanged` and `JobProgress`.
+`Registry.h`: `Registry<Product, Args...>`, the name-keyed factory registry through which modules add feature types,
+export formats, DRC checks and commands (A-11). `ServiceLocator.h`: `ServiceLocator` and `ServiceRegistration`, the one
+sanctioned process-wide object (rule 010).
 `Log.h`: `Log`, structured JSON-lines logging to rotating local files in an injected folder; spdlog is used behind it
 (ADR 0031) and may be included only in `core`.
 `expr/` (namespace `app::core::expr`): the expression lexer, parser and evaluator (`tokenize`, `parseExpression`,

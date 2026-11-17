@@ -33,6 +33,8 @@
     <ClInclude Include="Error.h" />
     <ClInclude Include="EventBus.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="Registry.h" />
+    <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Json.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ObjectId.h" />
@@ -61,6 +63,7 @@
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="EventBus.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="ObjectId.cpp" />
     <ClCompile Include="Units.cpp" />
