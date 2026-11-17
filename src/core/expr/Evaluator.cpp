@@ -180,11 +180,13 @@ private:
 
         Result<Quantity> value = m_resolve( name );
 
-        if( !value.has_value() )
+        // An unknown name is an error at this reference. Any other error comes from inside the referenced parameter
+        // and already says where it is, so it passes through unchanged.
+        if( !value.has_value() && value.error().code == ErrorCode::NotFound )
         {
             std::unexpected<Error> located = errorAt( offset, value.error().message );
 
-            located.error().code    = value.error().code;
+            located.error().code    = ErrorCode::NotFound;
             located.error().objects = std::move( value.error().objects );
             return located;
         }

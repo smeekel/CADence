@@ -5,8 +5,7 @@ feature parameters, global variables, PCB rule values and link mappings. In the 
 as text, for example `{ "expr": "Board.Width + 2 mm" }` (section 8 of the file format, @ref format).
 
 This page is normative for the syntax and the evaluation rules. They are implemented by `src/core/expr/`: `Lexer`,
-`Parser` and `Ast` (S0.03.6), `Evaluator` and `Functions` (S0.03.7). Parameter scopes (S0.03.8) are described here
-when they are implemented.
+`Parser` and `Ast` (S0.03.6), `Evaluator` and `Functions` (S0.03.7), parameter scopes and dependencies (S0.03.8).
 
 ## Grammar
 
@@ -86,6 +85,23 @@ length, rad for angle) with a dimension: the exponents of length and angle (`cor
 
 `floor`, `ceil` and `round` refuse lengths and angles because rounding the internal millimetres of a value typed in
 inches, or the radians of one typed in degrees, would not round what the user sees.
+
+## Parameter scopes and dependencies
+
+Implemented by `src/core/expr/IParameterScope.h`, `ParameterScope` and `Dependencies` (S0.03.8).
+
+- Scopes form a chain from the innermost (for example a part) to the outermost (the project). A reference resolves
+  in the nearest scope that defines the name; an inner parameter shadows an outer one of the same name.
+- A dotted name such as `Board.Width` is one parameter name, looked up whole in each scope. Parameter names follow
+  the `name { "." name }` grammar above, without spaces.
+- A parameter's expression is evaluated in the scope that defines it, so its references resolve from there outwards,
+  not from where it is used. An inner `t = t * 2` therefore refers to itself.
+- Values are computed on each lookup from the current expressions.
+- A cycle is an error naming every parameter in it, in the order they refer to each other:
+  "Parameter cycle in part: a -> b -> c -> a.". An error inside a referenced parameter is reported with its name:
+  "Parameter 'a': Cannot add length and angle at column 6.". The column is in that parameter's expression.
+- `referencedNames()` lists the parameters an expression refers to, each once, in order of first appearance, for
+  dependency tracking (A-07) and "where used" lists. Both branches of `if` count.
 
 ## Errors
 

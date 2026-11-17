@@ -240,13 +240,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests ExprEval.*` (every function, `1 mm + 1 deg` is a unit error, dimensionless angles)
   - Done when: tests green
   - Notes: `evaluate()` and `evaluateExpression()` return `Result<Quantity>`; references go through a `ReferenceResolver` callback until the scopes of S0.03.8. Judgement calls, documented in `docs/format/expressions.md` and listed for the S0 gate: `sin cos tan` take an angle or a plain number read as radians ("dimensionless angles"), and the inverse functions return angles; `floor ceil round` need a number, so the user divides by a unit first (`round(x / 1 mm) * 1 mm`); comparisons use the 1e-7 confusion tolerance; `if` evaluates only the branch it selects. An exponent must leave whole powers of each dimension (`(4 mm * 1 mm) ^ 0.5` is 2 mm). Division by zero and non-finite results are errors. Evaluation errors point at the operator (the parser now records `Binary::operatorOffset`), function, reference or condition. 8 tests in `ExprEval.*`.
-- [ ] **S0.03.8: Add expression dependency extraction and parameter scopes**
+- [x] **S0.03.8: Add expression dependency extraction and parameter scopes**
   - Requirements: A-08, A-07
   - Modules: core
   - Depends on: S0.03.7
   - Deliverables: `src/core/expr/Dependencies.{h,cpp}`, `src/core/expr/IParameterScope.h` (named lookup through nested scopes)
   - Tests: T-01 `Core.Tests ExprDeps.*`
   - Done when: tests green
+  - Notes: `IParameterScope` (scope name, parent, `findLocal`) with `lookup()` walking outwards and `resolverFor()` for the evaluator; `ParameterScope` stores parsed expressions, evaluates on lookup and rejects cycles naming every parameter (`Parameter cycle in part: a -> b -> c -> a.`, ErrorCode::Conflict). Judgement calls, listed for the S0 gate: a dotted name is one parameter name looked up whole; a parameter's references resolve from the scope that defines it; values are not cached; `ParameterScope` is not thread-safe. The evaluator now adds a column only to NotFound errors from the resolver, so errors from inside a referenced parameter are not located twice. `referencedNames()` counts both branches of `if`. 6 tests in `ExprDeps.*`.
 - [ ] **S0.03.9: Implement the event bus**
   - Requirements: A-03, A-07
   - Modules: core

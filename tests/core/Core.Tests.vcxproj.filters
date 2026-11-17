@@ -14,6 +14,9 @@
     <ClCompile Include="CompatTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExprDepsTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="ExprEvalTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

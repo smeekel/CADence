@@ -39,9 +39,12 @@
     <ClInclude Include="Tolerance.h" />
     <ClInclude Include="Units.h" />
     <ClInclude Include="expr\Ast.h" />
+    <ClInclude Include="expr\Dependencies.h" />
     <ClInclude Include="expr\Evaluator.h" />
     <ClInclude Include="expr\Functions.h" />
+    <ClInclude Include="expr\IParameterScope.h" />
     <ClInclude Include="expr\Lexer.h" />
+    <ClInclude Include="expr\ParameterScope.h" />
     <ClInclude Include="expr\Parser.h" />
     <ClInclude Include="math\Box.h" />
     <ClInclude Include="math\IntGeom.h" />
@@ -55,9 +58,11 @@
     <ClCompile Include="ObjectId.cpp" />
     <ClCompile Include="Units.cpp" />
     <ClCompile Include="expr\Ast.cpp" />
+    <ClCompile Include="expr\Dependencies.cpp" />
     <ClCompile Include="expr\Evaluator.cpp" />
     <ClCompile Include="expr\Functions.cpp" />
     <ClCompile Include="expr\Lexer.cpp" />
+    <ClCompile Include="expr\ParameterScope.cpp" />
     <ClCompile Include="expr\Parser.cpp" />
     <ClCompile Include="math\IntGeom.cpp" />
   </ItemGroup>

@@ -53,6 +53,15 @@
     <ClInclude Include="expr\Ast.h">
       <Filter>Header Files\expr</Filter>
     </ClInclude>
+    <ClInclude Include="expr\Dependencies.h">
+      <Filter>Header Files\expr</Filter>
+    </ClInclude>
+    <ClInclude Include="expr\IParameterScope.h">
+      <Filter>Header Files\expr</Filter>
+    </ClInclude>
+    <ClInclude Include="expr\ParameterScope.h">
+      <Filter>Header Files\expr</Filter>
+    </ClInclude>
     <ClInclude Include="expr\Evaluator.h">
       <Filter>Header Files\expr</Filter>
     </ClInclude>
@@ -95,6 +104,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="expr\Ast.cpp">
+      <Filter>Source Files\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="expr\Dependencies.cpp">
+      <Filter>Source Files\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="expr\ParameterScope.cpp">
       <Filter>Source Files\expr</Filter>
     </ClCompile>
     <ClCompile Include="expr\Evaluator.cpp">

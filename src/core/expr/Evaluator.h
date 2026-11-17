@@ -17,8 +17,9 @@
 namespace app::core::expr
 {
 
-/// @brief Resolves a parameter reference by its dotted name (`Board.Width`) to a value in internal units, or an error
-///        (for example ErrorCode::NotFound) whose message the evaluator reports at the reference's column.
+/// @brief Resolves a parameter reference by its dotted name (`Board.Width`) to a value in internal units. An
+///        ErrorCode::NotFound error is reported at the reference's column; any other error (for example from
+///        evaluating the referenced parameter) is returned unchanged.
 using ReferenceResolver = std::function<Result<Quantity>( std::string_view dottedName )>;
 
 /// @brief  Evaluate a syntax tree.
