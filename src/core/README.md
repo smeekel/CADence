@@ -37,6 +37,9 @@ point).
 `Registry.h`: `Registry<Product, Args...>`, the name-keyed factory registry through which modules add feature types,
 export formats, DRC checks and commands (A-11). `ServiceLocator.h`: `ServiceLocator` and `ServiceRegistration`, the one
 sanctioned process-wide object (rule 010).
+`IKnownFolders.h`: `KnownFolder`, `IKnownFolders` (implemented with Win32 in `platform`) and `FixedKnownFolders` (ADR 0024).
+`Settings.h`: `Settings`, user settings as an open JSON file at an injected path; unknown keys are kept.
+`Utf8Path.h`: `utf8Of` and `pathFromUtf8`, path conversions that do not depend on the ANSI code page.
 `Log.h`: `Log`, structured JSON-lines logging to rotating local files in an injected folder; spdlog is used behind it
 (ADR 0031) and may be included only in `core`.
 `expr/` (namespace `app::core::expr`): the expression lexer, parser and evaluator (`tokenize`, `parseExpression`,

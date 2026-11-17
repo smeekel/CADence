@@ -7,6 +7,7 @@
 #include "core/Log.h"
 
 #include "core/Json.h"
+#include "core/Utf8Path.h"
 
 #include <atomic>
 #include <format>
@@ -22,19 +23,6 @@ namespace app::core
 
 namespace
 {
-
-// std::filesystem::path::string() converts through the ANSI code page and throws for characters outside it.
-[[nodiscard]] std::string utf8Of( const std::filesystem::path& path )
-{
-    const std::u8string text = path.u8string();
-
-    return { text.begin(), text.end() };
-}
-
-[[nodiscard]] std::filesystem::path pathFromUtf8( std::string_view text )
-{
-    return { std::u8string( text.begin(), text.end() ) };
-}
 
 [[nodiscard]] spdlog::level::level_enum toSpdlog( LogLevel level ) noexcept
 {

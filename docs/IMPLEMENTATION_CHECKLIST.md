@@ -280,13 +280,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests Registry.*` (duplicate registration is an error, lookup by name)
   - Done when: tests green
   - Notes: `Registry<Product, Args...>` (header-only) maps names to factories returning `Result<std::unique_ptr<Product>>`: `add` (`Conflict` on a duplicate, which keeps the first factory), `find`, `create` (`NotFound` names the kind, for example "Unknown export format 'dxf'."), sorted `names()`. `ServiceLocator` maps a service type to one non-owning object; `provide<T>()` returns a move-only `ServiceRegistration` that withdraws the service when destroyed; `global()` is the one process-wide instance (rule 010), and tests use their own. Judgement calls, listed for the S0 gate: registry names are 1 to 64 ASCII letters, digits, '.', '_' or '-' and case-sensitive; registration is not synchronised (done at start-up, before sharing), lookups are safe from any thread; a factory returning null is `Internal`; the locator is keyed by the requested type exactly (providing `FixedClock` does not provide `IClock`) and is thread-safe. Tests: `Registry.*` (7) and `ServiceLocator.*` (7).
-- [ ] **S0.03.13: Add known-folder and settings interfaces**
+- [x] **S0.03.13: Add known-folder and settings interfaces**
   - Requirements: F-10, P-04, U-10
   - Modules: core
   - Depends on: S0.03.1, S0.03.2
   - Deliverables: `src/core/IKnownFolders.h`, `src/core/Settings.{h,cpp}` (user settings JSON at an injected path) per ADR 0024
   - Tests: T-01 `Core.Tests Settings.*` (load, save, unknown keys preserved)
   - Done when: tests green; no OS calls in `core`
+  - Notes: `IKnownFolders::path( KnownFolder )` returns `Result<path>`; `FixedKnownFolders` (no OS calls) puts every folder under one root for tests, portable installs and command-line overrides; the Win32 implementation follows in S0.11.1. `Settings` is a value type over an insertion-ordered JSON object: `load` (a missing file gives empty settings; a UTF-8 byte order mark is accepted; `FormatError` names the file and position), `save` (UTF-8, two-space indent, written to `<file>.tmp` and renamed over the target; creates the folder), dotted keys (`ui.theme`) over nested objects, `get<T>`/`getOr<T>` for bool, int64, double, string and JSON, `set`, `remove`. Unknown keys and their order survive load, change and save. `core/Utf8Path.h` (`utf8Of`, `pathFromUtf8`) replaces the private copies in `Log.cpp`. Judgement calls, listed for the S0 gate: `KnownFolder` has `UserSettings` and `Logs` besides the five folders ADR 0024 lists, because S0.03.10 and this step need them; settings have no version field yet; an explicit JSON `null` on a key path is replaced by an object when a deeper key is set. Tests: `Settings.*` (10) and `KnownFolders.*` (1).
 
 ### S0.04 Command bus, undo and journal
 

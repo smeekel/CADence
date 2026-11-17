@@ -34,6 +34,7 @@
     <ClCompile Include="JobSystemTests.cpp" />
     <ClCompile Include="LogTests.cpp" />
     <ClCompile Include="RegistryTests.cpp" />
+    <ClCompile Include="SettingsTests.cpp" />
     <ClCompile Include="ExprDepsTests.cpp" />
     <ClCompile Include="ExprEvalTests.cpp" />
     <ClCompile Include="ExprParserTests.cpp" />

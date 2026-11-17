@@ -38,6 +38,9 @@
     <ClInclude Include="EventBus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IKnownFolders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -45,6 +48,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ServiceLocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utf8Path.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Json.h">
@@ -124,10 +133,16 @@
     <ClCompile Include="EventBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IKnownFolders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ServiceLocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Module.cpp">
