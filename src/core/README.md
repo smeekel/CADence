@@ -26,5 +26,7 @@ it on project references and `#include` paths. It changes only together with an 
 `Error.h` and `Result.h` (namespace `app`, ADR 0042): `ErrorCode`, `Error`, `fail()`, `Result<T>` and `ok()`; every
 function that can fail across a module boundary returns `Result<T>`. `Json.h`: `app::core::Json`. `ObjectId.h`:
 `ObjectId` (UUID version 7, RFC 4122 byte order, lowercase text) and `ObjectIdGenerator` (injectable clock and random
-source, `makeDeterministic()` for tests; `newObjectId()` uses the process-wide generator).
+source, `makeDeterministic()` for tests; `newObjectId()` uses the process-wide generator). `Units.h`, `Quantity.h`,
+`Tolerance.h`: display units with exact conversion ratios, `Quantity` (value in mm or rad plus a `Dimension`, with
+unit-checked `add` and `subtract`), locale-independent formatting and parsing, and `kConfusionTolerance` (1e-7 mm).
 Planned: `Command`, `CommandBus`, `UndoStack`, `JobSystem`, `EventBus`, `ExpressionEngine`.

@@ -207,13 +207,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests ObjectId.*` (version and variant bits, monotonic ordering, string round-trip, 1e6 unique IDs with fixed seed)
   - Done when: tests green; deterministic generation available for tests
   - Notes: RFC 9562 layout with a 42-bit counter (method 1): seeded with 41 random bits per millisecond, incremented when the clock stands still or goes backwards, timestamp moved ahead on overflow. `ObjectIdGenerator::makeDeterministic( seed, unixMs )` gives reproducible IDs for tests and golden data. `parse` accepts only the lower-case hyphenated form (ADR 0028 amendment) and returns `std::optional` (so `ObjectId.h` does not need `Error.h`). `app::Error` gained `objects` (ADR 0042). 13 `ObjectId.*` tests, including the RFC 9562 example and the F-09 magic byte order.
-- [ ] **S0.03.4: Implement units, quantities and precision constants**
+- [x] **S0.03.4: Implement units, quantities and precision constants**
   - Requirements: P-06, P-07
   - Modules: core
   - Depends on: S0.03.2
   - Deliverables: `src/core/Units.{h,cpp}`, `src/core/Quantity.h`, `src/core/Tolerance.h` (mm, cm, m, in, mil, thou, µm, deg, rad; default 1e-7 mm confusion tolerance; display formatting with per-document defaults)
   - Tests: T-01 `Core.Tests Units.*` (exact conversion factors, formatting round-trip, unit parsing incl. `µm` and `um`)
   - Done when: tests green
+  - Notes: Conversion factors are ratios of exact integers (in = 254/10, mil and thou = 254/10000), so whole numbers convert to the correctly rounded millimetre value. `Quantity` holds a value in mm or rad and a `Dimension` (length and angle exponents); `add` and `subtract` return an error for different dimensions, ready for the A-08 unit check in S0.03.7. `DisplayUnits` holds the per-document defaults (mm with 3 decimals, deg with 2). Formatting and parsing use `to_chars` and `from_chars`, so they don't depend on the locale; `µm` (U+00B5), `μm` (U+03BC) and `um` are accepted. 14 tests in `Units.*`, `Quantity.*` and `Tolerance.*`.
 - [ ] **S0.03.5: Implement math primitives and integer-nanometre geometry types**
   - Requirements: P-06, A-09
   - Modules: core

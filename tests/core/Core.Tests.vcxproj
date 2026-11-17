@@ -34,6 +34,7 @@
     <ClCompile Include="ModuleTests.cpp" />
     <ClCompile Include="ObjectIdTests.cpp" />
     <ClCompile Include="ResultTests.cpp" />
+    <ClCompile Include="UnitsTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\core\Core.vcxproj">

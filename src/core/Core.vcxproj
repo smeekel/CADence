@@ -34,12 +34,16 @@
     <ClInclude Include="Json.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ObjectId.h" />
+    <ClInclude Include="Quantity.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="Tolerance.h" />
+    <ClInclude Include="Units.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="ObjectId.cpp" />
+    <ClCompile Include="Units.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
