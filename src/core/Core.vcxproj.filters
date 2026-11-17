@@ -29,6 +29,9 @@
     <ClInclude Include="Error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EventBus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Json.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -92,6 +95,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventBus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Module.cpp">

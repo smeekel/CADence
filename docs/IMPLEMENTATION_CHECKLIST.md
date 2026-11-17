@@ -248,13 +248,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests ExprDeps.*`
   - Done when: tests green
   - Notes: `IParameterScope` (scope name, parent, `findLocal`) with `lookup()` walking outwards and `resolverFor()` for the evaluator; `ParameterScope` stores parsed expressions, evaluates on lookup and rejects cycles naming every parameter (`Parameter cycle in part: a -> b -> c -> a.`, ErrorCode::Conflict). Judgement calls, listed for the S0 gate: a dotted name is one parameter name looked up whole; a parameter's references resolve from the scope that defines it; values are not cached; `ParameterScope` is not thread-safe. The evaluator now adds a column only to NotFound errors from the resolver, so errors from inside a referenced parameter are not located twice. `referencedNames()` counts both branches of `if`. 6 tests in `ExprDeps.*`.
-- [ ] **S0.03.9: Implement the event bus**
+- [x] **S0.03.9: Implement the event bus**
   - Requirements: A-03, A-07
   - Modules: core
   - Depends on: S0.03.3
   - Deliverables: `src/core/EventBus.{h,cpp}` (`DocumentChanged`, `RegenStateChanged`, `JobProgress`; handlers may post commands but never mutate)
   - Tests: T-01 `Core.Tests EventBus.*`
   - Done when: tests green
+  - Notes: Typed `subscribe<E>()` and `publish()` over the closed set `DocumentChanged` (with `ChangeSet`), `RegenStateChanged` (with `RegenState`, reused by the regeneration graph) and `JobProgress`; `SelectionChanged` is UI-only and stays out of `core`. `Subscription` is an RAII handle that may outlive the bus. Thread-safe; handlers run on the publishing thread in subscription order and may publish, subscribe and unsubscribe. Judgement calls, listed for the S0 gate: releasing a subscription waits for calls running on other threads (so an object can unsubscribe in its destructor while a worker publishes progress), and no lock is held during a handler call; "handlers never mutate" is enforced through `EventBus::isDispatching()`, which the command bus (S0.04) will check before running a command; a handler exception is not caught (no exceptions cross public APIs). 7 tests in `EventBus.*`, also run 20 times in a row.
 - [ ] **S0.03.10: Implement structured logging (ADR 0031)**
   - Requirements: P-23
   - Modules: core, build
