@@ -9,6 +9,12 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp</Extensions>
     </Filter>
+    <Filter Include="Header Files\jobs">
+      <UniqueIdentifier>{1496C0FE-9A64-40EC-9FB1-7A6965B16EF4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\jobs">
+      <UniqueIdentifier>{E9C5668B-090E-40B3-99BF-2E80A0677357}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\expr">
       <UniqueIdentifier>{5E9E837E-A1F9-424D-BF32-959E32428070}</UniqueIdentifier>
     </Filter>
@@ -55,6 +61,15 @@
     </ClInclude>
     <ClInclude Include="Units.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jobs\CancellationToken.h">
+      <Filter>Header Files\jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="jobs\JobSystem.h">
+      <Filter>Header Files\jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="jobs\Progress.h">
+      <Filter>Header Files\jobs</Filter>
     </ClInclude>
     <ClInclude Include="expr\Ast.h">
       <Filter>Header Files\expr</Filter>
@@ -114,6 +129,15 @@
     </ClCompile>
     <ClCompile Include="Units.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="jobs\CancellationToken.cpp">
+      <Filter>Source Files\jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="jobs\JobSystem.cpp">
+      <Filter>Source Files\jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="jobs\Progress.cpp">
+      <Filter>Source Files\jobs</Filter>
     </ClCompile>
     <ClCompile Include="expr\Ast.cpp">
       <Filter>Source Files\expr</Filter>

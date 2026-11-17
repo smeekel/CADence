@@ -40,6 +40,9 @@
     <ClInclude Include="Result.h" />
     <ClInclude Include="Tolerance.h" />
     <ClInclude Include="Units.h" />
+    <ClInclude Include="jobs\CancellationToken.h" />
+    <ClInclude Include="jobs\JobSystem.h" />
+    <ClInclude Include="jobs\Progress.h" />
     <ClInclude Include="expr\Ast.h" />
     <ClInclude Include="expr\Dependencies.h" />
     <ClInclude Include="expr\Evaluator.h" />
@@ -61,6 +64,9 @@
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="ObjectId.cpp" />
     <ClCompile Include="Units.cpp" />
+    <ClCompile Include="jobs\CancellationToken.cpp" />
+    <ClCompile Include="jobs\JobSystem.cpp" />
+    <ClCompile Include="jobs\Progress.cpp" />
     <ClCompile Include="expr\Ast.cpp" />
     <ClCompile Include="expr\Dependencies.cpp" />
     <ClCompile Include="expr\Evaluator.cpp" />

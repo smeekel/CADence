@@ -40,4 +40,6 @@ point).
 syntax tree in `Ast.h`, `evaluate` and `evaluateExpression` with unit checking and the built-in functions,
 `referencedNames`, and parameter scopes: `IParameterScope`, `lookup`, `resolverFor` and the expression-backed
 `ParameterScope`; grammar and rules in `docs/format/expressions.md`, A-08).
-Planned: `Command`, `CommandBus`, `UndoStack`, `JobSystem`.
+`jobs/` (namespace `app::core::jobs`): `JobSystem` (thread pool with job dependencies), `JobHandle`, `JobContext`,
+`CancellationToken` and `CancellationSource`, and monotonic `Progress` published as `JobProgress` events (A-10).
+Planned: `Command`, `CommandBus`, `UndoStack`.
