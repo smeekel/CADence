@@ -12,7 +12,7 @@ Full detail: `docs/notepads/Architecture_and_Build.md` and `docs/notepads/Comman
 
 | Module | May depend on |
 |---|---|
-| `core` | standard library, Eigen, nlohmann/json (ADR 0016) |
+| `core` | standard library, Eigen (ADR 0022), nlohmann/json (ADR 0016) |
 | `platform` | `core` |
 | `doc` | `core` (nlohmann/json allowed) |
 | `geom` | `core`, `doc` (OCCT allowed **only** here) |
@@ -34,7 +34,7 @@ Full detail: `docs/notepads/Architecture_and_Build.md` and `docs/notepads/Comman
 
 `scripts/check-layering.ps1` enforces this table on `.vcxproj` references and `#include` paths. Update the script and this table together, and only with an ADR.
 
-`<nlohmann/json.hpp>` is included only in `core` and `doc`; other modules use the alias `app::core::Json` from `core/Json.h` (ADR 0016).
+`<nlohmann/json.hpp>` is included only in `core` and `doc`; other modules use the alias `app::core::Json` from `core/Json.h` (ADR 0016). Eigen headers (`<Eigen/...>`) are included only in `core` until ADR 0022 is applied to `sketch` (S1.01.1), `asm` (S3.01.1) and `sim` (S9.01.1); other modules use the `app::core::math` types (`Vec3`, `Mat3`, `Transform`, `Box3`), whose public API does not expose Eigen except through `eigen()`.
 
 ## Patterns you must use
 

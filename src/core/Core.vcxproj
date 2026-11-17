@@ -38,12 +38,18 @@
     <ClInclude Include="Result.h" />
     <ClInclude Include="Tolerance.h" />
     <ClInclude Include="Units.h" />
+    <ClInclude Include="math\Box.h" />
+    <ClInclude Include="math\IntGeom.h" />
+    <ClInclude Include="math\Mat.h" />
+    <ClInclude Include="math\Transform.h" />
+    <ClInclude Include="math\Vec.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="ObjectId.cpp" />
     <ClCompile Include="Units.cpp" />
+    <ClCompile Include="math\IntGeom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

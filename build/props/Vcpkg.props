@@ -40,6 +40,13 @@
     <AppVcpkgLibDir Condition="'$(VcpkgConfiguration)' != 'Debug'">$(AppVcpkgTripletDir)lib\</AppVcpkgLibDir>
   </PropertyGroup>
 
+  <!-- Eigen installs its headers under include\eigen3 (ADR 0022); scripts\check-layering.ps1 confines its use. -->
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(AppVcpkgTripletDir)include\eigen3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
   <Import Project="$(AppVcpkgRoot)scripts\buildsystems\msbuild\vcpkg.props"
           Condition="Exists('$(AppVcpkgRoot)scripts\buildsystems\msbuild\vcpkg.props')" />
 </Project>

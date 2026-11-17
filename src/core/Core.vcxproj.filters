@@ -9,6 +9,12 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp</Extensions>
     </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{46ECFB43-E15D-4A3C-8BFE-9F022F18AFC7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{C3814F52-7ABE-44D8-B1FA-B62E22947491}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compat.h">
@@ -38,6 +44,21 @@
     <ClInclude Include="Units.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="math\Box.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\IntGeom.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Mat.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Transform.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Vec.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp">
@@ -51,6 +72,9 @@
     </ClCompile>
     <ClCompile Include="Units.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="math\IntGeom.cpp">
+      <Filter>Source Files\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

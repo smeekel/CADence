@@ -66,6 +66,17 @@
       "verified": "S0.01.6, ADR 0010; S0.03.1"
     },
     {
+      "port": "eigen3",
+      "library": "Eigen",
+      "version": "5.0.1",
+      "licence": "MPL-2.0 AND Apache-2.0 AND BSD-3-Clause",
+      "role": "linked",
+      "usedBy": "`core` (ADR 0022) and its dependants",
+      "shipped": "Yes (header-only, compiled in)",
+      "verified": "S0.01.6; S0.03.5, ADR 0022",
+      "note": "The port metadata says MPL-2.0. The installed copyright file (COPYING.README, .APACHE, .BSD, .MINPACK, .MPL2) and the headers show Apache-2.0 in Core/arch/Default/BFloat16.h and BSD-3-Clause in Geometry/AlignedBox.h and the LAPACKE/MKL bindings, which APP compiles in through Eigen/Core and Eigen/Geometry. The Minpack-licensed code is only under unsupported/, which APP does not use. Eigen headers are not modified (MPL-2.0 file-level copyleft)."
+    },
+    {
       "port": "gtest",
       "library": "GoogleTest and GoogleMock",
       "version": "1.18.0",

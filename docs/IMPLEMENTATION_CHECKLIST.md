@@ -64,9 +64,10 @@ Decided by the owner on 2026-11-12:
 | `core` may use nlohmann/json (C-07), accepted 2026-11-16 | Applied in S0.03.1: rule 030, `check-layering.ps1` and `src/core/Json.h` | S0.03.1, S0.04.* | 0016 (Accepted) |
 | Logging, Qt confinement, docking, `cli` layering (C-26, C-09, C-07), accepted 2026-11-16 | spdlog for logging; Qt only in `ui` with a Win32-only `platform` and Qt-free `render`; Qt Advanced Docking System; `cli` may reference `platform` and `render`. Each is applied in the step named here | S0.03.10, S0.11.6, S0.13.2, S0.10.3 | 0031, 0023, 0030, 0017 (Accepted) |
 | OS folders injected into `doc` (C-11), accepted 2026-11-16 | Accepted as written | S0.03.13, S0.07.*, S0.11.1 | 0024 (Accepted) |
-| Unknown fields (C-20), decided 2026-11-16 | Accepted as written: unknown fields stay in place and are written back on save (F-08). The rule for array elements without an ObjectId (matching by position was suggested) is not approved yet and is an open point for the S0 gate | S0.06.3 | 0027 (Accepted) |
+| Unknown fields (C-20), decided 2026-11-16 | Accepted as written: unknown fields stay in place and are written back on save (F-08). Array elements without an ObjectId are matched by position for now (owner decision, may be revisited) | S0.06.3 | 0027 (Accepted) |
 | UUIDs in BSON by schema (C-21), accepted 2026-11-16 | Accepted with the amendment (approved 2026-11-16): UUIDs are written only in the lower-case hyphenated form, and every `format: uuid` schema field carries the canonical `pattern`, so non-canonical UUIDs are rejected on load | S0.06.1, S0.06.3, S0.06.4, S0.06.11 | 0028 (Accepted) |
 | Command contract, JSON Schema validator, OpenGL loader, directions approved 2026-11-16 | Contract in `core`, with `CommandContext` using an interface defined in `core` (not `doc::Project&`); jsoncons 1.9.0 (BSL-1.0) subject to the licence check; an in-house GL loader on the Khronos headers with the lookup function supplied by `platform`, avoiding glad. The implementer accepts each ADR when written; the owner reviews them at the S0 gate | S0.04.1, S0.04.2, S0.12.1 | written in those steps |
+| Eigen in `core` (C-08), accepted 2026-11-16 | `core::math` types are built on Eigen; `eigen3` 5.0.1 added in S0.03.5. `sketch`, `asm` and `sim` follow in S1.01.1, S3.01.1 and S9.01.1 | S0.03.5 | 0022 (Accepted) |
 | vcpkg root, licence manifest, scaffold CLI fixes | ADR 0029 confirmed; `docs/licence-manifest.json` and its corrections to `THIRD_PARTY_NOTICES.md` and ADR 0004 accepted; the S0.02.4 `src/cli` changes accepted | S0.01.1, S0.02.2, S0.02.4 | 0029 (Accepted) |
 
 ## Stage S0: Foundation
@@ -215,13 +216,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests Units.*` (exact conversion factors, formatting round-trip, unit parsing incl. `µm` and `um`)
   - Done when: tests green
   - Notes: Conversion factors are ratios of exact integers (in = 254/10, mil and thou = 254/10000), so whole numbers convert to the correctly rounded millimetre value. `Quantity` holds a value in mm or rad and a `Dimension` (length and angle exponents); `add` and `subtract` return an error for different dimensions, ready for the A-08 unit check in S0.03.7. `DisplayUnits` holds the per-document defaults (mm with 3 decimals, deg with 2). Formatting and parsing use `to_chars` and `from_chars`, so they don't depend on the locale; `µm` (U+00B5), `μm` (U+03BC) and `um` are accepted. 14 tests in `Units.*`, `Quantity.*` and `Tolerance.*`.
-- [ ] **S0.03.5: Implement math primitives and integer-nanometre geometry types**
+- [x] **S0.03.5: Implement math primitives and integer-nanometre geometry types**
   - Requirements: P-06, A-09
   - Modules: core
   - Depends on: S0.03.4
   - Deliverables: `src/core/math/{Vec,Mat,Transform,Box}.h`, `src/core/math/IntGeom.{h,cpp}` (int64 nm points, vectors and rectangles with overflow-checked arithmetic; no nm↔mm conversion here)
   - Tests: T-01 `Core.Tests Transform.*`, `IntGeom.*` (overflow detection, exact integer ops)
   - Done when: tests green; no floating-point use in `IntGeom`
+  - Notes: Built on Eigen 5.0.1 (ADR 0022, accepted 2026-11-16): `Vec2`, `Vec3`, `Mat3`, `Transform` (`Eigen::Affine3d`) and `Box3` (`Eigen::AlignedBox3d`) wrap Eigen values and expose them through `eigen()`. Operations that can fail (normalising a zero vector, inverting a singular matrix, rotating about a zero axis) return `std::optional`. `eigen3` is in `vcpkg.json`, the licence manifest (`MPL-2.0 AND Apache-2.0 AND BSD-3-Clause`) and the regenerated notices; `build/props/Vcpkg.props` adds `include\eigen3`; `check-layering.ps1` allows Eigen only in `core` (self-test case `layering-eigen-outside-core`); `.clang-tidy` excludes `vcpkg_installed` because Eigen's `Eigen/src` paths matched the header filter. `IntGeom` returns `ErrorCode::InvalidArgument` on overflow; a grep of `IntGeom.{h,cpp}` finds no `double` or `float` outside a comment. 15 tests in `Vec.*`, `Mat3.*`, `Transform.*`, `Box3.*` and `IntGeom.*`.
 - [ ] **S0.03.6: Implement the expression lexer and parser**
   - Requirements: A-08
   - Modules: core

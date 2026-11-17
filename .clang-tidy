@@ -18,6 +18,9 @@ Checks: >
   misc-unused-using-decls
 WarningsAsErrors: ''
 FormatStyle: none
+# The header filter in build/props/CodeAnalysis.props matches any path with a src or tests folder, which includes
+# third-party trees such as vcpkg_installed/<tree>/x64-windows/include/eigen3/Eigen/src (ADR 0022).
+ExcludeHeaderFilterRegex: '.*[\\/]vcpkg_installed[\\/].*'
 CheckOptions:
   # app::Result<T> is std::expected<T, app::Error> (ADR 0042); a dropped Result is a dropped error.
   bugprone-unused-return-value.CheckedReturnTypes: '::std::error_code;::std::error_condition;::std::errc;::std::expected'

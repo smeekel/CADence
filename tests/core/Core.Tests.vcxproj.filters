@@ -14,7 +14,13 @@
     <ClCompile Include="CompatTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IntGeomTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="JsonTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MathTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ModuleTests.cpp">

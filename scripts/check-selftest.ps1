@@ -158,6 +158,10 @@ $cases = @(
        What = 'platform includes nlohmann/json (only core and doc may, ADR 0016)'
        Expect = "src/platform/Module\.cpp:\d+: nlohmann/json header 'nlohmann/json\.hpp' is allowed only in: core, doc"
        Apply = { param( $r ) Add-Text ( Join-Path $r 'src\platform\Module.cpp' ) "`n#include <nlohmann/json.hpp>`n" } },
+    @{ Name = 'layering-eigen-outside-core'; Check = 'check-layering'
+       What = 'ecad/pcb includes Eigen (only core may until ADR 0022 is applied to sketch, asm and sim)'
+       Expect = "src/ecad/pcb/Module\.cpp:\d+: Eigen header 'Eigen/Core' is allowed only in: core"
+       Apply = { param( $r ) Add-Text ( Join-Path $r 'src\ecad\pcb\Module.cpp' ) "`n#include <Eigen/Core>`n" } },
     # Accept: CR-07a
     @{ Name = 'spdx-missing-header'; Check = 'check-spdx'
        What = 'a new C++ file without an SPDX header'
