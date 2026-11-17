@@ -28,6 +28,7 @@ by APP and shipped, `test` only by test executables, `build` is used at build ti
 | zlib | `zlib` 1.3.2#3 | Zlib | linked | `ui` via Qt Core | Yes (DLL) |
 | MD4C | `md4c` 0.6.0 | MIT | linked | `ui` via Qt Gui | Yes (DLL) |
 | JSON for Modern C++ (nlohmann/json) | `nlohmann-json` 3.12.0#2 | MIT | linked | `core`, `doc` and their dependants | Yes (header-only, compiled in) |
+| spdlog | `spdlog` 1.17.0#1 | MIT | linked | `core` (ADR 0031) and its dependants | Yes (DLL) |
 | Eigen | `eigen3` 5.0.1 | MPL-2.0 AND Apache-2.0 AND BSD-3-Clause | linked | `core` (ADR 0022) and its dependants | Yes (header-only, compiled in) |
 | GoogleTest and GoogleMock | `gtest` 1.18.0 | BSD-3-Clause | test | `tests/*` only | No (test only) |
 | Khronos OpenGL API headers | `opengl-registry` 2026-08-03 | MIT | build | Qt Gui headers | No (headers, build time) |
@@ -38,8 +39,8 @@ by APP and shipped, `test` only by test executables, `build` is used at build ti
 
 Installed trees (`vcpkg_installed/<tree>`; `full` is used by Debug and Release, `headless` by Headless):
 
-- `full`: `double-conversion`, `egl-registry`, `eigen3`, `gtest`, `md4c`, `nlohmann-json`, `opengl`, `opengl-registry`, `pcre2`, `qtbase`, `vcpkg-cmake`, `vcpkg-cmake-config`, `zlib`
-- `headless`: `eigen3`, `gtest`, `nlohmann-json`, `vcpkg-cmake`, `vcpkg-cmake-config`
+- `full`: `double-conversion`, `egl-registry`, `eigen3`, `gtest`, `md4c`, `nlohmann-json`, `opengl`, `opengl-registry`, `pcre2`, `qtbase`, `spdlog`, `vcpkg-cmake`, `vcpkg-cmake-config`, `zlib`
+- `headless`: `eigen3`, `gtest`, `nlohmann-json`, `spdlog`, `vcpkg-cmake`, `vcpkg-cmake-config`
 
 ### Licence texts
 
@@ -54,6 +55,7 @@ the application. The SHA-256 identifies the exact text the notices were generate
 | `zlib` | `share/zlib/copyright` | `e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2` |
 | `md4c` | `share/md4c/copyright` | `e547c9a66c120b19f9838a1f7c2f51137f5c71ba27b70c3611b673f2cdb4e02e` |
 | `nlohmann-json` | `share/nlohmann-json/copyright` | `46a65cffd1ea955132d95a8dd921640714a8d6b537d2e4e482d31145ae95b603` |
+| `spdlog` | `share/spdlog/copyright` | `d678c20826e1392578508e1c78649a1e3c31bda05ef4388d967dbd654461b140` |
 | `eigen3` | `share/eigen3/copyright` | `ad251846a5a37acfed04407b7eee9161fbd58a91874b20fd949904413c407b2a` |
 | `gtest` | `share/gtest/copyright` | `9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138` |
 | `opengl-registry` | `share/opengl-registry/copyright` | `c56ffb0cc40bd972c1b2d4759828b89f7860471f5ba52eedde7a4ddb4664cef5` |

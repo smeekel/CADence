@@ -158,6 +158,10 @@ $cases = @(
        What = 'platform includes nlohmann/json (only core and doc may, ADR 0016)'
        Expect = "src/platform/Module\.cpp:\d+: nlohmann/json header 'nlohmann/json\.hpp' is allowed only in: core, doc"
        Apply = { param( $r ) Add-Text ( Join-Path $r 'src\platform\Module.cpp' ) "`n#include <nlohmann/json.hpp>`n" } },
+    @{ Name = 'layering-spdlog-outside-core'; Check = 'check-layering'
+       What = 'doc includes spdlog (only core may; other modules log through core/Log.h)'
+       Expect = "src/doc/Module\.cpp:\d+: spdlog header 'spdlog/spdlog.h' is allowed only in: core"
+       Apply = { param( $r ) Add-Text ( Join-Path $r 'src\doc\Module.cpp' ) "`n#include <spdlog/spdlog.h>`n" } },
     @{ Name = 'layering-eigen-outside-core'; Check = 'check-layering'
        What = 'ecad/pcb includes Eigen (only core may until ADR 0022 is applied to sketch, asm and sim)'
        Expect = "src/ecad/pcb/Module\.cpp:\d+: Eigen header 'Eigen/Core' is allowed only in: core"

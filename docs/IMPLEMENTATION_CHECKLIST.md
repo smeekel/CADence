@@ -256,13 +256,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests EventBus.*`
   - Done when: tests green
   - Notes: Typed `subscribe<E>()` and `publish()` over the closed set `DocumentChanged` (with `ChangeSet`), `RegenStateChanged` (with `RegenState`, reused by the regeneration graph) and `JobProgress`; `SelectionChanged` is UI-only and stays out of `core`. `Subscription` is an RAII handle that may outlive the bus. Thread-safe; handlers run on the publishing thread in subscription order and may publish, subscribe and unsubscribe. Judgement calls, listed for the S0 gate: releasing a subscription waits for calls running on other threads (so an object can unsubscribe in its destructor while a worker publishes progress), and no lock is held during a handler call; "handlers never mutate" is enforced through `EventBus::isDispatching()`, which the command bus (S0.04) will check before running a command; a handler exception is not caught (no exceptions cross public APIs). 7 tests in `EventBus.*`, also run 20 times in a row.
-- [ ] **S0.03.10: Implement structured logging (ADR 0031)**
+- [x] **S0.03.10: Implement structured logging (ADR 0031)**
   - Requirements: P-23
   - Modules: core, build
   - Depends on: S0.03.2
   - Deliverables: `src/core/Log.{h,cpp}` (JSON-lines records, rotating file sink in an injected folder); spdlog added to `vcpkg.json` and `THIRD_PARTY_NOTICES.md`; ADR 0031 Accepted
   - Tests: T-01 `Core.Tests Log.*` (rotation in a temporary folder, structured fields present)
   - Done when: tests and licence check green
+  - Notes: `app::core::Log` (pimpl, no spdlog in the header): `Log::open(LogOptions)` with an injected folder, file name, size limit, number of rotated files kept and minimum level; `write()`, `flush()`, `files()` (for Copy diagnostics, S0.11.4) and `failedWrites()`. Records are JSON lines with `time` (UTC, milliseconds), `level`, `module`, `message`, optional `object` (ObjectId) and optional `fields`; invalid UTF-8 is replaced, never thrown on. spdlog 1.17.0#1 (MIT) is installed without default features, so it uses `std::format` and brings no `fmt`; it links as a DLL for every executable, and `check-layering` confines `spdlog/` to `core` (self-test case added). Judgement calls, listed for the S0 gate: ADR 0031's consequence "spdlog brings fmt" is amended accordingly; the file sink is a small rotating sink in `Log.cpp` on `std::filesystem` paths, because spdlog's sink opens files through ANSI code-page paths and fails for user folders outside it (spdlog still provides the logger, levels and locking); extra fields sit under `fields` so they cannot clash with the standard keys; reopening appends to the current file; warnings and above are flushed at once. 11 tests in `Log.*`.
 - [ ] **S0.03.11: Implement the job system with progress and cancellation**
   - Requirements: A-10
   - Modules: core

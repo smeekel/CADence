@@ -40,11 +40,24 @@
     <AppVcpkgLibDir Condition="'$(VcpkgConfiguration)' != 'Debug'">$(AppVcpkgTripletDir)lib\</AppVcpkgLibDir>
   </PropertyGroup>
 
-  <!-- Eigen installs its headers under include\eigen3 (ADR 0022); scripts\check-layering.ps1 confines its use. -->
+  <PropertyGroup>
+    <AppSpdlogLib Condition="'$(VcpkgConfiguration)' == 'Debug'">spdlogd.lib</AppSpdlogLib>
+    <AppSpdlogLib Condition="'$(VcpkgConfiguration)' != 'Debug'">spdlog.lib</AppSpdlogLib>
+  </PropertyGroup>
+
+  <!--
+    Eigen installs its headers under include\eigen3 (ADR 0022). spdlog is a DLL built with std::format (ADR 0031);
+    every executable links core, so every link step gets its import library, which adds no DLL dependency to a binary
+    that does not use it. scripts\check-layering.ps1 confines both libraries to core.
+  -->
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(AppVcpkgTripletDir)include\eigen3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SPDLOG_COMPILED_LIB;SPDLOG_SHARED_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(AppVcpkgLibDir)$(AppSpdlogLib);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
 
   <Import Project="$(AppVcpkgRoot)scripts\buildsystems\msbuild\vcpkg.props"

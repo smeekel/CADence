@@ -10,7 +10,7 @@
       2. ClCompile, ClInclude and QtMoc items that point into another module's folder;
       3. #include paths in every C++ file under src/ and tests/ ("geom/Kernel.h" belongs to module geom);
       4. confinement of third-party headers to their adapter module (OCCT in geom, Clipper2 in ecad/pcb, Chrono and
-         ngspice in sim, Embree in render, lib3mf in io, nlohmann/json in core and doc (ADR 0016), Eigen in core (ADR 0022; sketch, asm and sim are added in the steps that apply it there), Qt in ui (non-Widgets Qt also in render and platform,
+         ngspice in sim, Embree in render, lib3mf in io, nlohmann/json in core and doc (ADR 0016), Eigen in core (ADR 0022; sketch, asm and sim are added in the steps that apply it there), spdlog in core (ADR 0031), Qt in ui (non-Widgets Qt also in render and platform,
          rule 010), GoogleTest only in tests) and of Win32 headers to platform (P-04).
     tests/<m> may use <m> and everything <m> may use, transitively.
     The table below and the rule file change together, and only with an ADR.
@@ -70,6 +70,7 @@ $ThirdParty = @(
     @{ Name = 'lib3mf';          Pattern = '^lib3mf';                                Modules = @( 'io' ) },
     @{ Name = 'nlohmann/json';   Pattern = '^nlohmann/';                             Modules = @( 'core', 'doc' ) },
     @{ Name = 'Eigen';           Pattern = '^(Eigen|unsupported/Eigen)/';            Modules = @( 'core' ) },
+    @{ Name = 'spdlog';          Pattern = '^spdlog/';                               Modules = @( 'core' ) },
     @{ Name = 'Qt Widgets';      Pattern = '^(QtWidgets/|Q(Application|Widget|MainWindow|Dialog|DockWidget|Menu|MenuBar|ToolBar|PushButton|Label|LineEdit|LayoutItem|BoxLayout|VBoxLayout|HBoxLayout|GridLayout|Layout|AbstractButton|StatusBar|OpenGLWidget|FileDialog|MessageBox|TreeView|TableView|ListView|Style|ScrollArea|TabWidget|Splitter)$)'; Modules = @( 'ui' ) },
     @{ Name = 'Qt';              Pattern = '^(Qt[A-Za-z]*/|Q[A-Z][A-Za-z]*$|Qt[A-Z][A-Za-z]*$)';   Modules = @( 'ui', 'render', 'platform' ) },
     @{ Name = 'GoogleTest';      Pattern = '^(gtest|gmock)/';                        Modules = @() },

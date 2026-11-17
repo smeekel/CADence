@@ -66,6 +66,17 @@
       "verified": "S0.01.6, ADR 0010; S0.03.1"
     },
     {
+      "port": "spdlog",
+      "library": "spdlog",
+      "version": "1.17.0#1",
+      "licence": "MIT",
+      "role": "linked",
+      "usedBy": "`core` (ADR 0031) and its dependants",
+      "shipped": "Yes (DLL)",
+      "verified": "S0.03.10, ADR 0031",
+      "note": "Installed without default features, so the port builds with SPDLOG_USE_STD_FORMAT and removes the bundled fmt; no fmt port is installed. The copyright file's note about the fmt dependency therefore does not apply to this build."
+    },
+    {
       "port": "eigen3",
       "library": "Eigen",
       "version": "5.0.1",
