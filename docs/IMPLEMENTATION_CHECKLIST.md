@@ -232,13 +232,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests ExprParser.*` (precedence, right-associative `^`, error column positions)
   - Done when: tests green; grammar documented in `docs/format/expressions.md`
   - Notes: Recursive descent in `app::core::expr`; `parseExpression()` returns `Result<NodePtr>`, and `toText()` gives the fully parenthesised form used by the tests. `^` binds tighter than a prefix sign (`-2 ^ 2` is `-(2 ^ 2)`) and its exponent may be signed. A unit may follow a number literal only, and a name after a number must be a unit ("Unknown unit"). Comparison operators (`< <= > >= == !=`, not chainable) are an addition to the A-08 operator list so that `if` has a condition; listed for the S0 gate. Syntax errors give a 1-based column counted in Unicode characters and a caret line in `Error::detail`. Nesting is limited to 64 levels (`kMaxNestingDepth`) so that hostile input cannot overflow the stack. Function names are not checked here (S0.03.7). 8 tests in `ExprParser.*`.
-- [ ] **S0.03.7: Implement the expression evaluator with unit checking**
+- [x] **S0.03.7: Implement the expression evaluator with unit checking**
   - Requirements: A-08
   - Modules: core
   - Depends on: S0.03.6
   - Deliverables: `src/core/expr/Evaluator.{h,cpp}`, `src/core/expr/Functions.cpp` (`sin cos tan asin acos atan atan2 sqrt abs min max floor ceil round if`)
   - Tests: T-01 `Core.Tests ExprEval.*` (every function, `1 mm + 1 deg` is a unit error, dimensionless angles)
   - Done when: tests green
+  - Notes: `evaluate()` and `evaluateExpression()` return `Result<Quantity>`; references go through a `ReferenceResolver` callback until the scopes of S0.03.8. Judgement calls, documented in `docs/format/expressions.md` and listed for the S0 gate: `sin cos tan` take an angle or a plain number read as radians ("dimensionless angles"), and the inverse functions return angles; `floor ceil round` need a number, so the user divides by a unit first (`round(x / 1 mm) * 1 mm`); comparisons use the 1e-7 confusion tolerance; `if` evaluates only the branch it selects. An exponent must leave whole powers of each dimension (`(4 mm * 1 mm) ^ 0.5` is 2 mm). Division by zero and non-finite results are errors. Evaluation errors point at the operator (the parser now records `Binary::operatorOffset`), function, reference or condition. 8 tests in `ExprEval.*`.
 - [ ] **S0.03.8: Add expression dependency extraction and parameter scopes**
   - Requirements: A-08, A-07
   - Modules: core

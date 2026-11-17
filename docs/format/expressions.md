@@ -4,9 +4,9 @@ The shared, unit-aware expression language (spec A-08) is used wherever a number
 feature parameters, global variables, PCB rule values and link mappings. In the file format an expression is stored
 as text, for example `{ "expr": "Board.Width + 2 mm" }` (section 8 of the file format, @ref format).
 
-This page is normative for the syntax. It is implemented by `src/core/expr/` (`Lexer`, `Parser`, `Ast`; S0.03.6).
-Evaluation, the functions and unit checking (S0.03.7) and parameter scopes (S0.03.8) are described here as they are
-implemented.
+This page is normative for the syntax and the evaluation rules. They are implemented by `src/core/expr/`: `Lexer`,
+`Parser` and `Ast` (S0.03.6), `Evaluator` and `Functions` (S0.03.7). Parameter scopes (S0.03.8) are described here
+when they are implemented.
 
 ## Grammar
 
@@ -56,6 +56,37 @@ EBNF, from loosest to tightest binding. Whitespace (space, tab, CR, LF) may appe
 - Nesting deeper than 64 levels is rejected. The whole expression, each parenthesis or argument list, each prefix sign
   and each `^` adds a level.
 
+## Evaluation and unit checking
+
+Implemented by `src/core/expr/Evaluator` and `Functions` (S0.03.7). A value is a number in internal units (mm for
+length, rad for angle) with a dimension: the exponents of length and angle (`core/Quantity.h`).
+
+| Operation | Rule |
+|---|---|
+| Number with a unit | Converted to internal units: `0.5 in` is 12.7 mm, `90 deg` is π/2 rad |
+| Number without a unit | Dimensionless |
+| `a + b`, `a - b` | Equal dimensions; `1 mm + 1 deg` is the error "Cannot add length and angle" |
+| `a * b`, `a / b` | Dimensions add or subtract: `2 mm * 3 mm` is an area; dividing by zero is an error |
+| `a ^ b` | `b` is dimensionless; each dimension exponent of `a` times `b` must be whole: `(2 mm) ^ 2` is an area, `(4 mm * 1 mm) ^ 0.5` is 2 mm, `(2 mm) ^ 0.5` is an error; a negative `a` needs a whole `b` |
+| Comparisons | Equal dimensions; the result is 1 or 0. They use the confusion tolerance (1e-7 in internal units, `core/Tolerance.h`): `a == b` when they differ by at most 1e-7, `a < b` only when `a` is smaller by more than that |
+| References | Resolved by the caller's parameter lookup (parameter scopes, S0.03.8) |
+| Any result | Must be finite; otherwise "The result is not a finite number" |
+
+| Function | Arguments | Result |
+|---|---|---|
+| `sin cos tan` | An angle, or a number read as radians | Number |
+| `asin acos` | A number from −1 to 1 | Angle |
+| `atan` | A number | Angle |
+| `atan2(y, x)` | Two values of the same dimension | Angle |
+| `sqrt` | A non-negative value whose dimension exponents are even | Half the exponents: `sqrt(4 mm * 1 mm)` is 2 mm |
+| `abs` | Any value | Same dimension |
+| `min max` | One or more values of the same dimension | Same dimension |
+| `floor ceil round` | A number (`round(x / 1 mm) * 1 mm` rounds a length to whole millimetres); `round` takes halves away from zero | Number |
+| `if(c, a, b)` | A number `c`; `a` if `c` is not 0, else `b` | Only the selected branch is evaluated, so `if(x > 0, sqrt(x), 0)` never fails on the other branch |
+
+`floor`, `ceil` and `round` refuse lengths and angles because rounding the internal millimetres of a value typed in
+inches, or the radians of one typed in degrees, would not round what the user sees.
+
 ## Errors
 
 A syntax error reports the 1-based column, counted in Unicode characters, and shows the text with a caret:
@@ -69,3 +100,8 @@ U+NNNN", "Malformed number 'n'", "Number 'n' is out of range", "Unexpected 't'",
 "Expected ')'", "Expected ',' or ')'", "Expected a name after '.'", "Unknown unit 'u'", "Function name 'a.b' cannot
 be dotted", "Comparisons cannot be chained", "Expression is nested more than 64 levels deep" and "Expression is
 empty.".
+
+Evaluation errors use the same form and point at the operator, function name, reference or `if` condition at fault:
+"Cannot add length and angle at column 6.", "Unknown function 'foo'", "atan2 takes 2 arguments, not 1", "sqrt of a
+negative number", "Division by zero", "Unknown parameter 'x'". An error returned by the parameter lookup keeps its
+error code and is reported at the reference.

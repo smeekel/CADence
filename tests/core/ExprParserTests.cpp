@@ -100,6 +100,7 @@ TEST( ExprParser, RecordsSourceRanges_WhenParsing )
     EXPECT_EQ( node.range, ( SourceRange{ 2, 19 } ) );
     EXPECT_EQ( binary->left->range, ( SourceRange{ 2, 11 } ) );
     EXPECT_EQ( binary->right->range, ( SourceRange{ 16, 5 } ) );
+    EXPECT_EQ( binary->operatorOffset, 14U );
 }
 
 TEST( ExprParser, ReportsColumn_WhenSyntaxIsInvalid )

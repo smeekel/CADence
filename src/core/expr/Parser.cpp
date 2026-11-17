@@ -158,7 +158,7 @@ private:
             return left;
         }
 
-        advance();
+        const std::size_t operatorOffset = advance().range.offset;
 
         Result<NodePtr> right = additive();
 
@@ -174,7 +174,7 @@ private:
 
         const SourceRange range = spanning( ( *left )->range.offset, **right );
 
-        return makeNode( Binary{ *op, std::move( *left ), std::move( *right ) }, range );
+        return makeNode( Binary{ *op, std::move( *left ), std::move( *right ), operatorOffset }, range );
     }
 
     // additive := term { ( "+" | "-" ) term }
@@ -184,7 +184,8 @@ private:
 
         while( left.has_value() && ( peek().kind == TokenKind::Plus || peek().kind == TokenKind::Minus ) )
         {
-            const BinaryOp op = advance().kind == TokenKind::Plus ? BinaryOp::Add : BinaryOp::Subtract;
+            const Token&   opToken = advance();
+            const BinaryOp op      = opToken.kind == TokenKind::Plus ? BinaryOp::Add : BinaryOp::Subtract;
 
             Result<NodePtr> right = term();
 
@@ -195,7 +196,7 @@ private:
 
             const SourceRange range = spanning( ( *left )->range.offset, **right );
 
-            left = makeNode( Binary{ op, std::move( *left ), std::move( *right ) }, range );
+            left = makeNode( Binary{ op, std::move( *left ), std::move( *right ), opToken.range.offset }, range );
         }
 
         return left;
@@ -208,7 +209,8 @@ private:
 
         while( left.has_value() && ( peek().kind == TokenKind::Star || peek().kind == TokenKind::Slash ) )
         {
-            const BinaryOp op = advance().kind == TokenKind::Star ? BinaryOp::Multiply : BinaryOp::Divide;
+            const Token&   opToken = advance();
+            const BinaryOp op      = opToken.kind == TokenKind::Star ? BinaryOp::Multiply : BinaryOp::Divide;
 
             Result<NodePtr> right = unary();
 
@@ -219,7 +221,7 @@ private:
 
             const SourceRange range = spanning( ( *left )->range.offset, **right );
 
-            left = makeNode( Binary{ op, std::move( *left ), std::move( *right ) }, range );
+            left = makeNode( Binary{ op, std::move( *left ), std::move( *right ), opToken.range.offset }, range );
         }
 
         return left;
@@ -264,9 +266,8 @@ private:
             return base;
         }
 
-        advance();
-
-        const DepthGuard guard( m_depth );
+        const std::size_t operatorOffset = advance().range.offset;
+        const DepthGuard  guard( m_depth );
 
         if( auto error = tooDeep() )
         {
@@ -282,7 +283,7 @@ private:
 
         const SourceRange range = spanning( ( *base )->range.offset, **exponent );
 
-        return makeNode( Binary{ BinaryOp::Power, std::move( *base ), std::move( *exponent ) }, range );
+        return makeNode( Binary{ BinaryOp::Power, std::move( *base ), std::move( *exponent ), operatorOffset }, range );
     }
 
     // primary := number [ unit ] | name { "." name } | name "(" [ comparison { "," comparison } ] ")"

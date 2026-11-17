@@ -53,6 +53,12 @@
     <ClInclude Include="expr\Ast.h">
       <Filter>Header Files\expr</Filter>
     </ClInclude>
+    <ClInclude Include="expr\Evaluator.h">
+      <Filter>Header Files\expr</Filter>
+    </ClInclude>
+    <ClInclude Include="expr\Functions.h">
+      <Filter>Header Files\expr</Filter>
+    </ClInclude>
     <ClInclude Include="expr\Lexer.h">
       <Filter>Header Files\expr</Filter>
     </ClInclude>
@@ -89,6 +95,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="expr\Ast.cpp">
+      <Filter>Source Files\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="expr\Evaluator.cpp">
+      <Filter>Source Files\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="expr\Functions.cpp">
       <Filter>Source Files\expr</Filter>
     </ClCompile>
     <ClCompile Include="expr\Lexer.cpp">

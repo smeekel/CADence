@@ -95,9 +95,10 @@ struct Unary
 /// @brief An infix operation.
 struct Binary
 {
-    BinaryOp op = BinaryOp::Add; ///< Operator.
-    NodePtr  left;               ///< Left operand, never null.
-    NodePtr  right;              ///< Right operand, never null.
+    BinaryOp    op = BinaryOp::Add; ///< Operator.
+    NodePtr     left;               ///< Left operand, never null.
+    NodePtr     right;              ///< Right operand, never null.
+    std::size_t operatorOffset = 0; ///< Byte offset of the operator, where evaluation errors point.
 };
 
 /// @brief A function call: `max(a, b)`. The parser accepts any name; the evaluator checks it (S0.03.7).

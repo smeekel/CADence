@@ -33,6 +33,7 @@ unit-checked `add` and `subtract`), locale-independent formatting and parsing, a
 storage (ADR 0022) whose API does not need Eigen except through `eigen()`; and `IntGeom.h`, the integer-nanometre board
 types `Nm`, `NmPoint`, `NmVector` and `NmRect` with overflow-checked arithmetic returning `Result` (A-09; no floating
 point).
-`expr/` (namespace `app::core::expr`): the expression lexer and parser (`tokenize`, `parseExpression`, syntax tree
-in `Ast.h`; grammar in `docs/format/expressions.md`, A-08).
+`expr/` (namespace `app::core::expr`): the expression lexer, parser and evaluator (`tokenize`, `parseExpression`,
+syntax tree in `Ast.h`, `evaluate` and `evaluateExpression` with unit checking and the built-in functions; grammar and
+rules in `docs/format/expressions.md`, A-08).
 Planned: `Command`, `CommandBus`, `UndoStack`, `JobSystem`, `EventBus`, `ExpressionEngine`.
