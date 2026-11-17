@@ -1,6 +1,6 @@
 # ADR 0030: Docking with Qt Advanced Docking System (C-26) {#adr-0030}
 
-- **Status:** Proposed (Phase 1 conflict C-26; new dependency)
+- **Status:** Accepted (owner decision, 2026-11-16; Phase 1 conflict C-26; new dependency)
 - **Date:** 2026-11-11
 
 ## Context

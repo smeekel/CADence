@@ -62,6 +62,7 @@ Decided by the owner on 2026-11-12:
 | Compilers and platforms (SP-1, L-03) | Build and test only with Visual Studio 2026 on Windows 11 for now. GCC and Clang are not installed and their feature columns are deferred; `docs/cpp-features.md` stays conservative | S0.01.2, S0.01.5, every stage gate | 0034 (Accepted) |
 | Clean-room term list (CR-02) | Ten names are generic and allowed (Solid Edge, Hole Wizard, FeatureManager, PropertyManager, CommandManager, ConfigurationManager, PhotoView, ActiveRoute, eDrawings, ActiveBOM); the rest of `docs/clean-room.md` is approved | S0.02.6 | none |
 | `core` may use nlohmann/json (C-07), accepted 2026-11-16 | Applied in S0.03.1: rule 030, `check-layering.ps1` and `src/core/Json.h` | S0.03.1, S0.04.* | 0016 (Accepted) |
+| Logging, Qt confinement, docking, `cli` layering (C-26, C-09, C-07), accepted 2026-11-16 | spdlog for logging; Qt only in `ui` with a Win32-only `platform` and Qt-free `render`; Qt Advanced Docking System; `cli` may reference `platform` and `render`. Each is applied in the step named here | S0.03.10, S0.11.6, S0.13.2, S0.10.3 | 0031, 0023, 0030, 0017 (Accepted) |
 | vcpkg root, licence manifest, scaffold CLI fixes | ADR 0029 confirmed; `docs/licence-manifest.json` and its corrections to `THIRD_PARTY_NOTICES.md` and ADR 0004 accepted; the S0.02.4 `src/cli` changes accepted | S0.01.1, S0.02.2, S0.02.4 | 0029 (Accepted) |
 
 ## Stage S0: Foundation

@@ -1,6 +1,6 @@
 # ADR 0023: Qt confined to `ui`; Win32-only `platform`; Qt-free `render` (C-09) {#adr-0023}
 
-- **Status:** Proposed (Phase 1 conflict C-09)
+- **Status:** Accepted (owner decision, 2026-11-16; Phase 1 conflict C-09)
 - **Date:** 2026-11-11
 
 ## Context

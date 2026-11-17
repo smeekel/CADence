@@ -1,6 +1,6 @@
 # ADR 0017: Layering: `cli` references `platform` and `render` {#adr-0017}
 
-- **Status:** Proposed (Phase 1 conflict C-07)
+- **Status:** Accepted (owner decision, 2026-11-16; Phase 1 conflict C-07)
 - **Date:** 2026-11-11
 
 ## Context

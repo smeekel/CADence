@@ -42,21 +42,21 @@ says assumptions are recorded as ADRs, never as invented requirements.
 | 0014 | Embree and an in-house path tracer (D-13) | Accepted |
 | 0015 | Reference scenario fabrication outputs in S6 (C-01) | Accepted |
 | 0016 | Layering: `core` may use nlohmann/json | Accepted |
-| 0017 | Layering: `cli` references `platform` and `render` | Proposed |
+| 0017 | Layering: `cli` references `platform` and `render` | Accepted |
 | 0018 | Layering: `link` references `ecad/lib`, `ecad/sch`, `drw` | Proposed |
 | 0019 | Layering: `drw` references `sketch` | Proposed |
 | 0020 | Layering: `io` references `sketch` and `drw` | Proposed |
 | 0021 | Layering: `sim` references `part` and `drw` | Proposed |
 | 0022 | Eigen allowed in `core`, `sketch`, `asm`, `sim` (C-08) | Proposed |
-| 0023 | Qt confined to `ui`; Win32-only `platform`; Qt-free `render` (C-09) | Proposed |
+| 0023 | Qt confined to `ui`; Win32-only `platform`; Qt-free `render` (C-09) | Accepted |
 | 0024 | OS folders injected into `doc` through `core` interfaces (C-11) | Proposed |
 | 0025 | Board 3D model and 3D DRC in `link` through providers (C-10) | Proposed |
 | 0026 | Network-API check scope and third-party network imports (C-12) | Accepted |
 | 0027 | Preservation of unknown fields (C-20) | Proposed |
 | 0028 | UUID encoding in BSON decided by schema (C-21) | Proposed |
 | 0029 | vcpkg root selection (C-24) | Accepted (verified in S0.01.1, confirmed by the owner) |
-| 0030 | Docking with Qt Advanced Docking System (C-26) | Proposed |
-| 0031 | Logging with spdlog (C-26) | Proposed |
+| 0030 | Docking with Qt Advanced Docking System (C-26) | Accepted |
+| 0031 | Logging with spdlog (C-26) | Accepted |
 | 0032 | Planning assumptions bundle | Proposed |
 | 0033 | Continuous integration: local scripts first, hosted CI later | Proposed (open) |
 | 0034 | Spike SP-1: toolchain and C++23/26 feature matrix | Accepted (MSVC only; GCC/Clang deferred by the owner) |
