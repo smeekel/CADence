@@ -16,7 +16,7 @@ Full detail: `docs/notepads/Data_Model_and_File_Format.md` and spec section 6 (F
 - Store design intent only. Derived data (B-rep, meshes, DRC results) is non-authoritative cache under `cache/` and must be safe to delete.
 - Every document type has a JSON Schema (draft 2020-12) in `docs/format/schemas/` and a Markdown page in `docs/format/`. Change schema, docs, migration and tests in the same step.
 - Version changes: bump `formatVersion`, add a forward migration in `src/doc/migrations/`, add a round-trip test and a migration test with a fixture of the old version.
-- Unknown fields are dropped on load, each reported as a warning with file and JSON path, and are not written back (ADR 0027, owner decision deviating from F-08). Schemas do not set `additionalProperties: false` on document objects.
+- Unknown fields are preserved on load and written back on save.
 - UUIDs are written only in lower-case hyphenated form; every `format: uuid` schema field carries the pattern `^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$` (ADR 0028).
 - Loaders never crash on bad input: return an `app::Error` naming the file, JSON path and reason. Every loader gets a fuzz target.
 - Blobs: stored as `blobs/<sha256>.bin` (no magic), referenced by hash.

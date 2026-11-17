@@ -52,7 +52,7 @@ says assumptions are recorded as ADRs, never as invented requirements.
 | 0024 | OS folders injected into `doc` through `core` interfaces (C-11) | Accepted |
 | 0025 | Board 3D model and 3D DRC in `link` through providers (C-10) | Proposed |
 | 0026 | Network-API check scope and third-party network imports (C-12) | Accepted |
-| 0027 | Unknown fields may be dropped on load (C-20) | Accepted (amended by the owner; deviates from F-08) |
+| 0027 | Preservation of unknown fields (C-20) | Accepted (array elements without an ObjectId open) |
 | 0028 | UUID encoding in BSON decided by schema (C-21) | Accepted (with the lower-case UUID amendment) |
 | 0029 | vcpkg root selection (C-24) | Accepted (verified in S0.01.1, confirmed by the owner) |
 | 0030 | Docking with Qt Advanced Docking System (C-26) | Accepted |

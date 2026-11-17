@@ -14,7 +14,7 @@ into binary.
 
 - ObjectIds and other UUID-valued fields are BSON binary subtype 0x04 when, and only when, the document's JSON Schema
   marks the field `format: uuid`. `$magic` is always binary.
-- The converter never guesses from string content. A field the schema does not mark stays a string. Unknown fields are dropped by the readers before conversion (ADR 0027).
+- The converter never guesses from string content. Unknown fields (ADR 0027) are always kept as strings.
 - **Canonical text form (amendment, 2026-11-16).** UUIDs are written only in the standard lower-case hyphenated
   form `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`. Every `format: uuid` field in a schema also carries
   `"pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"`, so upper-case, unhyphenated or braced
