@@ -38,6 +38,9 @@
     <ClInclude Include="Result.h" />
     <ClInclude Include="Tolerance.h" />
     <ClInclude Include="Units.h" />
+    <ClInclude Include="expr\Ast.h" />
+    <ClInclude Include="expr\Lexer.h" />
+    <ClInclude Include="expr\Parser.h" />
     <ClInclude Include="math\Box.h" />
     <ClInclude Include="math\IntGeom.h" />
     <ClInclude Include="math\Mat.h" />
@@ -49,6 +52,9 @@
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="ObjectId.cpp" />
     <ClCompile Include="Units.cpp" />
+    <ClCompile Include="expr\Ast.cpp" />
+    <ClCompile Include="expr\Lexer.cpp" />
+    <ClCompile Include="expr\Parser.cpp" />
     <ClCompile Include="math\IntGeom.cpp" />
   </ItemGroup>
   <ItemGroup>

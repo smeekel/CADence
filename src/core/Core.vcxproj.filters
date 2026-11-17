@@ -9,6 +9,12 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp</Extensions>
     </Filter>
+    <Filter Include="Header Files\expr">
+      <UniqueIdentifier>{5E9E837E-A1F9-424D-BF32-959E32428070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\expr">
+      <UniqueIdentifier>{31840C51-CB07-4D57-9633-21710A6F7188}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\math">
       <UniqueIdentifier>{46ECFB43-E15D-4A3C-8BFE-9F022F18AFC7}</UniqueIdentifier>
     </Filter>
@@ -44,6 +50,15 @@
     <ClInclude Include="Units.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="expr\Ast.h">
+      <Filter>Header Files\expr</Filter>
+    </ClInclude>
+    <ClInclude Include="expr\Lexer.h">
+      <Filter>Header Files\expr</Filter>
+    </ClInclude>
+    <ClInclude Include="expr\Parser.h">
+      <Filter>Header Files\expr</Filter>
+    </ClInclude>
     <ClInclude Include="math\Box.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
@@ -72,6 +87,15 @@
     </ClCompile>
     <ClCompile Include="Units.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="expr\Ast.cpp">
+      <Filter>Source Files\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="expr\Lexer.cpp">
+      <Filter>Source Files\expr</Filter>
+    </ClCompile>
+    <ClCompile Include="expr\Parser.cpp">
+      <Filter>Source Files\expr</Filter>
     </ClCompile>
     <ClCompile Include="math\IntGeom.cpp">
       <Filter>Source Files\math</Filter>

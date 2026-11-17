@@ -30,6 +30,7 @@
   <ImportGroup Label="PropertySheets" />
   <ItemGroup>
     <ClCompile Include="CompatTests.cpp" />
+    <ClCompile Include="ExprParserTests.cpp" />
     <ClCompile Include="IntGeomTests.cpp" />
     <ClCompile Include="JsonTests.cpp" />
     <ClCompile Include="MathTests.cpp" />

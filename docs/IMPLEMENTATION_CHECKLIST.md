@@ -224,13 +224,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests Transform.*`, `IntGeom.*` (overflow detection, exact integer ops)
   - Done when: tests green; no floating-point use in `IntGeom`
   - Notes: Built on Eigen 5.0.1 (ADR 0022, accepted 2026-11-16): `Vec2`, `Vec3`, `Mat3`, `Transform` (`Eigen::Affine3d`) and `Box3` (`Eigen::AlignedBox3d`) wrap Eigen values and expose them through `eigen()`. Operations that can fail (normalising a zero vector, inverting a singular matrix, rotating about a zero axis) return `std::optional`. `eigen3` is in `vcpkg.json`, the licence manifest (`MPL-2.0 AND Apache-2.0 AND BSD-3-Clause`) and the regenerated notices; `build/props/Vcpkg.props` adds `include\eigen3`; `check-layering.ps1` allows Eigen only in `core` (self-test case `layering-eigen-outside-core`); `.clang-tidy` excludes `vcpkg_installed` because Eigen's `Eigen/src` paths matched the header filter. `IntGeom` returns `ErrorCode::InvalidArgument` on overflow; a grep of `IntGeom.{h,cpp}` finds no `double` or `float` outside a comment. 15 tests in `Vec.*`, `Mat3.*`, `Transform.*`, `Box3.*` and `IntGeom.*`.
-- [ ] **S0.03.6: Implement the expression lexer and parser**
+- [x] **S0.03.6: Implement the expression lexer and parser**
   - Requirements: A-08
   - Modules: core
   - Depends on: S0.03.4
   - Deliverables: `src/core/expr/{Lexer,Parser,Ast}.{h,cpp}` (operators `+ - * / ^`, parentheses, unit literals `10 mm + 0.5 in`, dotted references `Board.Width`, function calls)
   - Tests: T-01 `Core.Tests ExprParser.*` (precedence, right-associative `^`, error column positions)
   - Done when: tests green; grammar documented in `docs/format/expressions.md`
+  - Notes: Recursive descent in `app::core::expr`; `parseExpression()` returns `Result<NodePtr>`, and `toText()` gives the fully parenthesised form used by the tests. `^` binds tighter than a prefix sign (`-2 ^ 2` is `-(2 ^ 2)`) and its exponent may be signed. A unit may follow a number literal only, and a name after a number must be a unit ("Unknown unit"). Comparison operators (`< <= > >= == !=`, not chainable) are an addition to the A-08 operator list so that `if` has a condition; listed for the S0 gate. Syntax errors give a 1-based column counted in Unicode characters and a caret line in `Error::detail`. Nesting is limited to 64 levels (`kMaxNestingDepth`) so that hostile input cannot overflow the stack. Function names are not checked here (S0.03.7). 8 tests in `ExprParser.*`.
 - [ ] **S0.03.7: Implement the expression evaluator with unit checking**
   - Requirements: A-08
   - Modules: core

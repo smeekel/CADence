@@ -116,7 +116,7 @@ with a clear message. *Version history table: to be added with the first release
 ## 8. Identifiers, units and numbers
 
 *To be specified in Stage 0:* ObjectId (UUID v7, A-04) encoding in JSON and BSON; mechanical values in document
-units or expressions (A-08); board geometry as int64 nanometres (A-09); topology references (`TopoRef`, A-06).
+units or expressions (A-08; syntax in [Expression language](expressions.md)); board geometry as int64 nanometres (A-09); topology references (`TopoRef`, A-06).
 
 ## 9. Robust loading (F-08)
 
