@@ -18,3 +18,6 @@ Checks: >
   misc-unused-using-decls
 WarningsAsErrors: ''
 FormatStyle: none
+CheckOptions:
+  # app::Result<T> is std::expected<T, app::Error> (ADR 0042); a dropped Result is a dropped error.
+  bugprone-unused-return-value.CheckedReturnTypes: '::std::error_code;::std::error_condition;::std::errc;::std::expected'

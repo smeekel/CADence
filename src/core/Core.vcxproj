@@ -30,10 +30,13 @@
   <ImportGroup Label="PropertySheets" />
   <ItemGroup>
     <ClInclude Include="Compat.h" />
+    <ClInclude Include="Error.h" />
     <ClInclude Include="Json.h" />
     <ClInclude Include="Module.h" />
+    <ClInclude Include="Result.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Error.cpp" />
     <ClCompile Include="Module.cpp" />
   </ItemGroup>
   <ItemGroup>

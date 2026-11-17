@@ -67,6 +67,7 @@ says assumptions are recorded as ADRs, never as invented requirements.
 | 0039 | Reserved: SP-6 polygon pours | to be written in S5.01.5 |
 | 0040 | Reserved: SP-7 cross-domain links | to be written in S6.01.2 |
 | 0041 | Reserved: SP-8 large-assembly strategy | to be written in S10.01.2 |
+| 0042 | Error model and Result type | Proposed |
 
 ## Consequences
 

@@ -187,13 +187,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-11 `check-layering.ps1` passes with `core` including `<nlohmann/json.hpp>` and still fails when `platform` includes it
   - Done when: ADR Accepted, rule, script and project agree, checks green
   - Notes: ADR 0016 Accepted by the owner on 2026-11-16. `nlohmann-json` 3.12.0#2 added to `vcpkg.json` (pinned with an override), `docs/licence-manifest.json` and the regenerated `THIRD_PARTY_NOTICES.md`. `src/core/Json.h` defines `app::core::Json` (`nlohmann::ordered_json`) and is the include the other modules use; `Core.Tests Json.*` checks key order. `check-layering.ps1` gains an nlohmann/json entry for `core` and `doc`, and the `layering-nlohmann-outside-core` self-test case fails when `platform` includes it.
-- [ ] **S0.03.2: Implement the error model and Result type**
+- [x] **S0.03.2: Implement the error model and Result type**
   - Requirements: A-02, A-03
   - Modules: core
   - Depends on: S0.01.5, S0.03.1
   - Deliverables: `src/core/Error.{h,cpp}`, `src/core/Result.h` (`std::expected<T, Error>`, error codes, message/detail/objects); `docs/adr/NNNN-error-model.md`
   - Tests: T-01 `Core.Tests Result.*`, `Error.*`
   - Done when: tests green; every public function returning `Result` is `[[nodiscard]]`; Doxygen clean
+  - Notes: ADR 0042 (Proposed; the step does not need it Accepted). `app::ErrorCode` is the notepad list plus `IoError`, with stable kebab-case names; `app::Error` has code, message and detail, `app::fail()` and `app::ok()` build results. The `objects` member is added in S0.03.3 together with `ObjectId`, so `ObjectId.h` does not need `Error.h`. `.clang-tidy` makes `bugprone-unused-return-value` check `std::expected`, so a dropped `Result` fails `analyze.ps1`. 8 tests in `Core.Tests` (`Error.*`, `Result.*`).
 - [ ] **S0.03.3: Implement ObjectId (UUID v7)**
   - Requirements: A-04
   - Modules: core
