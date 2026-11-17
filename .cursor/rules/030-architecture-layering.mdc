@@ -12,9 +12,9 @@ Full detail: `docs/notepads/Architecture_and_Build.md` and `docs/notepads/Comman
 
 | Module | May depend on |
 |---|---|
-| `core` | standard library, Eigen |
+| `core` | standard library, Eigen, nlohmann/json (ADR 0016) |
 | `platform` | `core` |
-| `doc` | `core` |
+| `doc` | `core` (nlohmann/json allowed) |
 | `geom` | `core`, `doc` (OCCT allowed **only** here) |
 | `sketch` | `core`, `doc`, `geom` |
 | `part` | `core`, `doc`, `geom`, `sketch` |
@@ -33,6 +33,8 @@ Full detail: `docs/notepads/Architecture_and_Build.md` and `docs/notepads/Comman
 | `tests/<m>` | `<m>` and its dependencies, GoogleTest |
 
 `scripts/check-layering.ps1` enforces this table on `.vcxproj` references and `#include` paths. Update the script and this table together, and only with an ADR.
+
+`<nlohmann/json.hpp>` is included only in `core` and `doc`; other modules use the alias `app::core::Json` from `core/Json.h` (ADR 0016).
 
 ## Patterns you must use
 

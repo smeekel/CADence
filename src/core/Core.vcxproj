@@ -30,6 +30,7 @@
   <ImportGroup Label="PropertySheets" />
   <ItemGroup>
     <ClInclude Include="Compat.h" />
+    <ClInclude Include="Json.h" />
     <ClInclude Include="Module.h" />
   </ItemGroup>
   <ItemGroup>

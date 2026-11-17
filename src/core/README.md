@@ -14,7 +14,7 @@
 ## Allowed dependencies
 
 - Application modules: Nothing in the application (A-01).
-- Third-party libraries: Standard library; Eigen (rule 030).
+- Third-party libraries: Standard library; Eigen; nlohmann/json through `core/Json.h` (rule 030, ADR 0016).
 
 The table in `.cursor/rules/030-architecture-layering.mdc` is authoritative and `scripts/check-layering.ps1` enforces
 it on project references and `#include` paths. It changes only together with an ADR.

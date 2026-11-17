@@ -154,6 +154,10 @@ $cases = @(
        Apply = { param( $r )
                  Add-Text ( Join-Path $r 'src\part\Module.cpp' ) "`n#include <gp_Pnt.hxx>`n"
                  Add-Text ( Join-Path $r 'src\doc\Module.cpp' ) "`n#include <QWidget>`n" } },
+    @{ Name = 'layering-nlohmann-outside-core'; Check = 'check-layering'
+       What = 'platform includes nlohmann/json (only core and doc may, ADR 0016)'
+       Expect = "src/platform/Module\.cpp:\d+: nlohmann/json header 'nlohmann/json\.hpp' is allowed only in: core, doc"
+       Apply = { param( $r ) Add-Text ( Join-Path $r 'src\platform\Module.cpp' ) "`n#include <nlohmann/json.hpp>`n" } },
     # Accept: CR-07a
     @{ Name = 'spdx-missing-header'; Check = 'check-spdx'
        What = 'a new C++ file without an SPDX header'

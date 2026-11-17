@@ -14,6 +14,9 @@
     <ClCompile Include="CompatTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="JsonTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="ModuleTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

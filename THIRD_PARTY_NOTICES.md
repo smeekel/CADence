@@ -27,6 +27,7 @@ by APP and shipped, `test` only by test executables, `build` is used at build ti
 | double-conversion | `double-conversion` 3.4.0 | BSD-3-Clause | linked | `ui` via Qt Core | Yes (DLL) |
 | zlib | `zlib` 1.3.2#3 | Zlib | linked | `ui` via Qt Core | Yes (DLL) |
 | MD4C | `md4c` 0.6.0 | MIT | linked | `ui` via Qt Gui | Yes (DLL) |
+| JSON for Modern C++ (nlohmann/json) | `nlohmann-json` 3.12.0#2 | MIT | linked | `core`, `doc` and their dependants | Yes (header-only, compiled in) |
 | GoogleTest and GoogleMock | `gtest` 1.18.0 | BSD-3-Clause | test | `tests/*` only | No (test only) |
 | Khronos OpenGL API headers | `opengl-registry` 2026-08-03 | MIT | build | Qt Gui headers | No (headers, build time) |
 | Khronos EGL API headers | `egl-registry` 2025-05-27 | Apache-2.0 | build | Qt Gui headers | No (headers, build time) |
@@ -36,8 +37,8 @@ by APP and shipped, `test` only by test executables, `build` is used at build ti
 
 Installed trees (`vcpkg_installed/<tree>`; `full` is used by Debug and Release, `headless` by Headless):
 
-- `full`: `double-conversion`, `egl-registry`, `gtest`, `md4c`, `opengl`, `opengl-registry`, `pcre2`, `qtbase`, `vcpkg-cmake`, `vcpkg-cmake-config`, `zlib`
-- `headless`: `gtest`, `vcpkg-cmake`, `vcpkg-cmake-config`
+- `full`: `double-conversion`, `egl-registry`, `gtest`, `md4c`, `nlohmann-json`, `opengl`, `opengl-registry`, `pcre2`, `qtbase`, `vcpkg-cmake`, `vcpkg-cmake-config`, `zlib`
+- `headless`: `gtest`, `nlohmann-json`, `vcpkg-cmake`, `vcpkg-cmake-config`
 
 ### Licence texts
 
@@ -51,6 +52,7 @@ the application. The SHA-256 identifies the exact text the notices were generate
 | `double-conversion` | `share/double-conversion/copyright` | `4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca` |
 | `zlib` | `share/zlib/copyright` | `e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2` |
 | `md4c` | `share/md4c/copyright` | `e547c9a66c120b19f9838a1f7c2f51137f5c71ba27b70c3611b673f2cdb4e02e` |
+| `nlohmann-json` | `share/nlohmann-json/copyright` | `46a65cffd1ea955132d95a8dd921640714a8d6b537d2e4e482d31145ae95b603` |
 | `gtest` | `share/gtest/copyright` | `9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138` |
 | `opengl-registry` | `share/opengl-registry/copyright` | `c56ffb0cc40bd972c1b2d4759828b89f7860471f5ba52eedde7a4ddb4664cef5` |
 | `egl-registry` | `share/egl-registry/copyright` | `5d77554ffc974ce346430a01a30be8176ca5c46fb1b53a7233291195ded592d3` |

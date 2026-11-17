@@ -41,7 +41,7 @@ says assumptions are recorded as ADRs, never as invented requirements.
 | 0013 | OpenGL 4.5 behind `render::Device` (D-12) | Accepted |
 | 0014 | Embree and an in-house path tracer (D-13) | Accepted |
 | 0015 | Reference scenario fabrication outputs in S6 (C-01) | Accepted |
-| 0016 | Layering: `core` may use nlohmann/json | Proposed |
+| 0016 | Layering: `core` may use nlohmann/json | Accepted |
 | 0017 | Layering: `cli` references `platform` and `render` | Proposed |
 | 0018 | Layering: `link` references `ecad/lib`, `ecad/sch`, `drw` | Proposed |
 | 0019 | Layering: `drw` references `sketch` | Proposed |

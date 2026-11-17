@@ -61,6 +61,7 @@ Decided by the owner on 2026-11-12:
 |---|---|---|---|
 | Compilers and platforms (SP-1, L-03) | Build and test only with Visual Studio 2026 on Windows 11 for now. GCC and Clang are not installed and their feature columns are deferred; `docs/cpp-features.md` stays conservative | S0.01.2, S0.01.5, every stage gate | 0034 (Accepted) |
 | Clean-room term list (CR-02) | Ten names are generic and allowed (Solid Edge, Hole Wizard, FeatureManager, PropertyManager, CommandManager, ConfigurationManager, PhotoView, ActiveRoute, eDrawings, ActiveBOM); the rest of `docs/clean-room.md` is approved | S0.02.6 | none |
+| `core` may use nlohmann/json (C-07), accepted 2026-11-16 | Applied in S0.03.1: rule 030, `check-layering.ps1` and `src/core/Json.h` | S0.03.1, S0.04.* | 0016 (Accepted) |
 | vcpkg root, licence manifest, scaffold CLI fixes | ADR 0029 confirmed; `docs/licence-manifest.json` and its corrections to `THIRD_PARTY_NOTICES.md` and ADR 0004 accepted; the S0.02.4 `src/cli` changes accepted | S0.01.1, S0.02.2, S0.02.4 | 0029 (Accepted) |
 
 ## Stage S0: Foundation
@@ -177,13 +178,14 @@ locally (hosted CI open, ADR 0033).
 
 ### S0.03 Core foundations
 
-- [ ] **S0.03.1: Apply layering extension ADR 0016 (core may use nlohmann/json)**
+- [x] **S0.03.1: Apply layering extension ADR 0016 (core may use nlohmann/json)**
   - Requirements: A-01
   - Modules: core, scripts
   - Depends on: S0.02.7
   - Deliverables: rule `030` table, `scripts/check-layering.ps1` third-party table and `Core.vcxproj` updated together; ADR 0016 set to Accepted
   - Tests: T-11 `check-layering.ps1` passes with `core` including `<nlohmann/json.hpp>` and still fails when `platform` includes it
   - Done when: ADR Accepted, rule, script and project agree, checks green
+  - Notes: ADR 0016 Accepted by the owner on 2026-11-16. `nlohmann-json` 3.12.0#2 added to `vcpkg.json` (pinned with an override), `docs/licence-manifest.json` and the regenerated `THIRD_PARTY_NOTICES.md`. `src/core/Json.h` defines `app::core::Json` (`nlohmann::ordered_json`) and is the include the other modules use; `Core.Tests Json.*` checks key order. `check-layering.ps1` gains an nlohmann/json entry for `core` and `doc`, and the `layering-nlohmann-outside-core` self-test case fails when `platform` includes it.
 - [ ] **S0.03.2: Implement the error model and Result type**
   - Requirements: A-02, A-03
   - Modules: core

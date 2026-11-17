@@ -8,6 +8,10 @@
     {
       "name": "gtest",
       "version>=": "1.18.0"
+    },
+    {
+      "name": "nlohmann-json",
+      "version>=": "3.12.0#2"
     }
   ],
   "features": {
@@ -38,6 +42,11 @@
     {
       "name": "md4c",
       "version": "0.6.0"
+    },
+    {
+      "name": "nlohmann-json",
+      "version": "3.12.0",
+      "port-version": 2
     },
     {
       "name": "pcre2",
