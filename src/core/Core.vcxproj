@@ -33,11 +33,13 @@
     <ClInclude Include="Error.h" />
     <ClInclude Include="Json.h" />
     <ClInclude Include="Module.h" />
+    <ClInclude Include="ObjectId.h" />
     <ClInclude Include="Result.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="Module.cpp" />
+    <ClCompile Include="ObjectId.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

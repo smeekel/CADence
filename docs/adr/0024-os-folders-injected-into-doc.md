@@ -1,6 +1,6 @@
 # ADR 0024: OS folders injected into `doc` through `core` interfaces (C-11) {#adr-0024}
 
-- **Status:** Proposed (Phase 1 conflict C-11)
+- **Status:** Accepted (owner decision, 2026-11-16, as written; Phase 1 conflict C-11)
 - **Date:** 2026-11-11
 
 ## Context

@@ -24,5 +24,7 @@ it on project references and `#include` paths. It changes only together with an 
 `ModuleInfo` and the product version constants (scaffold). `Compat.h`: required feature-test macros and the
 `compat::` wrappers for conditional C++23/26 features (`enumerate`, `zip`, `zipTransform`, `FlatMap`, `FlatSet`; L-04).
 `Error.h` and `Result.h` (namespace `app`, ADR 0042): `ErrorCode`, `Error`, `fail()`, `Result<T>` and `ok()`; every
-function that can fail across a module boundary returns `Result<T>`. `Json.h`: `app::core::Json`.
-Planned: `ObjectId`, `Command`, `CommandBus`, `UndoStack`, `JobSystem`, `EventBus`, `ExpressionEngine`.
+function that can fail across a module boundary returns `Result<T>`. `Json.h`: `app::core::Json`. `ObjectId.h`:
+`ObjectId` (UUID version 7, RFC 4122 byte order, lowercase text) and `ObjectIdGenerator` (injectable clock and random
+source, `makeDeterministic()` for tests; `newObjectId()` uses the process-wide generator).
+Planned: `Command`, `CommandBus`, `UndoStack`, `JobSystem`, `EventBus`, `ExpressionEngine`.

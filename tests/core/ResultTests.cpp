@@ -11,6 +11,7 @@
 #include <set>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace
 {
@@ -72,9 +73,21 @@ TEST( Error, ReportsUnknown_WhenCodeIsOutOfRange )
     EXPECT_EQ( app::toString( outOfRange ), "unknown" );
 }
 
+TEST( Error, CarriesObjectsToHighlight_WhenFailIsGivenObjects )
+{
+    const app::core::ObjectId first  = app::core::newObjectId();
+    const app::core::ObjectId second = app::core::newObjectId();
+
+    const app::Result<int> result =
+        app::fail( app::ErrorCode::Conflict, "Sketch is over-constrained.", {}, { first, second } );
+
+    ASSERT_FALSE( result.has_value() );
+    EXPECT_EQ( result.error().objects, ( std::vector<app::core::ObjectId>{ first, second } ) );
+}
+
 TEST( Error, DescribeIncludesCodeMessageAndDetail_WhenDetailIsSet )
 {
-    const app::Error error{ app::ErrorCode::NotFound, "Parameter not found.", "Board.Width" };
+    const app::Error error{ app::ErrorCode::NotFound, "Parameter not found.", "Board.Width", {} };
 
     EXPECT_EQ( error.describe(), "not-found: Parameter not found. (Board.Width)" );
 }

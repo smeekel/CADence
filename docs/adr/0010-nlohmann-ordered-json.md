@@ -14,7 +14,7 @@ the default `json` type sorts keys alphabetically.
 - `nlohmann::ordered_json` is the only JSON type used for documents, libraries, command parameters and journals.
 - It is used in `doc` (format) and, per ADR 0016, in `core` (command parameters, journal).
 - Determinism rules on top of the library (schema key order, shortest round-trip floats, LF endings) live in
-  `src/doc/format/` (steps S0.06.2, S0.06.3). UUID encoding in BSON follows ADR 0028; unknown fields follow ADR 0027.
+  `src/doc/format/` (steps S0.06.2, S0.06.3). UUID encoding in BSON follows ADR 0028; unknown fields are dropped on load per ADR 0027.
 
 ## Licence verification (S0.01.6, 2026-11-12)
 

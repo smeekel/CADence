@@ -50,9 +50,10 @@ std::string Error::describe() const
     return text;
 }
 
-std::unexpected<Error> fail( ErrorCode code, std::string message, std::string detail )
+std::unexpected<Error>
+fail( ErrorCode code, std::string message, std::string detail, std::vector<core::ObjectId> objects )
 {
-    return std::unexpected<Error>( Error{ code, std::move( message ), std::move( detail ) } );
+    return std::unexpected<Error>( Error{ code, std::move( message ), std::move( detail ), std::move( objects ) } );
 }
 
 } // namespace app

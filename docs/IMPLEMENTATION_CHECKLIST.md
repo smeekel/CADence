@@ -63,6 +63,10 @@ Decided by the owner on 2026-11-12:
 | Clean-room term list (CR-02) | Ten names are generic and allowed (Solid Edge, Hole Wizard, FeatureManager, PropertyManager, CommandManager, ConfigurationManager, PhotoView, ActiveRoute, eDrawings, ActiveBOM); the rest of `docs/clean-room.md` is approved | S0.02.6 | none |
 | `core` may use nlohmann/json (C-07), accepted 2026-11-16 | Applied in S0.03.1: rule 030, `check-layering.ps1` and `src/core/Json.h` | S0.03.1, S0.04.* | 0016 (Accepted) |
 | Logging, Qt confinement, docking, `cli` layering (C-26, C-09, C-07), accepted 2026-11-16 | spdlog for logging; Qt only in `ui` with a Win32-only `platform` and Qt-free `render`; Qt Advanced Docking System; `cli` may reference `platform` and `render`. Each is applied in the step named here | S0.03.10, S0.11.6, S0.13.2, S0.10.3 | 0031, 0023, 0030, 0017 (Accepted) |
+| OS folders injected into `doc` (C-11), accepted 2026-11-16 | Accepted as written | S0.03.13, S0.07.*, S0.11.1 | 0024 (Accepted) |
+| Unknown fields (C-20), decided 2026-11-16 | Amended: unknown fields may be dropped on load, each reported as a warning, instead of kept in place. Deviates from F-08 ("preserved on load and written back"); listed for the S0 gate | S0.06.3, S0.06.8 | 0027 (Accepted, amended) |
+| UUIDs in BSON by schema (C-21), accepted 2026-11-16 | Accepted with the amendment (approved 2026-11-16): UUIDs are written only in the lower-case hyphenated form, and every `format: uuid` schema field carries the canonical `pattern`, so non-canonical UUIDs are rejected on load | S0.06.1, S0.06.3, S0.06.4, S0.06.11 | 0028 (Accepted) |
+| Command contract, JSON Schema validator, OpenGL loader, directions approved 2026-11-16 | Contract in `core`, with `CommandContext` using an interface defined in `core` (not `doc::Project&`); jsoncons 1.9.0 (BSL-1.0) subject to the licence check; an in-house GL loader on the Khronos headers with the lookup function supplied by `platform`, avoiding glad. The implementer accepts each ADR when written; the owner reviews them at the S0 gate | S0.04.1, S0.04.2, S0.12.1 | written in those steps |
 | vcpkg root, licence manifest, scaffold CLI fixes | ADR 0029 confirmed; `docs/licence-manifest.json` and its corrections to `THIRD_PARTY_NOTICES.md` and ADR 0004 accepted; the S0.02.4 `src/cli` changes accepted | S0.01.1, S0.02.2, S0.02.4 | 0029 (Accepted) |
 
 ## Stage S0: Foundation
@@ -195,13 +199,14 @@ locally (hosted CI open, ADR 0033).
   - Tests: T-01 `Core.Tests Result.*`, `Error.*`
   - Done when: tests green; every public function returning `Result` is `[[nodiscard]]`; Doxygen clean
   - Notes: ADR 0042 (Proposed; the step does not need it Accepted). `app::ErrorCode` is the notepad list plus `IoError`, with stable kebab-case names; `app::Error` has code, message and detail, `app::fail()` and `app::ok()` build results. The `objects` member is added in S0.03.3 together with `ObjectId`, so `ObjectId.h` does not need `Error.h`. `.clang-tidy` makes `bugprone-unused-return-value` check `std::expected`, so a dropped `Result` fails `analyze.ps1`. 8 tests in `Core.Tests` (`Error.*`, `Result.*`).
-- [ ] **S0.03.3: Implement ObjectId (UUID v7)**
+- [x] **S0.03.3: Implement ObjectId (UUID v7)**
   - Requirements: A-04
   - Modules: core
   - Depends on: S0.03.2
   - Deliverables: `src/core/ObjectId.{h,cpp}` (generate with injectable clock and random source, parse, lowercase format, RFC 4122 byte order, compare, hash)
   - Tests: T-01 `Core.Tests ObjectId.*` (version and variant bits, monotonic ordering, string round-trip, 1e6 unique IDs with fixed seed)
   - Done when: tests green; deterministic generation available for tests
+  - Notes: RFC 9562 layout with a 42-bit counter (method 1): seeded with 41 random bits per millisecond, incremented when the clock stands still or goes backwards, timestamp moved ahead on overflow. `ObjectIdGenerator::makeDeterministic( seed, unixMs )` gives reproducible IDs for tests and golden data. `parse` accepts only the lower-case hyphenated form (ADR 0028 amendment) and returns `std::optional` (so `ObjectId.h` does not need `Error.h`). `app::Error` gained `objects` (ADR 0042). 13 `ObjectId.*` tests, including the RFC 9562 example and the F-09 magic byte order.
 - [ ] **S0.03.4: Implement units, quantities and precision constants**
   - Requirements: P-06, P-07
   - Modules: core
@@ -355,8 +360,8 @@ locally (hosted CI open, ADR 0033).
   - Requirements: F-01, F-09
   - Modules: docs
   - Depends on: S0.05.1
-  - Deliverables: `docs/format/{envelope,project,blobs,versioning}.md`; `docs/format/schemas/{envelope,project}.schema.json` (draft 2020-12); schema IDs `urn:app:schema:<type>:<major>` per ADR 0032
-  - Tests: T-03 `Format.Tests Schemas.AllSchemasAreValidDraft202012`
+  - Deliverables: `docs/format/{envelope,project,blobs,versioning}.md`; `docs/format/schemas/{envelope,project}.schema.json` (draft 2020-12); schema IDs `urn:app:schema:<type>:<major>` per ADR 0032; every `format: uuid` field carries the canonical lower-case `pattern` (ADR 0028)
+  - Tests: T-03 `Format.Tests Schemas.AllSchemasAreValidDraft202012`, `Schemas.UuidFieldsRequireCanonicalPattern`
   - Done when: schemas validate; ADR Accepted
 - [ ] **S0.06.2: Implement the deterministic JSON writer**
   - Requirements: F-03, F-09
@@ -365,18 +370,18 @@ locally (hosted CI open, ADR 0033).
   - Deliverables: `src/doc/io/JsonWriter.{h,cpp}` (`$magic` first, then `formatVersion`, `type`, then schema key order; shortest round-trip floats via `std::to_chars`; LF; 2-space indent)
   - Tests: T-03 `Format.Tests JsonWriter.*` (saving twice gives identical bytes; float edge cases)
   - Done when: tests green
-- [ ] **S0.06.3: Implement the JSON reader with validation and unknown-field preservation**
+- [ ] **S0.06.3: Implement the JSON reader with validation and unknown-field reporting**
   - Requirements: F-08, F-03
   - Modules: doc
   - Depends on: S0.06.2, S0.04.2
-  - Deliverables: `src/doc/io/JsonReader.{h,cpp}` (errors carry file, JSON path and reason; unknown keys kept in place per ADR 0027)
-  - Tests: T-03 `Format.Tests JsonReader.*` (unknown fields written back byte-identical, malformed inputs give precise errors)
+  - Deliverables: `src/doc/io/JsonReader.{h,cpp}` (errors carry file, JSON path and reason; unknown keys dropped and each reported as a warning with its JSON path per ADR 0027)
+  - Tests: T-03 `Format.Tests JsonReader.*` (unknown fields dropped with one warning each naming file and JSON path, known fields still byte-identical after save, malformed inputs give precise errors, upper-case or unhyphenated UUIDs rejected with their JSON path per ADR 0028)
   - Done when: tests green
 - [ ] **S0.06.4: Implement the BSON writer and reader**
   - Requirements: F-02, F-09
   - Modules: doc
   - Depends on: S0.06.3
-  - Deliverables: `src/doc/io/{BsonWriter,BsonReader}.{h,cpp}` (`$magic` first as binary subtype 0x04; ObjectIds binary by schema `format: uuid` per ADR 0028)
+  - Deliverables: `src/doc/io/{BsonWriter,BsonReader}.{h,cpp}` (`$magic` first as binary subtype 0x04; ObjectIds binary by schema `format: uuid` per ADR 0028, written back as lower-case hyphenated text)
   - Tests: T-03 `Format.Tests Bson.*` (bytes 4 to 32 equal the F-09 constant)
   - Done when: tests green
 - [ ] **S0.06.5: Implement file identification by magic (FileSniffer)**

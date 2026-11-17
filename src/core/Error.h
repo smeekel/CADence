@@ -7,10 +7,13 @@
 
 #pragma once
 
+#include "core/ObjectId.h"
+
 #include <cstdint>
 #include <expected>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace app
 {
@@ -35,20 +38,21 @@ enum class ErrorCode : std::uint8_t
 /// @return Name of the category; "unknown" only for a value outside the enumeration.
 [[nodiscard]] std::string_view toString( ErrorCode code ) noexcept;
 
-/// @brief An error with a category, a user-readable message and developer detail.
+/// @brief An error with a category, a user-readable message, developer detail and the objects it concerns.
 ///
 /// Errors are values: they are returned inside app::Result and never thrown across a module's public API.
 struct Error
 {
-    ErrorCode   code = ErrorCode::Internal; ///< Category, used by callers to react.
-    std::string message;                    ///< User-readable English sentence, shown in the UI and the CLI.
-    std::string detail;                     ///< Developer detail: file, JSON path, kernel status, parameter name.
+    ErrorCode                   code = ErrorCode::Internal; ///< Category, used by callers to react.
+    std::string                 message; ///< User-readable English sentence, shown in the UI and CLI.
+    std::string                 detail;  ///< Developer detail: file, JSON path, kernel status, parameter name.
+    std::vector<core::ObjectId> objects; ///< Objects the UI highlights and the Messages panel locates.
 
     /// @brief  One-line description: "<code>: <message>", followed by " (<detail>)" when there is detail.
     /// @return Text for logs and CLI output.
     [[nodiscard]] std::string describe() const;
 
-    /// @brief Two errors are equal when code, message and detail are equal.
+    /// @brief Two errors are equal when code, message, detail and objects are equal.
     [[nodiscard]] friend bool operator==( const Error&, const Error& ) = default;
 };
 
@@ -56,7 +60,9 @@ struct Error
 /// @param  code     Error category.
 /// @param  message  User-readable message.
 /// @param  detail   Optional developer detail.
+/// @param  objects  Optional objects to highlight.
 /// @return The error wrapped in `std::unexpected`, convertible to any `Result<T>`.
-[[nodiscard]] std::unexpected<Error> fail( ErrorCode code, std::string message, std::string detail = {} );
+[[nodiscard]] std::unexpected<Error>
+fail( ErrorCode code, std::string message, std::string detail = {}, std::vector<core::ObjectId> objects = {} );
 
 } // namespace app

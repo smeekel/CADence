@@ -120,7 +120,8 @@ units or expressions (A-08); board geometry as int64 nanometres (A-09); topology
 
 ## 9. Robust loading (F-08)
 
-Unknown fields are preserved on load and written back on save. Malformed files produce an error naming the file,
+Unknown fields are dropped on load and reported as warnings naming the file and the JSON path; they are not written
+back on save (ADR 0027, an owner decision that deviates from F-08). Malformed files produce an error naming the file,
 the JSON path and the reason, and never crash the application; every loader has a fuzz target (T-09).
 
 ## 10. Blobs (F-06)
